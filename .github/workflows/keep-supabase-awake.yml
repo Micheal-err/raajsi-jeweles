@@ -1,0 +1,42 @@
+name: Keep Supabase Project Awake
+
+# Supabase free-tier projects pause after 7 days with zero API/database
+# activity. Pinging every 3 days gives a safety margin — if one run fails
+# (GitHub outage, etc.) you still have days of buffer before hitting 7.
+#
+# Setup (one-time):
+#   1. Go to your GitHub repo → Settings → Secrets and variables → Actions
+#   2. Add two repository secrets:
+#        SUPABASE_URL        e.g. https://ctieimykqptiludpfker.supabase.co
+#        SUPABASE_ANON_KEY   the anon/publishable key (same one used in your .env)
+#   3. Commit this file to .github/workflows/keep-supabase-awake.yml
+#   4. Test it immediately: go to Actions tab → "Keep Supabase Project Awake"
+#      → "Run workflow" — don't wait 3 days to find out it's misconfigured.
+#
+# Note: GitHub Actions cron always runs in UTC, not your local time —
+# irrelevant for this job specifically (any day/time works), but worth
+# knowing if you reuse this schedule syntax elsewhere.
+
+on:
+  schedule:
+    - cron: '0 3 */3 * *'   # 03:00 UTC, every 3 days
+  workflow_dispatch: {}      # lets you trigger it manually to test
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase (lightweight public read)
+        run: |
+          set -e
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/app_settings?select=key&limit=1" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
+
+          echo "Supabase responded with HTTP $HTTP_STATUS"
+
+          if [ "$HTTP_STATUS" -ge 400 ]; then
+            echo "::error::Keep-alive ping failed with status $HTTP_STATUS — check your secrets or project status."
+            exit 1
+          fi
