@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHero, KineticTitle } from "@/components/PageHero";
-import { ShieldCheck, UserCheck, Lock, AlertCircle } from "lucide-react";
+import { Lock, AlertCircle } from "lucide-react";
 
 const searchSchema = z.object({ next: z.string().optional() });
 
@@ -136,25 +136,6 @@ function AuthPage() {
     }
   }
 
-  async function handleDemoSignIn() {
-    setEmail("demo@raajsijewels.com");
-    setPassword("RaajsiPassword2026!");
-    setStatus("busy");
-    setErr("");
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: "demo@raajsijewels.com",
-        password: "RaajsiPassword2026!",
-      });
-      if (error) throw error;
-      const targetUrl = next && next.startsWith("/") ? next : "/";
-      window.location.href = targetUrl;
-    } catch (e) {
-      setErr(e instanceof Error ? e.message : "Demo sign in error");
-      setStatus("idle");
-    }
-  }
-
   async function googleSignIn() {
     setErr("");
     const { error } = await supabase.auth.signInWithOAuth({
@@ -204,24 +185,6 @@ function AuthPage() {
                 {m === "signin" ? "Sign In" : "Create Account"}
               </button>
             ))}
-          </div>
-
-          {/* Quick Demo Sign In Action */}
-          <div className="mb-6 p-4 bg-mist/50 border border-hairline flex flex-col gap-2">
-            <div className="text-[11px] uppercase tracking-wider text-ink/60 font-semibold flex items-center gap-1.5">
-              <ShieldCheck size={14} className="text-[color:var(--gold)]" /> Instant Access
-            </div>
-            <p className="text-xs text-ink/60">
-              Test full customer account features (cart, orders, profile) with 1 click:
-            </p>
-            <button
-              type="button"
-              onClick={handleDemoSignIn}
-              disabled={status === "busy"}
-              className="w-full py-2.5 bg-ink text-paper text-xs uppercase tracking-wider font-medium hover:bg-ink/90 transition flex items-center justify-center gap-2 mt-1"
-            >
-              <UserCheck size={14} className="text-[color:var(--gold)]" /> 1-Click Demo Sign In (Verified User)
-            </button>
           </div>
 
           <button
