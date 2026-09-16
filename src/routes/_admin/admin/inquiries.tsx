@@ -39,7 +39,13 @@ function InquiriesPage() {
       qc.invalidateQueries({ queryKey: ["admin-inquiries"] });
       toast.success("Inquiry status updated");
     },
-    onError: () => toast.error("Failed to update"),
+    onError: (err: any) => {
+      console.error("[Admin] Inquiry update failed:", err);
+      const msg = err?.code === "42501"
+        ? "Permission denied — run the RLS fix SQL in Supabase."
+        : `Failed to update: ${err?.message || "Unknown error"}`;
+      toast.error(msg);
+    },
   });
 
   const rows = data ?? [];

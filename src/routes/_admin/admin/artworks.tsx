@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Plus, Pencil, Trash2, X, Sparkles, Package, Image as ImageIcon } from "lucide-react";
 import { resolveImage } from "@/lib/images";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 
 const CATEGORIES = [
   { value: "women", label: "Women's Collection" },
@@ -77,15 +78,24 @@ function ArtworksPage() {
   const deleteMut = useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase.from("artworks").delete().eq("id", id);
-      if (error) throw error;
+      if (error) {
+        console.error("[Admin] Delete failed:", error.code, error.message, error.details);
+        throw error;
+      }
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin-artworks"] });
       qc.invalidateQueries({ queryKey: ["artworks"] });
       qc.invalidateQueries({ queryKey: ["collection"] });
+      qc.invalidateQueries({ queryKey: ["home-artworks"] });
       toast.success("Jewellery item removed from catalogue");
     },
-    onError: () => toast.error("Failed to delete item"),
+    onError: (err: any) => {
+      const msg = err?.code === "42501"
+        ? "Permission denied — your admin RLS policies may not be set up. Run the SQL fix in Supabase."
+        : `Failed to delete: ${err?.message || "Unknown error"}`;
+      toast.error(msg);
+    },
   });
 
   const rows = data ?? [];
@@ -297,6 +307,7 @@ function ProductForm({
   onSaved: () => void;
 }) {
   const [saving, setSaving] = useState(false);
+  const [imageUrl, setImageUrl] = useState("/jewellery/jewellery-hero.png");
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -316,13 +327,13 @@ function ProductForm({
     const carat = String(fd.get("carat") || "").trim();
     const weight = String(fd.get("weight") || "").trim();
 
-    const { error } = await supabase.from("artworks").insert({
+    const payload = {
       slug,
       title,
       medium: String(fd.get("medium") ?? "22K Yellow Gold"),
       price,
       display_price: price,
-      price_display: "fixed",
+      price_display: "fixed" as const,
       availability: String(fd.get("availability") ?? "available") as
         | "available"
         | "reserved"
@@ -330,7 +341,7 @@ function ProductForm({
         | "not_for_sale",
       stock_quantity: stock,
       story: String(fd.get("story") ?? "") || null,
-      primary_image_url: String(fd.get("primary_image_url") ?? "/jewellery/jewellery-hero.png"),
+      primary_image_url: imageUrl || String(fd.get("primary_image_url") ?? "/jewellery/jewellery-hero.png"),
       origin_country: "Jaipur, India",
       metadata: {
         category,
@@ -339,11 +350,17 @@ function ProductForm({
         carat: carat || undefined,
         weight: weight || undefined,
       },
-    });
+    };
+
+    const { error } = await supabase.from("artworks").insert(payload);
 
     setSaving(false);
     if (error) {
-      toast.error("Failed to add piece: " + error.message);
+      console.error("[Admin] Insert failed:", error.code, error.message, error.details, error.hint);
+      const msg = error.code === "42501"
+        ? "Permission denied — please run the RLS fix SQL in your Supabase SQL Editor."
+        : "Failed to add piece: " + error.message;
+      toast.error(msg);
       return;
     }
     toast.success("New jewellery piece added to catalogue");
@@ -418,11 +435,11 @@ function ProductForm({
           </select>
         </label>
 
-        <Field
-          label="Primary Image URL"
+        <ImageUploader
+          value={imageUrl}
+          onChange={setImageUrl}
+          label="Piece Image (Drag & Drop or Browse)"
           name="primary_image_url"
-          placeholder="/jewellery/jewellery-necklace.jpg or HTTPS URL"
-          className="md:col-span-1"
           required
         />
 
@@ -469,6 +486,7 @@ function EditModal({
   onSaved: () => void;
 }) {
   const [saving, setSaving] = useState(false);
+  const [imageUrl, setImageUrl] = useState(artwork?.primary_image_url || "");
   if (!artwork) return null;
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
@@ -483,34 +501,40 @@ function EditModal({
     const gemstone = String(fd.get("gemstone") || "").trim();
     const weight = String(fd.get("weight") || "").trim();
 
+    const updatePayload = {
+      title: String(fd.get("title") ?? ""),
+      medium: String(fd.get("medium") ?? ""),
+      price,
+      display_price: price,
+      availability: String(fd.get("availability") ?? "available") as
+        | "available"
+        | "reserved"
+        | "sold"
+        | "not_for_sale",
+      stock_quantity: stock,
+      story: String(fd.get("story") ?? "") || null,
+      primary_image_url: imageUrl || String(fd.get("primary_image_url") ?? "") || artwork!.primary_image_url,
+      metadata: {
+        ...(artwork!.metadata ?? {}),
+        category,
+        subcategory,
+        gemstone: gemstone || undefined,
+        weight: weight || undefined,
+      },
+    };
+
     const { error } = await supabase
       .from("artworks")
-      .update({
-        title: String(fd.get("title") ?? ""),
-        medium: String(fd.get("medium") ?? ""),
-        price,
-        display_price: price,
-        availability: String(fd.get("availability") ?? "available") as
-          | "available"
-          | "reserved"
-          | "sold"
-          | "not_for_sale",
-        stock_quantity: stock,
-        story: String(fd.get("story") ?? "") || null,
-        primary_image_url: String(fd.get("primary_image_url") ?? "") || artwork!.primary_image_url,
-        metadata: {
-          ...(artwork!.metadata ?? {}),
-          category,
-          subcategory,
-          gemstone: gemstone || undefined,
-          weight: weight || undefined,
-        },
-      } as any)
+      .update(updatePayload as any)
       .eq("id", artwork!.id);
 
     setSaving(false);
     if (error) {
-      toast.error("Failed to update: " + error.message);
+      console.error("[Admin] Update failed:", error.code, error.message, error.details, error.hint);
+      const msg = error.code === "42501"
+        ? "Permission denied — please run the RLS fix SQL in your Supabase SQL Editor."
+        : "Failed to update: " + error.message;
+      toast.error(msg);
       return;
     }
     toast.success("Jewellery details updated");
@@ -607,10 +631,11 @@ function EditModal({
             </select>
           </label>
 
-          <Field
-            label="Image URL"
+          <ImageUploader
+            value={imageUrl}
+            onChange={setImageUrl}
+            label="Piece Image (Drag & Drop or Browse)"
             name="primary_image_url"
-            defaultValue={artwork.primary_image_url ?? ""}
             required
           />
 

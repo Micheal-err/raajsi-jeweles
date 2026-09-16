@@ -76,7 +76,13 @@ function OrdersPage() {
       qc.invalidateQueries({ queryKey: ["admin-acquisitions"] });
       toast.success("Order status updated");
     },
-    onError: () => toast.error("Failed to update order status"),
+    onError: (err: any) => {
+      console.error("[Admin] Order status update failed:", err);
+      const msg = err?.code === "42501"
+        ? "Permission denied — run the RLS fix SQL in Supabase."
+        : `Failed to update: ${err?.message || "Unknown error"}`;
+      toast.error(msg);
+    },
   });
 
   const updateFulfillment = useMutation({
@@ -99,7 +105,13 @@ function OrdersPage() {
       qc.invalidateQueries({ queryKey: ["admin-orders"] });
       toast.success("Shipping & fulfillment details saved");
     },
-    onError: () => toast.error("Failed to save shipping details"),
+    onError: (err: any) => {
+      console.error("[Admin] Fulfillment update failed:", err);
+      const msg = err?.code === "42501"
+        ? "Permission denied — run the RLS fix SQL in Supabase."
+        : `Failed to save: ${err?.message || "Unknown error"}`;
+      toast.error(msg);
+    },
   });
 
   const rows: any[] = (data ?? []) as any[];
