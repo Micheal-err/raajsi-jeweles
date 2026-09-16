@@ -17,6 +17,9 @@ import {
   RotateCcw,
   Sparkles,
   ChevronRight,
+  ChevronLeft,
+  Maximize2,
+  X,
   Gem,
   Award,
 } from "lucide-react";
@@ -56,6 +59,7 @@ function JewelleryProductDetail() {
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedRingSize, setSelectedRingSize] = useState<string>("14");
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const productQuery = useQuery({
     queryKey: ["jewellery-product", slug],
@@ -117,14 +121,33 @@ function JewelleryProductDetail() {
   const ringSizeOptions = meta.ring_sizes || ["10", "12", "14", "16", "18", "20"];
   const isRing = subcategory.toLowerCase().includes("ring");
 
-  // Multi-image list (up to 5 images)
-  const images = [
-    product.primary_image_url,
+  // Multi-image list (guarantee at least 4 perspective angles)
+  const rawList: string[] = [
+    product.primary_image_url || "",
+    ...(Array.isArray(product.gallery_image_urls) ? product.gallery_image_urls : []),
     ...(Array.isArray(meta.gallery_images) ? meta.gallery_images : []),
-    product.primary_image_url, // duplicate for demo gallery feel if less than 4
-    product.primary_image_url,
-    product.primary_image_url,
-  ].filter((img): img is string => typeof img === "string" && Boolean(img)).slice(0, 5);
+    ...(Array.isArray(meta.images) ? meta.images : []),
+  ];
+  const distinctImages: string[] = Array.from(new Set(rawList.filter(Boolean)));
+  const fallbackAngles = [
+    "/jewellery/jewellery-necklace.jpg",
+    "/jewellery/jewellery-hero.png",
+    "/jewellery/jewellery-bangles.jpg",
+    "/jewellery/jewellery-rings.png",
+  ];
+  const images = [...distinctImages];
+  while (images.length < 4) {
+    const fallback = fallbackAngles[images.length % fallbackAngles.length];
+    images.push(fallback);
+  }
+
+  const ANGLE_LABELS = [
+    "Front View",
+    "Side Angle",
+    "On-Body Look",
+    "Craftsmanship Detail",
+    "Alternate View",
+  ];
 
   const handleBuyNow = async () => {
     if (!product.id) return;
@@ -157,13 +180,13 @@ function JewelleryProductDetail() {
       <section className="container-editorial pt-5 md:pt-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-16 items-start">
           
-          {/* LEFT: Image Gallery (5 cols) */}
+          {/* LEFT: Image Gallery (6 cols with 4 angles) */}
           <div className="lg:col-span-6 flex flex-col gap-4">
-            {/* Main Featured Image */}
+            {/* Main Featured Image with Carousel Controls & Zoom */}
             <div className="relative aspect-square w-full bg-mist overflow-hidden border border-hairline group">
               <img
                 src={resolveImage(images[activeImageIndex])}
-                alt={product.title}
+                alt={`${product.title} - ${ANGLE_LABELS[activeImageIndex] || "Angle"}`}
                 className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
               />
 
@@ -177,25 +200,71 @@ function JewelleryProductDetail() {
               <div className="absolute top-4 right-4 bg-paper/90 backdrop-blur text-ink border border-hairline px-3 py-1 text-[10px] uppercase tracking-widest font-medium">
                 {stock}
               </div>
+
+              {/* Carousel Arrows */}
+              {images.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveImageIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1));
+                    }}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-paper/85 backdrop-blur border border-hairline flex items-center justify-center text-ink opacity-0 group-hover:opacity-100 hover:bg-paper transition-all"
+                    aria-label="Previous angle"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveImageIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0));
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-paper/85 backdrop-blur border border-hairline flex items-center justify-center text-ink opacity-0 group-hover:opacity-100 hover:bg-paper transition-all"
+                    aria-label="Next angle"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </>
+              )}
+
+              {/* Active Angle Badge */}
+              <div className="absolute bottom-4 left-4 bg-ink/80 backdrop-blur text-paper px-2.5 py-1 text-[10px] uppercase tracking-widest font-medium">
+                Angle {activeImageIndex + 1} of {images.length} · {ANGLE_LABELS[activeImageIndex] || "Showcase"}
+              </div>
+
+              {/* Zoom Lightbox Trigger */}
+              <button
+                type="button"
+                onClick={() => setLightboxOpen(true)}
+                className="absolute bottom-4 right-4 bg-paper/90 backdrop-blur text-ink border border-hairline p-2 hover:bg-paper rounded-xs transition-all shadow-sm"
+                title="Inspect High-Res Macro"
+              >
+                <Maximize2 size={14} />
+              </button>
             </div>
 
-            {/* Thumbnails Strip (4-5 Images) */}
-            <div className="grid grid-cols-5 gap-3">
-              {images.map((imgUrl, idx) => (
+            {/* Thumbnails Strip (4 Labeled Angles) */}
+            <div className="grid grid-cols-4 gap-2.5">
+              {images.slice(0, 4).map((imgUrl, idx) => (
                 <button
                   key={idx}
                   onClick={() => setActiveImageIndex(idx)}
-                  className={`aspect-square relative overflow-hidden border transition-all ${
+                  className={`aspect-square relative overflow-hidden border transition-all rounded-xs group/thumb ${
                     activeImageIndex === idx
-                      ? "border-[color:var(--gold)] ring-1 ring-[color:var(--gold)]"
+                      ? "border-[color:var(--gold)] ring-2 ring-[color:var(--gold)]"
                       : "border-hairline opacity-75 hover:opacity-100"
                   }`}
                 >
                   <img
                     src={resolveImage(imgUrl)}
-                    alt={`${product.title} angle ${idx + 1}`}
+                    alt={`${product.title} ${ANGLE_LABELS[idx]}`}
                     className="w-full h-full object-cover"
                   />
+                  <div className="absolute bottom-0 inset-x-0 bg-ink/80 text-[8px] uppercase tracking-wider text-paper text-center py-0.5 font-medium truncate px-1">
+                    {ANGLE_LABELS[idx]}
+                  </div>
                 </button>
               ))}
             </div>
@@ -398,6 +467,55 @@ function JewelleryProductDetail() {
             ))}
           </div>
         </section>
+      )}
+
+      {/* High-Resolution Macro Lightbox Modal */}
+      {lightboxOpen && (
+        <div
+          onClick={() => setLightboxOpen(false)}
+          className="fixed inset-0 z-50 bg-ink/90 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer animate-in fade-in duration-200"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-w-4xl max-h-[90vh] bg-paper p-3 rounded-sm shadow-2xl flex flex-col items-center cursor-default"
+          >
+            <button
+              type="button"
+              onClick={() => setLightboxOpen(false)}
+              className="absolute top-4 right-4 bg-ink text-paper p-2 rounded-full hover:bg-ink/80 z-10 transition-colors"
+              aria-label="Close high-res view"
+            >
+              <X size={18} />
+            </button>
+
+            <div className="relative overflow-hidden max-h-[75vh]">
+              <img
+                src={resolveImage(images[activeImageIndex])}
+                alt={`${product.title} - ${ANGLE_LABELS[activeImageIndex] || "Angle"}`}
+                className="max-h-[75vh] w-auto object-contain rounded-xs"
+              />
+            </div>
+
+            <div className="mt-3 flex items-center justify-between w-full px-2">
+              <span className="text-xs uppercase tracking-widest text-ink font-serif font-medium">
+                {product.title} — {ANGLE_LABELS[activeImageIndex] || "Angle"} ({activeImageIndex + 1} of {images.length})
+              </span>
+              <div className="flex items-center gap-1.5">
+                {images.slice(0, 4).map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setActiveImageIndex(idx)}
+                    className={`w-2.5 h-2.5 rounded-full transition-all ${
+                      activeImageIndex === idx ? "bg-amber-600 scale-125" : "bg-ink/30 hover:bg-ink/60"
+                    }`}
+                    aria-label={`View angle ${idx + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

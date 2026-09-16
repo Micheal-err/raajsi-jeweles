@@ -63,18 +63,39 @@ export function JewelleryCard({ product }: { product: JewelleryProduct }) {
   const subcategory = product.metadata?.subcategory?.toLowerCase() ?? "";
   const badgeClass = SUBCATEGORY_COLORS[subcategory] ?? "bg-stone-100 text-stone-700";
 
+  const primaryImg = product.primary_image_url;
+  const secondaryImg =
+    (product.gallery_image_urls && product.gallery_image_urls.find((u) => u && u !== primaryImg)) ||
+    (product.metadata?.gallery_images && product.metadata.gallery_images.find((u) => u && u !== primaryImg)) ||
+    null;
+
   return (
     <article className="jewellery-card group relative flex flex-col bg-paper border border-hairline overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
-      {/* Image */}
+      {/* Image Container with 2-Angle Hover Effect */}
       <div className="relative overflow-hidden bg-mist aspect-square">
-        <Link to="/artworks/$slug" params={{ slug: product.slug }} className="block w-full h-full">
+        <Link to="/artworks/$slug" params={{ slug: product.slug }} className="block w-full h-full relative">
           <img
-            src={resolveImage(product.primary_image_url)}
+            src={resolveImage(primaryImg)}
             alt={product.title}
-            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+            className={`w-full h-full object-cover object-center transition-all duration-700 ease-out ${
+              secondaryImg ? "group-hover:opacity-0 group-hover:scale-105" : "group-hover:scale-105"
+            }`}
             loading="lazy"
           />
+          {secondaryImg && (
+            <img
+              src={resolveImage(secondaryImg)}
+              alt={`${product.title} alternate angle`}
+              className="absolute inset-0 w-full h-full object-cover object-center opacity-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
+              loading="lazy"
+            />
+          )}
         </Link>
+
+        {/* 4 Angles Photography Badge on Hover */}
+        <span className="absolute bottom-2.5 left-2.5 bg-ink/80 backdrop-blur-xs text-paper text-[9px] uppercase tracking-widest px-2 py-0.5 rounded-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+          4 Angles
+        </span>
 
         {/* Subcategory Badge */}
         {subcategory && (

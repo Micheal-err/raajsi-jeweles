@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Plus, Pencil, Trash2, X, Sparkles, Package, Image as ImageIcon } from "lucide-react";
 import { resolveImage } from "@/lib/images";
-import { ImageUploader } from "@/components/admin/ImageUploader";
+import { MultiImageUploader } from "@/components/admin/MultiImageUploader";
 
 const CATEGORIES = [
   { value: "women", label: "Women's Collection" },
@@ -190,7 +190,7 @@ function ArtworksPage() {
                 {filtered.map((item) => (
                   <tr key={item.id} className="hover:bg-mist/30 transition-colors">
                     <td className="px-4 py-2">
-                      <div className="w-12 h-14 bg-mist overflow-hidden rounded-sm border border-hairline">
+                      <div className="w-12 h-14 bg-mist overflow-hidden rounded-sm border border-hairline relative">
                         {item.primary_image_url ? (
                           <img
                             src={resolveImage(item.primary_image_url)}
@@ -202,6 +202,11 @@ function ArtworksPage() {
                             <ImageIcon size={16} />
                           </div>
                         )}
+                        <div className="absolute bottom-0 inset-x-0 bg-ink/75 text-[8px] tracking-wider uppercase text-paper text-center py-0.5 font-medium">
+                          {(item.gallery_image_urls?.length ?? 0) >= 4
+                            ? "4 angles"
+                            : `${item.gallery_image_urls?.length || 1} angles`}
+                        </div>
                       </div>
                     </td>
                     <td className="px-4 py-3 max-w-xs">
@@ -307,11 +312,24 @@ function ProductForm({
   onSaved: () => void;
 }) {
   const [saving, setSaving] = useState(false);
-  const [imageUrl, setImageUrl] = useState("/jewellery/jewellery-hero.png");
+  const [images, setImages] = useState<string[]>([
+    "/jewellery/jewellery-necklace.jpg",
+    "/jewellery/jewellery-hero.png",
+    "/jewellery/jewellery-bangles.jpg",
+    "/jewellery/jewellery-rings.png",
+  ]);
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSaving(true);
+
+    const validImages = images.filter((img) => Boolean(img && img.trim()));
+    if (validImages.length < 4) {
+      toast.error("Please configure at least 4 photos (Front, Side Profile, On-Body, and Detail).");
+      setSaving(false);
+      return;
+    }
+
     const fd = new FormData(e.currentTarget);
     const title = String(fd.get("title") ?? "").trim();
     const slug = title
@@ -341,7 +359,8 @@ function ProductForm({
         | "not_for_sale",
       stock_quantity: stock,
       story: String(fd.get("story") ?? "") || null,
-      primary_image_url: imageUrl || String(fd.get("primary_image_url") ?? "/jewellery/jewellery-hero.png"),
+      primary_image_url: validImages[0],
+      gallery_image_urls: validImages,
       origin_country: "Jaipur, India",
       metadata: {
         category,
@@ -349,6 +368,8 @@ function ProductForm({
         gemstone: gemstone || undefined,
         carat: carat || undefined,
         weight: weight || undefined,
+        gallery_images: validImages,
+        images: validImages,
       },
     };
 
@@ -435,12 +456,10 @@ function ProductForm({
           </select>
         </label>
 
-        <ImageUploader
-          value={imageUrl}
-          onChange={setImageUrl}
-          label="Piece Image (Drag & Drop or Browse)"
-          name="primary_image_url"
-          required
+        <MultiImageUploader
+          images={images}
+          onChange={setImages}
+          requiredCount={4}
         />
 
         <label className="grid gap-1 md:col-span-2">
@@ -486,12 +505,32 @@ function EditModal({
   onSaved: () => void;
 }) {
   const [saving, setSaving] = useState(false);
-  const [imageUrl, setImageUrl] = useState(artwork?.primary_image_url || "");
+  const initialImages = (() => {
+    if (!artwork) return ["", "", "", ""];
+    const meta = artwork.metadata as any;
+    const list = artwork.gallery_image_urls && artwork.gallery_image_urls.length > 0
+      ? [...artwork.gallery_image_urls]
+      : (meta?.gallery_images?.length
+        ? [...meta.gallery_images]
+        : [artwork.primary_image_url || ""]);
+    while (list.length < 4) list.push("");
+    return list;
+  })();
+
+  const [images, setImages] = useState<string[]>(initialImages);
   if (!artwork) return null;
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSaving(true);
+
+    const validImages = images.filter((img) => Boolean(img && img.trim()));
+    if (validImages.length < 4) {
+      toast.error("Please configure at least 4 photos (Front, Side Profile, On-Body, and Detail).");
+      setSaving(false);
+      return;
+    }
+
     const fd = new FormData(e.currentTarget);
 
     const price = Number(fd.get("price") || 0);
@@ -513,13 +552,16 @@ function EditModal({
         | "not_for_sale",
       stock_quantity: stock,
       story: String(fd.get("story") ?? "") || null,
-      primary_image_url: imageUrl || String(fd.get("primary_image_url") ?? "") || artwork!.primary_image_url,
+      primary_image_url: validImages[0] || artwork!.primary_image_url,
+      gallery_image_urls: validImages,
       metadata: {
         ...(artwork!.metadata ?? {}),
         category,
         subcategory,
         gemstone: gemstone || undefined,
         weight: weight || undefined,
+        gallery_images: validImages,
+        images: validImages,
       },
     };
 
@@ -631,12 +673,10 @@ function EditModal({
             </select>
           </label>
 
-          <ImageUploader
-            value={imageUrl}
-            onChange={setImageUrl}
-            label="Piece Image (Drag & Drop or Browse)"
-            name="primary_image_url"
-            required
+          <MultiImageUploader
+            images={images}
+            onChange={setImages}
+            requiredCount={4}
           />
 
           <label className="grid gap-1 md:col-span-2">
