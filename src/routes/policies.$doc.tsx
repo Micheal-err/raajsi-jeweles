@@ -3,24 +3,42 @@ import { PageHero, KineticTitle } from "@/components/PageHero";
 
 const DOCS: Record<string, { title: string; lede: string; body: string }> = {
   privacy: {
-    title: "Privacy",
-    lede: "What we collect, why, and how you can ask us to forget it.",
-    body: `We collect only what we need to serve you — your name, contact, and the works you inquire about. We do not sell data. We share it only with the delivery partners required to fulfill your order.\n\nWrite to hello@raajsijewels.com to review or delete anything we hold.`,
+    title: "Privacy Policy",
+    lede: "How we protect your personal information and respect your privacy.",
+    body: `We collect only what is necessary to deliver an exceptional Raajsi experience — your name, shipping address, contact details, and inquiry preferences. We do not sell or rent your personal data to third parties. Information is securely shared only with verified logistics partners to fulfill your orders.\n\nTo update your preferences or request data deletion, contact our concierge at care@raajsi.com.`,
   },
   terms: {
-    title: "Terms",
-    lede: "The quiet agreement behind every acquisition.",
-    body: `All prices displayed are indicative unless confirmed by a director. Works remain the property of Raajsi Jewels until payment is cleared. Provenance certificates are issued in the buyer's name and are non-transferrable without our endorsement.`,
+    title: "Terms & Conditions",
+    lede: "Guidelines governing your acquisitions and interactions with Raajsi.",
+    body: `All jewellery specifications, metals (including 925 Sterling Silver), gemstones, and craftsmanship details are described with accuracy. Raajsi reserves the right to verify orders prior to dispatch. Each piece comes with our certificate of authenticity.\n\nFor custom or personalized commissions, production begins upon formal design confirmation.`,
   },
   shipping: {
-    title: "Shipping",
-    lede: "White-glove crating, insured freight, and installation.",
-    body: `Within India: 7–14 working days from confirmation, fully insured. International: 3–5 weeks, DDP quotes on request. All works are crated to museum standards; installation is included in six Indian cities.`,
+    title: "Shipping & Delivery",
+    lede: "Insured, tamper-evident delivery from our Jaipur atelier directly to your door.",
+    body: `Domestic Shipping (India): Standard delivery arrives within 3–7 business days. Express shipping is available for major metropolitan cities (2–3 business days). All shipments are fully insured and tracked in real time.\n\nInternational Shipping: Orders are dispatched via reputed global couriers (DHL / FedEx) and typically arrive within 7–14 business days. Custom duties and local taxes, if applicable, are handled as per destination country regulations.`,
   },
   returns: {
-    title: "Returns",
-    lede: "Two weeks, no questions.",
-    body: `Every acquisition may be returned within 14 days of receipt for a full refund, less freight. Bespoke commissions are non-returnable but may be reviewed for restoration or exchange within the same artist's studio.`,
+    title: "Returns & Exchange",
+    lede: "Our commitment to your complete satisfaction with every Raajsi creation.",
+    body: `We offer a 7-day return and exchange window from the date of delivery for unworn, unaltered jewellery in its original packaging with all security tags intact.\n\nTo initiate a return or exchange, simply contact our support team at care@raajsi.com or message us via WhatsApp with your order details. Once inspected at our Jaipur studio, refunds are processed within 5–7 business days to the original payment method.`,
+  },
+  faqs: {
+    title: "Frequently Asked Questions",
+    lede: "Answers to common questions about Raajsi jewellery, authenticity, care, and orders.",
+    body: `Q: Are your silver pieces genuine 925 Sterling Silver?
+A: Yes, every piece in our Sterling Silver collection is crafted in genuine 925 Sterling Silver, offering a refined, hypoallergenic, and timeless finish.
+
+Q: What makes the Handcrafted Jewels collection unique?
+A: Our Handcrafted collection celebrates artistic character and Jaipur's celebrated artisanal heritage. Each piece is inspired by distinctive forms, textures, colours, and traditional influences designed for modern wear.
+
+Q: How can I care for my Raajsi jewellery?
+A: Store each item individually in your Raajsi luxury box or moisture-free pouch. Avoid exposure to perfumes, lotions, and harsh chemicals. Gently buff silver with a soft microfiber cloth to preserve its radiant shine.
+
+Q: Can I place an order for gifting?
+A: Absolutely. Every Raajsi creation arrives in elegant gift-ready signature packaging. You can also include a personalized handwritten message at checkout.
+
+Q: How do I contact the Raajsi team?
+A: You can reach us via WhatsApp at +91 98290 12345, email us at care@raajsi.com, or send a message through our Contact page. We are delighted to assist you.`,
   },
 };
 

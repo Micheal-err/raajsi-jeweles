@@ -31,6 +31,8 @@ export interface JewelleryProduct {
     ring_size?: string;
     ring_sizes?: string[];
     subcategory?: string;
+    category?: string;
+    collection?: string;
     gender?: "men" | "women" | "unisex" | string;
     stock?: string;
     images?: string[];

@@ -11,6 +11,10 @@ import {
   Facebook,
   Linkedin,
   Youtube,
+  ChevronDown,
+  Phone,
+  Mail,
+  MessageCircle,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/useSession";
@@ -33,6 +37,7 @@ const NAV = [
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [menu, setMenu] = useState(false);
+  const [collectionsDropdown, setCollectionsDropdown] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const { user } = useSession();
   const navigate = useNavigate();
@@ -74,31 +79,116 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 bg-paper/95 backdrop-blur-sm border-b border-hairline">
       <div className="container-editorial flex items-center justify-between h-16 md:h-20">
+        {/* Brand Logo - Always links back to Home */}
         <Link to="/" className="flex items-center gap-2.5 group" onClick={() => setOpen(false)}>
-          <img src={logoImg} alt="Raajsi Jewels Logo" className="h-8 md:h-10 w-auto object-contain" />
+          <img src={logoImg} alt="Raajsi Logo" className="h-8 md:h-10 w-auto object-contain" />
           <div className="flex flex-col">
             <span
-              className="font-serif text-lg md:text-xl font-bold leading-none"
+              className="font-serif text-lg md:text-xl font-bold leading-none tracking-wide"
               style={{ color: "var(--gold)" }}
             >
               Raajsi
             </span>
-            <span className="eyebrow text-[9px] tracking-[0.3em] uppercase text-ink/70">Jewels</span>
+            <span className="text-[9px] tracking-[0.22em] uppercase text-ink/70 mt-0.5">
+              Timeless Luxury
+            </span>
           </div>
         </Link>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Navigation: HOME | ABOUT | COLLECTIONS (dropdown) | CONTACT */}
         <nav className="hidden lg:flex items-center gap-8">
-          {NAV.map((n) => (
+          <Link
+            to="/"
+            className="text-[13px] tracking-wider uppercase text-ink/80 hover:text-ink transition-colors"
+            activeProps={{ className: "text-[color:var(--gold)] font-medium" }}
+          >
+            Home
+          </Link>
+
+          <Link
+            to="/about"
+            className="text-[13px] tracking-wider uppercase text-ink/80 hover:text-ink transition-colors"
+            activeProps={{ className: "text-[color:var(--gold)] font-medium" }}
+          >
+            About
+          </Link>
+
+          {/* Collections Dropdown: Sterling Silver 925 & Handcrafted Jewels */}
+          <div
+            className="relative"
+            onMouseEnter={() => setCollectionsDropdown(true)}
+            onMouseLeave={() => setCollectionsDropdown(false)}
+          >
             <Link
-              key={n.to}
-              to={n.to}
-              className="text-[13px] tracking-wider uppercase text-ink/80 hover:text-ink transition-colors"
+              to="/collection"
+              className="text-[13px] tracking-wider uppercase text-ink/80 hover:text-ink transition-colors inline-flex items-center gap-1.5 py-2"
               activeProps={{ className: "text-[color:var(--gold)] font-medium" }}
             >
-              {n.label}
+              <span>Collections</span>
+              <ChevronDown
+                size={12}
+                className={`transition-transform duration-200 ${
+                  collectionsDropdown ? "rotate-180 text-[color:var(--gold)]" : "text-ink/60"
+                }`}
+              />
             </Link>
-          ))}
+
+            {collectionsDropdown && (
+              <div className="absolute top-full left-0 min-w-[280px] bg-paper border border-hairline shadow-xl py-3 px-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150 rounded-xs">
+                <div className="px-3 pb-2 mb-1 border-b border-hairline text-[9px] uppercase tracking-[0.25em] text-ink/40 font-semibold">
+                  Two Distinct Expressions
+                </div>
+                <Link
+                  to="/collection"
+                  search={{ category: "sterling-silver" }}
+                  onClick={() => setCollectionsDropdown(false)}
+                  className="block px-3 py-2.5 hover:bg-mist/70 rounded transition-colors group/item"
+                >
+                  <div className="text-xs font-serif font-semibold text-ink group-hover/item:text-[color:var(--gold)] flex items-center justify-between">
+                    <span>Sterling Silver 925</span>
+                    <span className="text-[9px] uppercase tracking-wider text-muted-foreground font-sans">925</span>
+                  </div>
+                  <div className="text-[10px] text-muted-foreground mt-0.5">
+                    Modern • Minimal • Elegant
+                  </div>
+                </Link>
+
+                <Link
+                  to="/collection"
+                  search={{ category: "handcrafted" }}
+                  onClick={() => setCollectionsDropdown(false)}
+                  className="block px-3 py-2.5 hover:bg-mist/70 rounded transition-colors group/item mt-1"
+                >
+                  <div className="text-xs font-serif font-semibold text-ink group-hover/item:text-[color:var(--gold)] flex items-center justify-between">
+                    <span>Handcrafted Jewels</span>
+                    <span className="text-[9px] uppercase tracking-wider text-muted-foreground font-sans">Artisanal</span>
+                  </div>
+                  <div className="text-[10px] text-muted-foreground mt-0.5">
+                    Artistic • Whimsical • Expressive
+                  </div>
+                </Link>
+
+                <div className="mt-2 pt-2 border-t border-hairline px-3">
+                  <Link
+                    to="/collection"
+                    onClick={() => setCollectionsDropdown(false)}
+                    className="text-[11px] uppercase tracking-wider text-ink/60 hover:text-ink flex items-center justify-between"
+                  >
+                    <span>View All Collections</span>
+                    <span>→</span>
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <Link
+            to="/contact"
+            className="text-[13px] tracking-wider uppercase text-ink/80 hover:text-ink transition-colors"
+            activeProps={{ className: "text-[color:var(--gold)] font-medium" }}
+          >
+            Contact
+          </Link>
 
           <div className="flex items-center gap-1 pl-4 border-l border-hairline">
             <LanguageSwitcher className="mr-1 text-ink/70 hover:text-ink" />
@@ -241,18 +331,61 @@ export function SiteHeader() {
 
       {/* Mobile Drawer */}
       {open && (
-        <div className="lg:hidden border-t border-hairline bg-paper">
+        <div className="lg:hidden border-t border-hairline bg-paper animate-in fade-in slide-in-from-top-2 duration-200">
           <nav className="container-editorial py-6 flex flex-col gap-4">
-            {NAV.map((n) => (
+            <Link
+              to="/"
+              className="text-lg font-serif text-ink"
+              onClick={() => setOpen(false)}
+            >
+              Home
+            </Link>
+
+            <Link
+              to="/about"
+              className="text-lg font-serif text-ink"
+              onClick={() => setOpen(false)}
+            >
+              About Us
+            </Link>
+
+            {/* Mobile Collections with Two Distinct Options */}
+            <div className="flex flex-col gap-2 py-1 pl-3 border-l-2 border-[color:var(--gold)]">
               <Link
-                key={n.to}
-                to={n.to}
-                className="text-lg font-serif text-ink"
+                to="/collection"
+                className="text-base font-serif font-medium text-ink flex items-center justify-between"
                 onClick={() => setOpen(false)}
               >
-                {n.label}
+                <span>Collections</span>
+                <span className="text-xs text-muted-foreground uppercase tracking-widest font-sans">All</span>
               </Link>
-            ))}
+              <div className="flex flex-col gap-2 pl-2">
+                <Link
+                  to="/collection"
+                  search={{ category: "sterling-silver" }}
+                  className="text-sm text-ink/80 hover:text-[color:var(--gold)]"
+                  onClick={() => setOpen(false)}
+                >
+                  → Sterling Silver 925
+                </Link>
+                <Link
+                  to="/collection"
+                  search={{ category: "handcrafted" }}
+                  className="text-sm text-ink/80 hover:text-[color:var(--gold)]"
+                  onClick={() => setOpen(false)}
+                >
+                  → Handcrafted Jewels
+                </Link>
+              </div>
+            </div>
+
+            <Link
+              to="/contact"
+              className="text-lg font-serif text-ink"
+              onClick={() => setOpen(false)}
+            >
+              Contact Us
+            </Link>
 
             {user ? (
               <div className="py-4 border-t border-b border-hairline my-2 flex flex-col gap-3">
@@ -320,136 +453,184 @@ export function SiteFooter() {
   return (
     <>
       <TrustStrip />
-      <footer className="border-t border-hairline bg-paper">
-        <div className="container-editorial py-16 grid gap-10 md:grid-cols-12">
-          {/* Brand Info */}
-          <div className="md:col-span-4">
-            <div className="flex items-center gap-3">
-              <img src={logoImg} alt="Raajsi Jewels" className="h-9 w-auto object-contain" />
-              <div className="font-serif text-2xl font-bold leading-tight" style={{ color: "var(--gold)" }}>
-                Raajsi Jewels
+      <footer className="border-t border-hairline bg-paper text-ink">
+        <div className="container-editorial py-16 grid gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
+          {/* 1. Brand Info: RAAJSI, Timeless Luxury, Jaipur, Rajasthan, India */}
+          <div className="space-y-3 sm:col-span-2 lg:col-span-1">
+            <Link to="/" className="inline-block">
+              <div className="font-serif text-2xl font-bold tracking-wide" style={{ color: "var(--gold)" }}>
+                RAAJSI
               </div>
-            </div>
-            <p className="mt-3 text-sm text-muted-foreground max-w-md">
-              Exquisite Indian jewellery, crafted with heritage since 2009. Every piece carries a
-              BIS Hallmark Certificate — because <em className="italic">true elegance endures</em>.
+              <div className="text-xs uppercase tracking-[0.2em] text-ink/70 font-medium mt-0.5">
+                Timeless Luxury
+              </div>
+            </Link>
+            <p className="text-sm text-ink/80 leading-relaxed font-medium">
+              Jaipur, Rajasthan, India
             </p>
-            <div className="mt-6 eyebrow">Showroom</div>
-            <address className="not-italic text-sm mt-1 leading-relaxed text-ink/80">
-              C-Scheme, Jaipur 302001
-              <br />
-              Rajasthan, India
-              <br />
-              {GALLERY_HOURS.filter((h) => h.open).map((h) => (
-                <span key={h.day} className="block text-xs text-ink/60">
-                  {h.day} · {h.open}–{h.close}
-                </span>
-              ))}
-            </address>
-            <div className="flex items-center gap-4 mt-5 text-ink/60">
-              <a href="#" aria-label="Instagram" className="hover:text-[color:var(--gold)]">
-                <Instagram size={17} />
-              </a>
-              <a href="#" aria-label="Facebook" className="hover:text-[color:var(--gold)]">
-                <Facebook size={17} />
-              </a>
-              <a href="#" aria-label="LinkedIn" className="hover:text-[color:var(--gold)]">
-                <Linkedin size={17} />
-              </a>
-              <a href="#" aria-label="YouTube" className="hover:text-[color:var(--gold)]">
-                <Youtube size={17} />
-              </a>
-            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed pt-1">
+              Inspired by the beauty of timeless design, Indian craftsmanship, and modern elegance.
+            </p>
           </div>
 
-          {/* Quick Links */}
-          <div className="md:col-span-2">
-            <div className="eyebrow mb-3">Jewellery</div>
-            <ul className="space-y-2 text-sm">
+          {/* 2. Quick Links */}
+          <div>
+            <div className="eyebrow mb-3 text-ink font-semibold">Quick Links</div>
+            <ul className="space-y-2.5 text-sm">
               <li>
-                <Link to="/collection" className="link-underline">
-                  All Collections
+                <Link to="/" className="text-muted-foreground hover:text-ink transition-colors">
+                  Home
                 </Link>
               </li>
               <li>
-                <Link to="/collection" className="link-underline">
-                  Women's Jewellery
+                <Link to="/about" className="text-muted-foreground hover:text-ink transition-colors">
+                  About Us
                 </Link>
               </li>
               <li>
-                <Link to="/collection" className="link-underline">
-                  Men's Jewellery
+                <Link to="/collection" className="text-muted-foreground hover:text-ink transition-colors">
+                  Collections
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="link-underline">
-                  Our Story
+                <Link
+                  to="/collection"
+                  search={{ category: "sterling-silver" }}
+                  className="text-muted-foreground hover:text-ink transition-colors"
+                >
+                  Sterling Silver 925
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/collection"
+                  search={{ category: "handcrafted" }}
+                  className="text-muted-foreground hover:text-ink transition-colors"
+                >
+                  Handcrafted Jewels
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="text-muted-foreground hover:text-ink transition-colors">
+                  Contact Us
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Customer Care & Policies */}
-          <div className="md:col-span-2">
-            <div className="eyebrow mb-3">Customer Care</div>
-            <ul className="space-y-2 text-sm">
+          {/* 3. Customer Support */}
+          <div>
+            <div className="eyebrow mb-3 text-ink font-semibold">Customer Support</div>
+            <ul className="space-y-2.5 text-sm">
               <li>
-                <Link to="/contact" className="link-underline">
-                  Customer Care & Inquiries
+                <Link to="/contact" className="text-muted-foreground hover:text-ink transition-colors">
+                  Contact Us
                 </Link>
               </li>
               <li>
-                <Link to="/policies/$doc" params={{ doc: "privacy" }} className="link-underline">
-                  Privacy Policy
+                <Link
+                  to="/policies/$doc"
+                  params={{ doc: "shipping" }}
+                  className="text-muted-foreground hover:text-ink transition-colors"
+                >
+                  Shipping & Delivery
                 </Link>
               </li>
               <li>
-                <Link to="/policies/$doc" params={{ doc: "terms" }} className="link-underline">
-                  Terms of Service
+                <Link
+                  to="/policies/$doc"
+                  params={{ doc: "returns" }}
+                  className="text-muted-foreground hover:text-ink transition-colors"
+                >
+                  Returns & Exchange
                 </Link>
               </li>
               <li>
-                <Link to="/policies/$doc" params={{ doc: "shipping" }} className="link-underline">
-                  Shipping & Returns
+                <Link
+                  to="/policies/$doc"
+                  params={{ doc: "faqs" }}
+                  className="text-muted-foreground hover:text-ink transition-colors"
+                >
+                  FAQs
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Newsletter & Contact */}
-          <div className="md:col-span-4">
-            <NewsletterSignup />
-            <div className="eyebrow mt-8 mb-3">Contact Showroom</div>
-            <ul className="space-y-2 text-sm">
+          {/* 4. Follow Us */}
+          <div>
+            <div className="eyebrow mb-3 text-ink font-semibold">Follow Us</div>
+            <ul className="space-y-2.5 text-sm">
               <li>
-                <a href="tel:+911412370439" className="link-underline">
-                  +91 141 237 0439
+                <a
+                  href="https://instagram.com/raajsi_official"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-ink transition-colors flex items-center gap-2 group"
+                >
+                  <Instagram size={15} className="group-hover:text-[color:var(--gold)] transition-colors" />
+                  <span>Instagram</span>
                 </a>
               </li>
               <li>
-                <a href="mailto:hello@raajsijewels.com" className="link-underline">
-                  hello@raajsijewels.com
+                <a
+                  href="https://facebook.com/raajsiofficial"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-ink transition-colors flex items-center gap-2 group"
+                >
+                  <Facebook size={15} className="group-hover:text-[color:var(--gold)] transition-colors" />
+                  <span>Facebook</span>
                 </a>
               </li>
+            </ul>
+          </div>
+
+          {/* 5. Contact */}
+          <div>
+            <div className="eyebrow mb-3 text-ink font-semibold">Contact</div>
+            <ul className="space-y-2.5 text-sm">
               <li>
-                <Link to="/contact" className="link-underline">
-                  Jaipur Atelier Location & Map
-                </Link>
+                <div className="text-[11px] uppercase tracking-wider text-muted-foreground">Phone / WhatsApp:</div>
+                <div className="flex flex-col gap-1 mt-1">
+                  <a
+                    href="https://wa.me/919829012345"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-ink hover:text-[color:var(--gold)] font-medium flex items-center gap-1.5 transition-colors text-xs"
+                  >
+                    <MessageCircle size={14} className="text-emerald-600 shrink-0" />
+                    <span>+91 98290 12345</span>
+                  </a>
+                  <a
+                    href="tel:+919829012345"
+                    className="text-ink/80 hover:text-ink text-xs flex items-center gap-1.5 transition-colors"
+                  >
+                    <Phone size={13} className="shrink-0" />
+                    <span>Call Us</span>
+                  </a>
+                </div>
+              </li>
+              <li className="pt-2">
+                <div className="text-[11px] uppercase tracking-wider text-muted-foreground">Email:</div>
+                <a
+                  href="mailto:care@raajsi.com"
+                  className="text-ink hover:text-[color:var(--gold)] font-medium flex items-center gap-1.5 transition-colors mt-1 text-xs"
+                >
+                  <Mail size={14} className="shrink-0" />
+                  <span>care@raajsi.com</span>
+                </a>
               </li>
             </ul>
-            <div className="mt-6 flex items-center gap-2 text-[10px] tracking-widest uppercase text-muted-foreground">
-              <span className="border border-hairline px-2 py-1">SSL 256-Bit</span>
-              <span className="border border-hairline px-2 py-1">BIS Hallmarked</span>
-              <span className="border border-hairline px-2 py-1">Razorpay Verified</span>
-            </div>
           </div>
         </div>
 
-        <div className="border-t border-hairline">
-          <div className="container-editorial py-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-xs text-muted-foreground">
-            <div>© {new Date().getFullYear()} Raajsi Jewels. Est. 2009, Jaipur, Rajasthan.</div>
-            <div className="tracking-widest uppercase" style={{ color: "var(--gold)" }}>
-              Where Heritage Meets Elegance
+        {/* Footer Bottom Bar */}
+        <div className="border-t border-hairline py-6">
+          <div className="container-editorial flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
+            <div>© 2026 Raajsi. All Rights Reserved.</div>
+            <div className="tracking-widest uppercase text-[11px]" style={{ color: "var(--gold)" }}>
+              Timeless Luxury · Jaipur, India
             </div>
           </div>
         </div>

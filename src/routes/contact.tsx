@@ -2,43 +2,41 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHero, KineticTitle } from "@/components/PageHero";
-import { GALLERY_HOURS } from "@/lib/gallery-hours";
 import {
   MapPin,
   Phone,
   Mail,
   MessageCircle,
-  Clock,
   Send,
   CheckCircle2,
-  ShieldCheck,
   Instagram,
   Facebook,
-  Linkedin,
-  Youtube,
+  ArrowRight,
+  Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact Us — Raajsi Jewels, Jaipur" },
+      { title: "Contact Us — Raajsi | Timeless Luxury, Jaipur" },
       {
         name: "description",
         content:
-          "Get in touch with Raajsi Jewels in Jaipur. Inquire about bridal Kundan & Polki collections, bespoke jewellery commissions, or showroom appointments.",
+          "Have a question about a product, your order, shipping, or anything else? Our team would be happy to help. Reach out to Raajsi in Jaipur, India.",
       },
-      { property: "og:title", content: "Contact Us — Raajsi Jewels, Jaipur" },
+      { property: "og:title", content: "Contact Us — Raajsi" },
       {
         property: "og:description",
-        content: "Reach the master jewellery specialists at Raajsi Jewels, Jaipur.",
+        content:
+          "Connect with Raajsi via Phone, WhatsApp, Email, or visit us in Jaipur, Rajasthan, India.",
       },
     ],
   }),
   component: ContactPage,
 });
 
-function ContactPage() {
+export function ContactPage() {
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -49,6 +47,7 @@ function ContactPage() {
     const name = String(fd.get("name") ?? "");
     const email = String(fd.get("email") ?? "");
     const phone = String(fd.get("phone") ?? "") || null;
+    const subject = String(fd.get("subject") ?? "") || null;
     const message = String(fd.get("message") ?? "");
 
     try {
@@ -56,309 +55,363 @@ function ContactPage() {
         name,
         email,
         phone,
-        message,
+        message: subject ? `[Subject: ${subject}] ${message}` : message,
         type: "general",
       });
 
       if (error) {
-        // Fallback gracefully so the user is never blocked
-        console.warn("Inquiries table not found or restricted, storing inquiry locally:", error);
+        console.warn("Inquiry insert fallback:", error.message);
       }
       setSent(true);
-      toast.success("Message received. A Raajsi specialist will get back to you shortly.");
-    } catch {
+      toast.success("Thank you for contacting Raajsi. We'll get back to you soon.");
+    } catch (err) {
       setSent(true);
-      toast.success("Thank you! Your message has been sent to our directors.");
+      toast.success("Thank you for contacting Raajsi. We'll get back to you soon.");
     } finally {
       setSubmitting(false);
     }
   }
 
   return (
-    <div className="bg-paper pb-20">
-      {/* Page Hero Header */}
+    <div className="bg-paper text-ink pb-24">
+      {/* 1. HERO HEADER */}
       <PageHero
-        eyebrow="Get In Touch · Raajsi Jewels"
+        eyebrow="3. Contact Us · Raajsi"
         title={
           <KineticTitle>
-            Contact <em className="italic">our atelier</em>.
+            We'd Love to <em className="italic">Hear From You</em>.
           </KineticTitle>
         }
-        lede="Whether you are selecting a bridal Kundan set, commissioning a bespoke piece, or have an inquiry about certified purity, our jewellery directors are here to assist you."
+        lede="Have a question about a product, your order, shipping, or anything else? Our team would be happy to help."
         meta={
           <>
-            <span>C-Scheme, Jaipur</span>
+            <span>Jaipur, Rajasthan, India</span>
             <span>·</span>
-            <span>Mon – Sat · 11:00 – 19:00</span>
+            <span>Phone / WhatsApp</span>
             <span>·</span>
-            <span>Direct WhatsApp & Call</span>
+            <span>Email & Social</span>
           </>
         }
       />
 
-      {/* Main Contact Grid */}
-      <section className="container-editorial py-10 md:py-16">
+      {/* Main Section */}
+      <section className="container-editorial py-12 md:py-20">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-16">
           
-          {/* LEFT: Contact Information & Cards (5 cols) */}
-          <div className="lg:col-span-5 flex flex-col gap-8">
-            
-            {/* Direct Cards */}
-            <div className="grid gap-4">
-              {/* Phone & WhatsApp */}
-              <div className="p-5 bg-mist/50 border border-hairline flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-[color:var(--gold)]/10 text-[color:var(--gold)] flex items-center justify-center shrink-0">
-                  <Phone size={18} />
-                </div>
-                <div>
-                  <div className="text-[10px] uppercase tracking-wider font-semibold text-ink/50">
-                    Phone & Call Desk
-                  </div>
-                  <a
-                    href="tel:+911412370439"
-                    className="text-base font-serif font-medium text-ink hover:text-[color:var(--gold)] transition-colors block mt-0.5"
-                  >
-                    +91 141 237 0439
-                  </a>
-                  <p className="text-xs text-ink/60 mt-1">
-                    Available Mon – Sat, 11:00 AM – 7:00 PM IST
-                  </p>
-                </div>
-              </div>
-
-              {/* WhatsApp Quick Chat */}
-              <div className="p-5 bg-emerald-50/60 border border-emerald-200/60 flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
-                  <MessageCircle size={18} />
-                </div>
-                <div>
-                  <div className="text-[10px] uppercase tracking-wider font-semibold text-emerald-800">
-                    Instant WhatsApp Assistance
-                  </div>
-                  <a
-                    href="https://wa.me/911412370439?text=Hello%20Raajsi%20Jewels%2C%20I%20would%20like%20to%20inquire%20about%20your%20jewellery%20collection."
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-sm font-medium text-emerald-900 underline block mt-0.5"
-                  >
-                    Chat directly with a jewellery consultant →
-                  </a>
-                  <p className="text-xs text-emerald-700/80 mt-1">
-                    Fastest response for pricing & custom designs
-                  </p>
-                </div>
-              </div>
-
-              {/* Email */}
-              <div className="p-5 bg-mist/50 border border-hairline flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-[color:var(--gold)]/10 text-[color:var(--gold)] flex items-center justify-center shrink-0">
-                  <Mail size={18} />
-                </div>
-                <div>
-                  <div className="text-[10px] uppercase tracking-wider font-semibold text-ink/50">
-                    Email Inquiries
-                  </div>
-                  <a
-                    href="mailto:hello@raajsijewels.com"
-                    className="text-base font-serif font-medium text-ink hover:text-[color:var(--gold)] transition-colors block mt-0.5"
-                  >
-                    hello@raajsijewels.com
-                  </a>
-                  <p className="text-xs text-ink/60 mt-1">
-                    For orders, hallmarking certificates & corporate inquiries
-                  </p>
-                </div>
-              </div>
-
-              {/* Showroom Address */}
-              <div className="p-5 bg-mist/50 border border-hairline flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-[color:var(--gold)]/10 text-[color:var(--gold)] flex items-center justify-center shrink-0">
-                  <MapPin size={18} />
-                </div>
-                <div>
-                  <div className="text-[10px] uppercase tracking-wider font-semibold text-ink/50">
-                    Showroom Address
-                  </div>
-                  <address className="not-italic text-sm text-ink font-sans leading-relaxed mt-1">
-                    <strong>Raajsi Jewels</strong>
-                    <br />
-                    C-Scheme, Ashok Nagar
-                    <br />
-                    Jaipur 302001, Rajasthan, India
-                  </address>
-                </div>
-              </div>
-            </div>
-
-            {/* Operating Hours */}
-            <div className="p-6 bg-paper border border-hairline">
-              <div className="flex items-center gap-2 mb-3">
-                <Clock size={16} className="text-[color:var(--gold)]" />
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-ink">
-                  Showroom Timings
-                </h3>
-              </div>
-              <ul className="divide-y divide-hairline text-xs text-ink/80">
-                {GALLERY_HOURS.map((h) => (
-                  <li key={h.day} className="py-2 flex justify-between">
-                    <span className="font-medium">{h.day}</span>
-                    <span className={h.open ? "text-ink" : "text-ink/40 italic"}>
-                      {h.open ? `${h.open} – ${h.close}` : "Closed"}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Social Links */}
+          {/* LEFT COLUMN: Contact Details & Connect With Raajsi */}
+          <div className="lg:col-span-5 space-y-10">
             <div>
-              <div className="text-[11px] uppercase tracking-wider text-ink/50 font-semibold mb-3">
-                Follow Raajsi Jewels
+              <span className="text-[11px] uppercase tracking-[0.25em] text-[color:var(--gold)] font-medium block mb-2">
+                Reach Out
+              </span>
+              <h2 className="font-serif text-3xl md:text-4xl text-ink mb-4">
+                We'd Love to Hear From You
+              </h2>
+              <p className="text-base text-ink/80 leading-relaxed font-light">
+                Have a question about a product, your order, shipping, or anything else?
+                Our team would be happy to help.
+              </p>
+              <p className="text-sm text-muted-foreground leading-relaxed mt-2">
+                Whether you're looking for more information about a piece or simply want to connect with
+                Raajsi, feel free to reach out.
+              </p>
+            </div>
+
+            {/* Contact Details Card */}
+            <div className="border border-hairline bg-mist/30 p-6 md:p-8 rounded-sm space-y-6">
+              <h3 className="font-serif text-xl text-ink font-medium border-b border-hairline pb-3">
+                Contact Details
+              </h3>
+
+              <div className="space-y-4 text-sm">
+                {/* Phone / WhatsApp */}
+                <div>
+                  <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold block mb-1">
+                    Phone / WhatsApp:
+                  </span>
+                  <div className="flex flex-col gap-1">
+                    <a
+                      href="https://wa.me/919829012345"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-ink hover:text-[color:var(--gold)] font-medium flex items-center gap-2 transition-colors"
+                    >
+                      <MessageCircle size={16} className="text-emerald-600" />
+                      <span>+91 98290 12345 (WhatsApp)</span>
+                    </a>
+                    <a
+                      href="tel:+919829012345"
+                      className="text-ink/80 hover:text-ink flex items-center gap-2 transition-colors text-xs pl-6"
+                    >
+                      <Phone size={13} />
+                      <span>+91 98290 12345 (Call Us)</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div>
+                  <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold block mb-1">
+                    Email:
+                  </span>
+                  <a
+                    href="mailto:care@raajsi.com"
+                    className="text-ink hover:text-[color:var(--gold)] font-medium flex items-center gap-2 transition-colors"
+                  >
+                    <Mail size={16} className="text-amber-700" />
+                    <span>care@raajsi.com</span>
+                  </a>
+                </div>
+
+                {/* Instagram */}
+                <div>
+                  <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold block mb-1">
+                    Instagram:
+                  </span>
+                  <a
+                    href="https://instagram.com/raajsi_official"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-ink hover:text-[color:var(--gold)] font-medium flex items-center gap-2 transition-colors"
+                  >
+                    <Instagram size={16} className="text-pink-600" />
+                    <span>@raajsi_official</span>
+                  </a>
+                </div>
+
+                {/* Facebook */}
+                <div>
+                  <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold block mb-1">
+                    Facebook:
+                  </span>
+                  <a
+                    href="https://facebook.com/raajsiofficial"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-ink hover:text-[color:var(--gold)] font-medium flex items-center gap-2 transition-colors"
+                  >
+                    <Facebook size={16} className="text-blue-600" />
+                    <span>Raajsi Jewellery</span>
+                  </a>
+                </div>
+
+                {/* Location */}
+                <div>
+                  <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold block mb-1">
+                    Location:
+                  </span>
+                  <div className="flex items-center gap-2 text-ink font-medium">
+                    <MapPin size={16} className="text-[color:var(--gold)] shrink-0" />
+                    <span>Jaipur, Rajasthan, India</span>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-4 text-ink/70">
-                <a href="#" aria-label="Instagram" className="hover:text-[color:var(--gold)] transition-colors">
-                  <Instagram size={20} />
-                </a>
-                <a href="#" aria-label="Facebook" className="hover:text-[color:var(--gold)] transition-colors">
-                  <Facebook size={20} />
-                </a>
-                <a href="#" aria-label="LinkedIn" className="hover:text-[color:var(--gold)] transition-colors">
-                  <Linkedin size={20} />
-                </a>
-                <a href="#" aria-label="YouTube" className="hover:text-[color:var(--gold)] transition-colors">
-                  <Youtube size={20} />
-                </a>
+            </div>
+
+            {/* Connect With Raajsi (Social Media Info & Clickable Buttons) */}
+            <div className="border border-hairline bg-paper p-6 md:p-8 rounded-sm space-y-5">
+              <div>
+                <h3 className="font-serif text-xl text-ink font-medium mb-2">
+                  Connect With Raajsi
+                </h3>
+                <p className="text-xs text-muted-foreground mb-3">
+                  Follow us on social media for:
+                </p>
+                <ul className="space-y-1.5 text-xs text-ink/80">
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--gold)]" />
+                    <span>New collection launches</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--gold)]" />
+                    <span>New arrivals</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--gold)]" />
+                    <span>Styling inspiration</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--gold)]" />
+                    <span>Jewellery stories</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--gold)]" />
+                    <span>Special offers</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--gold)]" />
+                    <span>Behind-the-scenes content</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Clickable Mobile & Desktop Buttons */}
+              <div className="pt-2 border-t border-hairline">
+                <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold block mb-3">
+                  Quick Action Buttons:
+                </span>
+                <div className="grid grid-cols-2 gap-2.5">
+                  <a
+                    href="https://instagram.com/raajsi_official"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 border border-hairline bg-paper hover:bg-mist text-ink text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 transition-colors rounded-xs shadow-xs"
+                  >
+                    <Instagram size={14} className="text-pink-600" />
+                    <span>Instagram</span>
+                  </a>
+                  <a
+                    href="https://facebook.com/raajsiofficial"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 border border-hairline bg-paper hover:bg-mist text-ink text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 transition-colors rounded-xs shadow-xs"
+                  >
+                    <Facebook size={14} className="text-blue-600" />
+                    <span>Facebook</span>
+                  </a>
+                  <a
+                    href="https://wa.me/919829012345"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 border border-hairline bg-paper hover:bg-mist text-ink text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 transition-colors rounded-xs shadow-xs"
+                  >
+                    <MessageCircle size={14} className="text-emerald-600" />
+                    <span>WhatsApp</span>
+                  </a>
+                  <a
+                    href="tel:+919829012345"
+                    className="p-3 border border-hairline bg-paper hover:bg-mist text-ink text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 transition-colors rounded-xs shadow-xs"
+                  >
+                    <Phone size={14} />
+                    <span>Call Us</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* RIGHT: Contact Form & Map (7 cols) */}
-          <div className="lg:col-span-7 flex flex-col gap-8">
-            
-            {/* Contact Form Card */}
-            <div className="p-8 bg-paper border border-hairline shadow-sm">
-              <div className="mb-6">
-                <div className="eyebrow mb-1" style={{ color: "var(--gold)" }}>
-                  Send a Message
-                </div>
+          {/* RIGHT COLUMN: 4. CONTACT FORM */}
+          <div className="lg:col-span-7">
+            <div className="border border-hairline bg-paper p-8 md:p-12 shadow-sm rounded-sm">
+              <div className="border-b border-hairline pb-4 mb-8">
+                <span className="text-[11px] uppercase tracking-[0.25em] text-[color:var(--gold)] font-medium block mb-1">
+                  4. Contact Form
+                </span>
                 <h2 className="font-serif text-2xl md:text-3xl text-ink">
-                  How may we assist you?
+                  Get in Touch
                 </h2>
-                <p className="text-xs text-ink/60 mt-1">
-                  Fill in your details below. A jewellery specialist will respond within 24 hours.
+                <p className="text-xs text-muted-foreground mt-1">
+                  Leave your details below and our team will get back to you promptly.
                 </p>
               </div>
 
               {sent ? (
-                <div className="p-8 bg-emerald-50 border border-emerald-200 text-center flex flex-col items-center gap-3">
-                  <CheckCircle2 size={36} className="text-emerald-700" />
-                  <h3 className="font-serif text-2xl text-emerald-900">
-                    Inquiry Received
-                  </h3>
-                  <p className="text-xs text-emerald-800 max-w-md leading-relaxed">
-                    Thank you for contacting Raajsi Jewels. One of our jewellery directors will review your message and reach out to you via phone or email shortly.
+                <div className="py-16 text-center space-y-4 animate-in fade-in">
+                  <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border border-emerald-200">
+                    <CheckCircle2 size={32} />
+                  </div>
+                  <h3 className="font-serif text-2xl text-ink">Message Received</h3>
+                  <p className="text-base text-ink/80 max-w-md mx-auto leading-relaxed">
+                    Thank you for contacting Raajsi. We'll get back to you soon.
                   </p>
-                  <button
-                    onClick={() => setSent(false)}
-                    className="mt-4 text-xs font-medium uppercase tracking-wider underline text-emerald-900 hover:text-emerald-700"
-                  >
-                    Send another message
-                  </button>
+                  <div className="pt-4">
+                    <button
+                      type="button"
+                      onClick={() => setSent(false)}
+                      className="text-xs uppercase tracking-widest text-[color:var(--gold)] underline hover:text-ink"
+                    >
+                      Send another message
+                    </button>
+                  </div>
                 </div>
               ) : (
-                <form onSubmit={submit} className="space-y-4">
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-[11px] uppercase tracking-wider text-ink/60 font-semibold block mb-1">
-                        Your Full Name *
-                      </label>
-                      <input
-                        type="text"
-                        name="name"
-                        placeholder="e.g. Maharani Gayatri"
-                        required
-                        className="w-full bg-mist/30 border border-hairline px-3.5 py-2.5 text-xs text-ink placeholder:text-ink/40 focus:outline-none focus:border-ink"
-                      />
-                    </div>
+                <form onSubmit={submit} className="space-y-6">
+                  {/* Name */}
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] tracking-[0.18em] uppercase font-semibold text-ink/70 flex items-center justify-between">
+                      <span>Name *</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      required
+                      placeholder="[Enter your name]"
+                      className="w-full border border-hairline px-4 py-3 text-sm bg-transparent rounded-none focus:border-ink outline-none transition-colors"
+                    />
+                  </div>
 
-                    <div>
-                      <label className="text-[11px] uppercase tracking-wider text-ink/60 font-semibold block mb-1">
-                        Email Address *
+                  {/* Email & Phone Number Grid */}
+                  <div className="grid sm:grid-cols-2 gap-6">
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] tracking-[0.18em] uppercase font-semibold text-ink/70">
+                        Email *
                       </label>
                       <input
                         type="email"
                         name="email"
-                        placeholder="your.email@domain.com"
                         required
-                        className="w-full bg-mist/30 border border-hairline px-3.5 py-2.5 text-xs text-ink placeholder:text-ink/40 focus:outline-none focus:border-ink"
+                        placeholder="[Enter your email]"
+                        className="w-full border border-hairline px-4 py-3 text-sm bg-transparent rounded-none focus:border-ink outline-none transition-colors"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] tracking-[0.18em] uppercase font-semibold text-ink/70">
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        placeholder="[Enter your phone number]"
+                        className="w-full border border-hairline px-4 py-3 text-sm bg-transparent rounded-none focus:border-ink outline-none transition-colors"
                       />
                     </div>
                   </div>
 
-                  <div>
-                    <label className="text-[11px] uppercase tracking-wider text-ink/60 font-semibold block mb-1">
-                      Phone Number (Optional / WhatsApp)
+                  {/* Subject */}
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] tracking-[0.18em] uppercase font-semibold text-ink/70">
+                      Subject
                     </label>
                     <input
-                      type="tel"
-                      name="phone"
-                      placeholder="+91 98765 43210"
-                      className="w-full bg-mist/30 border border-hairline px-3.5 py-2.5 text-xs text-ink placeholder:text-ink/40 focus:outline-none focus:border-ink"
+                      type="text"
+                      name="subject"
+                      placeholder="[Enter subject]"
+                      className="w-full border border-hairline px-4 py-3 text-sm bg-transparent rounded-none focus:border-ink outline-none transition-colors"
                     />
                   </div>
 
-                  <div>
-                    <label className="text-[11px] uppercase tracking-wider text-ink/60 font-semibold block mb-1">
-                      Your Message / Inquiry Details *
+                  {/* Message */}
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] tracking-[0.18em] uppercase font-semibold text-ink/70">
+                      Message *
                     </label>
                     <textarea
                       name="message"
                       rows={5}
                       required
-                      placeholder="Please let us know about the jewellery piece, gold purity, or custom request you are interested in..."
-                      className="w-full bg-mist/30 border border-hairline px-3.5 py-2.5 text-xs text-ink placeholder:text-ink/40 focus:outline-none focus:border-ink resize-none"
+                      placeholder="[Write your message]"
+                      className="w-full border border-hairline px-4 py-3 text-sm bg-transparent rounded-none focus:border-ink outline-none transition-colors resize-y"
                     />
                   </div>
 
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="cta-gold w-full flex items-center justify-center gap-2 py-3.5 text-xs"
-                  >
-                    {submitting ? "Sending..." : "Send Message to Raajsi Jewels"} <Send size={14} />
-                  </button>
+                  {/* Submit Button */}
+                  <div className="pt-2">
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-ink text-paper px-8 py-3.5 text-xs tracking-[0.2em] uppercase hover:bg-ink/90 transition-colors disabled:opacity-50"
+                    >
+                      <span>{submitting ? "Sending…" : "Send Message"}</span>
+                      <Send size={13} />
+                    </button>
+                  </div>
                 </form>
               )}
-            </div>
-
-            {/* Embedded Map Section */}
-            <div className="border border-hairline bg-paper p-5">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[11px] uppercase tracking-wider font-semibold text-ink flex items-center gap-1.5">
-                  <MapPin size={14} className="text-[color:var(--gold)]" /> Showroom Map — Jaipur
-                </span>
-                <a
-                  href="https://www.google.com/maps/search/?api=1&query=C-Scheme+Jaipur+Rajasthan"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-xs text-[color:var(--gold)] underline"
-                >
-                  Open in Google Maps →
-                </a>
-              </div>
-              <div className="aspect-[16/9] w-full bg-mist border border-hairline overflow-hidden">
-                <iframe
-                  title="Raajsi Jewels Showroom, Jaipur Map"
-                  src="https://www.openstreetmap.org/export/embed.html?bbox=75.7900%2C26.9020%2C75.8250%2C26.9200&amp;layer=mapnik&amp;marker=26.9124%2C75.8003"
-                  className="w-full h-full border-0"
-                  loading="lazy"
-                />
-              </div>
             </div>
           </div>
         </div>
       </section>
-
     </div>
   );
 }

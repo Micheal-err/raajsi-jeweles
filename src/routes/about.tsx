@@ -4,62 +4,61 @@ import { PageHero, KineticTitle } from "@/components/PageHero";
 import { KineticBand } from "@/components/KineticBand";
 import interior from "@/assets/gallery-interior.jpg";
 import { ParallaxImage } from "@/components/Parallax";
-import heroImg from "@/assets/hero-artwork.jpg";
-import art1 from "@/assets/artwork-1.jpg";
-import art2 from "@/assets/artwork-2.jpg";
-import art3 from "@/assets/artwork-3.jpg";
-import art4 from "@/assets/artwork-4.jpg";
-import { Testimonials } from "@/components/Testimonials";
+import heroImg from "@/assets/jewellery-hero.png";
+import ringImg from "@/assets/jewellery-rings.png";
+import banglesImg from "@/assets/jewellery-bangles.jpg";
+import necklaceImg from "@/assets/jewellery-necklace.jpg";
 import {
-  Check,
   Sparkles,
-  Compass,
   ShieldCheck,
-  HeartHandshake,
-  Eye,
+  Check,
+  Gem,
   Award,
+  ArrowRight,
   Layers,
+  Heart,
+  Compass,
 } from "lucide-react";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — Raajsi Jewels, Jaipur" },
+      { title: "About Raajsi — Timeless Luxury | Jaipur, India" },
       {
         name: "description",
         content:
-          "Founded in 2009, Raajsi Jewels is a Jaipur-based fine jewellery house committed to Rajasthani craft traditions, BIS Hallmark integrity, and connecting artisans with collectors worldwide.",
+          "Raajsi is a jewellery brand inspired by the beauty of timeless design, Indian craftsmanship, and modern elegance. Handcrafted in Jaipur, India.",
       },
-      { property: "og:title", content: "About — Raajsi Jewels" },
+      { property: "og:title", content: "About Raajsi — Timeless Luxury" },
       {
         property: "og:description",
         content:
-          "A Jaipur-based fine jewellery house since 2009. Rajasthani craftsmanship with BIS Hallmark certification on every piece.",
+          "Explore the philosophy, craftsmanship, and distinctive collections of Raajsi — Timeless Luxury, Crafted for You.",
       },
     ],
   }),
   component: AboutPage,
 });
 
-function AboutPage() {
+export function AboutPage() {
   return (
-    <>
-      {/* Hero Header */}
+    <div className="bg-paper text-ink pb-24">
+      {/* 1. HERO HEADER */}
       <PageHero
-        eyebrow="About Raajsi Jewels"
+        eyebrow="About Raajsi · Jaipur, India"
         title={
           <KineticTitle>
-            Where Rajasthani tradition meets <em className="italic">timeless elegance</em>.
+            Timeless Luxury, <em className="italic">Crafted for You</em>.
           </KineticTitle>
         }
-        lede="Founded in 2009, Raajsi Jewels is a Jaipur-based fine jewellery house committed to preserving Rajasthani craft traditions, presenting exquisite collections, and connecting master artisans with collectors, brides, and connoisseurs across India and the world."
+        lede="Raajsi is a jewellery brand inspired by the beauty of timeless design, Indian craftsmanship, and modern elegance."
         meta={
           <>
-            <span>Est. 2009</span>
+            <span>Brand: Raajsi</span>
             <span>·</span>
-            <span>Jaipur, Rajasthan</span>
+            <span>Tagline: Timeless Luxury</span>
             <span>·</span>
-            <span>Fine Indian Jewellery</span>
+            <span>Jaipur, India</span>
           </>
         }
         visual="gallery"
@@ -67,429 +66,366 @@ function AboutPage() {
 
       <KineticBand />
 
-      {/* Hero Image Section */}
-      <section className="container-editorial pb-20 md:pb-28 pt-12 md:pt-16">
+      {/* Hero Showcase Image */}
+      <section className="container-editorial pb-16 md:pb-24 pt-8 md:pt-12">
         <Reveal>
-          <div className="relative overflow-hidden group shadow-xl border border-hairline">
+          <div className="relative overflow-hidden shadow-xl border border-hairline group">
             <ParallaxImage
               src={interior}
-              alt="Interior of Raajsi Jewels Showroom, Jaipur"
+              alt="Raajsi Jewellery Atelier in Jaipur, India"
               aspectRatio="aspect-[16/9]"
-              className="w-full h-[450px] md:h-[620px]"
+              className="w-full h-[400px] md:h-[580px]"
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-ink/65 via-transparent to-transparent pointer-events-none" />
-              <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 bg-paper/95 backdrop-blur px-5 py-3 border border-hairline z-10 shadow-lg">
-                <span className="eyebrow text-[color:var(--gold)]">The Showroom & Atelier</span>
-                <p className="text-xs text-ink/80 mt-0.5 font-medium">C-Scheme, Jaipur · Rajasthan, India</p>
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/75 via-ink/20 to-transparent pointer-events-none" />
+              <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 bg-paper/95 backdrop-blur px-6 py-4 border border-hairline z-10 shadow-lg max-w-md">
+                <span className="text-[10px] tracking-[0.25em] uppercase font-semibold text-[color:var(--gold)] block mb-1">
+                  Atelier & Origin
+                </span>
+                <p className="font-serif text-lg text-ink font-medium leading-snug">
+                  Jaipur, Rajasthan, India
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Where traditional craftsmanship and contemporary aesthetics come together.
+                </p>
               </div>
             </ParallaxImage>
           </div>
         </Reveal>
       </section>
 
-      {/* Overview & Story */}
-      <section className="container-editorial pb-24 md:pb-32">
-        <div className="grid md:grid-cols-12 gap-10 items-start">
-          <div className="md:col-span-4 md:sticky md:top-32 self-start space-y-3">
-            <div className="eyebrow" style={{ color: 'var(--gold)' }}>Overview</div>
-            <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">
-              A heritage jewellery house rooted in Rajasthani craft tradition.
+      {/* 2. ABOUT RAAJSI SECTION */}
+      <section className="container-editorial pb-20 md:pb-28">
+        <div className="grid md:grid-cols-12 gap-10 lg:gap-16 items-start">
+          <div className="md:col-span-5 md:sticky md:top-32 self-start space-y-3">
+            <div className="text-[11px] uppercase tracking-[0.25em] text-[color:var(--gold)] font-medium">
+              1. About Us
+            </div>
+            <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-ink leading-tight">
+              About Raajsi
             </h2>
+            <div className="w-12 h-px bg-[color:var(--gold)] mt-4" />
           </div>
-          <div className="md:col-span-7 md:col-start-6 space-y-6 text-lg leading-relaxed text-ink/85">
-            <p>
-              Operating from the pink city of Jaipur, Raajsi Jewels combines a commercially informed
-              fine jewellery practice with deep reverence for Rajasthani craft traditions — Kundan,
-              Meenakari, Polki, and Jadau work.
+
+          <div className="md:col-span-7 space-y-6 text-lg md:text-xl leading-relaxed text-ink/85 font-light">
+            <p className="font-serif text-2xl md:text-3xl text-ink font-normal leading-snug italic">
+              "Timeless Luxury, Crafted for You"
             </p>
+
             <p>
-              We work with master craftsmen from Jaipur's old city, while remaining committed to
-              introducing traditional techniques to modern, wearable designs that speak to
-              contemporary sensibilities.
+              Raajsi is a jewellery brand inspired by the beauty of timeless design, Indian craftsmanship,
+              and modern elegance.
             </p>
-            <p className="text-base text-ink/70 border-l-2 pl-4 italic" style={{ borderColor: 'var(--gold)' }}>
-              "We view nurturing relationships with master artisans as the foundation of our role —
-              helping them preserve their art form while reaching new audiences and collectors
-              globally."
+
+            <p>
+              We believe jewellery should be more than an accessory — it should reflect your personality,
+              complement your individuality, and become a part of the moments you cherish.
+            </p>
+
+            <p>
+              From minimal everyday pieces to distinctive handcrafted designs, Raajsi brings together
+              contemporary aesthetics and traditional craftsmanship to create jewellery that feels both
+              elegant and personal.
+            </p>
+
+            <p className="text-base text-ink/75 border-l-2 pl-5 py-1 italic" style={{ borderColor: "var(--gold)" }}>
+              Our collections are thoughtfully curated for those who appreciate beautiful details,
+              expressive designs, and jewellery that can be worn and loved beyond a single occasion.
             </p>
           </div>
         </div>
       </section>
 
-      {/* What the Gallery Represents (3 Pillars) */}
-      <section className="bg-mist border-y border-hairline py-24 md:py-32">
+      {/* 3. OUR PHILOSOPHY */}
+      <section className="bg-mist/50 border-y border-hairline py-20 md:py-28">
         <div className="container-editorial">
           <Reveal>
-            <div className="eyebrow mb-3">Core Focus</div>
-            <h2 className="font-serif text-3xl md:text-5xl text-ink mb-12">
-              What Raajsi Jewels Represents
-            </h2>
+            <div className="max-w-3xl mb-12">
+              <div className="text-[11px] uppercase tracking-[0.25em] text-[color:var(--gold)] font-medium mb-2">
+                Brand Core
+              </div>
+              <h2 className="font-serif text-3xl md:text-5xl text-ink mb-4">
+                Our Philosophy
+              </h2>
+              <p className="font-serif text-xl md:text-2xl text-ink/90 italic leading-relaxed">
+                At Raajsi, we believe luxury does not always have to be extravagant.
+              </p>
+              <p className="text-base md:text-lg text-muted-foreground mt-3 leading-relaxed">
+                True luxury lies in thoughtful design, quality, craftsmanship, and the feeling a piece gives you
+                when you wear it.
+              </p>
+            </div>
           </Reveal>
 
-          <div className="grid md:grid-cols-3 gap-8 md:gap-12">
+          {/* 5 Emphasis Pillars */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6 mt-8">
             {[
               {
                 num: "01",
-                icon: Layers,
-                title: "Crafting & Presenting Collections",
-                desc: "Creating bridal, festive, and everyday jewellery collections using traditional Kundan, Meenakari, Polki and contemporary techniques.",
+                title: "Timeless Aesthetics",
+                desc: "Classic silhouettes that remain forever graceful beyond fleeting trends.",
               },
               {
                 num: "02",
-                icon: ShieldCheck,
-                title: "BIS Hallmark Certified Jewellery",
-                desc: "Every piece is hallmarked at BIS-approved centres. Gold, silver, and gemstones are certified for purity and quality with complete documentation.",
+                title: "Thoughtful Craftsmanship",
+                desc: "Meticulous attention to every contour, setting, metal purity, and finish.",
               },
               {
                 num: "03",
-                icon: HeartHandshake,
-                title: "Supporting Master Artisans",
-                desc: "Providing sustained relationships, fair wages, and global exposure for Jaipur's karigars and craftsmen — preserving their art for future generations.",
+                title: "Contemporary Design",
+                desc: "Modern, wearable sensibilities tailored for today's dynamic lifestyles.",
               },
-            ].map((pillar, idx) => {
-              const Icon = pillar.icon;
-              return (
-                <Reveal key={pillar.num} delayMs={idx * 100}>
-                  <div className="bg-paper p-8 border border-hairline h-full flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between mb-6">
-                        <span className="eyebrow font-mono text-sm">{pillar.num}</span>
-                        <Icon size={20} className="text-[color:var(--accent)]" />
-                      </div>
-                      <h3 className="font-serif text-2xl mb-3 text-ink">{pillar.title}</h3>
-                      <p className="text-sm text-ink/70 leading-relaxed">{pillar.desc}</p>
-                    </div>
+              {
+                num: "04",
+                title: "Individual Expression",
+                desc: "Jewellery created to reflect personality and complement individuality.",
+              },
+              {
+                num: "05",
+                title: "Everyday & Occasion Wear",
+                desc: "Versatility that transitions effortlessly from daily wear to celebrations.",
+              },
+            ].map((pillar, idx) => (
+              <Reveal key={pillar.num} delayMs={idx * 80}>
+                <div className="bg-paper p-6 border border-hairline h-full flex flex-col justify-between hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                  <div>
+                    <span className="font-mono text-xs text-[color:var(--gold)] font-semibold block mb-3">
+                      {pillar.num}
+                    </span>
+                    <h3 className="font-serif text-lg font-medium text-ink mb-2">
+                      {pillar.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {pillar.desc}
+                    </p>
                   </div>
-                </Reveal>
-              );
-            })}
-          </div>
-
-          {/* Hosted Programming List */}
-          <div className="mt-16 pt-12 border-t border-hairline grid md:grid-cols-12 gap-8">
-            <div className="md:col-span-4">
-              <div className="eyebrow mb-2">Services & Events</div>
-              <h3 className="font-serif text-2xl">Raajsi Offers:</h3>
-            </div>
-            <div className="md:col-span-8 grid sm:grid-cols-2 gap-4 text-sm text-ink/80">
-              {[
-                "Bridal Jewellery Consultations",
-                "Bespoke Custom Orders",
-                "Jewellery Repair & Restoration",
-                "Resizing & Polishing",
-                "BIS Hallmarking Assistance",
-                "Gemstone Grading Reports",
-                "Gift Wrapping & Packaging",
-                "Showroom Appointments",
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-2.5 p-2.5 border border-hairline bg-paper/60"
-                >
-                  <Check size={14} className="text-[color:var(--gold)] shrink-0" />
-                  <span>{item}</span>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Vision & Mission */}
-      <section className="container-editorial py-24 md:py-32">
-        <div className="grid md:grid-cols-2 gap-12 md:gap-16">
-          {/* Vision */}
-          <Reveal>
-            <div className="border border-hairline p-8 md:p-12 bg-paper relative overflow-hidden h-full">
-              <div className="eyebrow mb-4 text-[color:var(--accent)]">Our Vision</div>
-              <h3 className="font-serif text-2xl md:text-3xl mb-6 text-ink">
-                Rajasthan’s leading contemporary jewellery showroom & cultural institution.
-              </h3>
-              <p className="text-base text-ink/80 leading-relaxed">
-                To establish Raajsi Jewels as Rajasthan’s leading contemporary jewellery showroom
-                and cultural institution—one that strengthens the professional journeys of artists,
-                expands access to meaningful art experiences, and connects Indian artistic practices
-                with local and international audiences.
-              </p>
-            </div>
-          </Reveal>
-
-          {/* Mission */}
-          <Reveal delayMs={150}>
-            <div className="border border-hairline p-8 md:p-12 bg-paper relative overflow-hidden h-full">
-              <div className="eyebrow mb-4 text-[color:var(--accent)]">Our Mission</div>
-              <h3 className="font-serif text-2xl md:text-3xl mb-6 text-ink">
-                Presenting authentic, original, and excellent artistic practices.
-              </h3>
-              <p className="text-base text-ink/80 leading-relaxed mb-6">
-                To present authentic, original, and excellent artistic practices while creating
-                lasting relationships between artists, collectors, institutions, businesses, and
-                communities.
-              </p>
-              <ul className="space-y-2 text-sm text-ink/75">
-                {[
-                  "Promote Indian artists working in modern & contemporary practices",
-                  "Encourage artistic experimentation and excellence",
-                  "Facilitate meaningful art acquisition and collection",
-                  "Build sustained dialogue between art, society, and contemporary life",
-                ].map((m, i) => (
-                  <li key={i} className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--accent)]" />
-                    <span>{m}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Curatorial & Artistic Philosophy Quote */}
-      <section className="bg-ink text-paper py-24 md:py-32">
-        <div className="container-editorial">
-          <Reveal>
-            <div className="eyebrow text-paper/50 mb-6">Curatorial & Artistic Philosophy</div>
-            <h2 className="font-serif text-3xl md:text-6xl leading-[1.1] max-w-4xl mb-8 text-paper">
-              "For Raajsi Jewels, an artwork is not merely an object. Its value lies in the idea behind
-              it, the artist’s process, its provenance, and its{" "}
-              <em className="italic text-[color:var(--accent)]">materiality</em>."
-            </h2>
-            <p className="text-lg text-paper/80 max-w-2xl font-serif italic border-l border-paper/30 pl-4">
-              "The gallery believes that{" "}
-              <span className="text-[color:var(--accent)] not-italic font-medium">
-                authenticity is priceless
-              </span>
-              . Anyone who acquires an artwork should feel confident not only in owning an authentic
-              collectible, but also in understanding every attribute connected to it."
-            </p>
-          </Reveal>
-
-          {/* 6 Philosophical Pillars */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 mt-16 pt-16 border-t border-paper/15">
-            {[
-              {
-                title: "Authenticity",
-                text: "Every work certified with direct studio provenance.",
-              },
-              {
-                title: "Originality",
-                text: "Honouring distinct artistic voices and visionary concepts.",
-              },
-              {
-                title: "Artistic Excellence",
-                text: "Upholding master craftsmanship and conceptual depth.",
-              },
-              {
-                title: "Experimentation",
-                text: "Supporting genre-pushing mediums and installations.",
-              },
-              {
-                title: "Conceptual Relevance",
-                text: "Bridging cultural heritage with modern global discourse.",
-              },
-              {
-                title: "Collectibility",
-                text: "Fostering long-term value for private and institutional archives.",
-              },
-            ].map((item, idx) => (
-              <div key={idx} className="border border-paper/15 p-5 bg-paper/5">
-                <span className="text-[10px] tracking-widest uppercase text-paper/40 block mb-2 font-mono">
-                  Pillar 0{idx + 1}
-                </span>
-                <h4 className="font-serif text-lg text-paper mb-1">{item.title}</h4>
-                <p className="text-xs text-paper/60 leading-relaxed">{item.text}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
+
+          <div className="mt-12 p-6 bg-paper border border-hairline text-center max-w-2xl mx-auto">
+            <p className="text-sm md:text-base text-ink/85 leading-relaxed font-serif">
+              Whether you prefer understated elegance or something more distinctive, Raajsi is designed
+              to help you find a piece that feels uniquely yours.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Wider Cultural Life & Guided Walkthroughs */}
-      <section className="container-editorial py-24 md:py-32">
-        <div className="grid md:grid-cols-12 gap-12 items-center">
+      {/* 4. MADE TO BE YOURS */}
+      <section className="container-editorial py-20 md:py-28">
+        <div className="grid md:grid-cols-12 gap-10 items-center">
           <div className="md:col-span-6 space-y-6">
-            <div className="eyebrow text-[color:var(--accent)]">A Wider Cultural Life</div>
-            <h2 className="font-serif text-3xl md:text-5xl leading-tight text-ink">
-              More than a commercial exhibition space.
+            <div className="text-[11px] uppercase tracking-[0.25em] text-[color:var(--gold)] font-medium">
+              Expression
+            </div>
+            <h2 className="font-serif text-3xl md:text-5xl text-ink leading-tight">
+              Made to Be Yours
             </h2>
-            <p className="text-base text-ink/80 leading-relaxed">
-              Raajsi Jewels is part of a larger cultural environment where visual art
-              intersects with performance, literature, music, design, business, and public dialogue.
+            <div className="w-12 h-px bg-[color:var(--gold)]" />
+            <p className="text-lg md:text-xl text-ink/85 font-serif italic">
+              Every piece carries its own character.
             </p>
-            <p className="text-base text-ink/80 leading-relaxed">
-              Our guided walk-throughs, led by knowledgeable members of the team, are designed to
-              make the experience engaging, accessible, and memorable. Rather than simply viewing
-              artworks, visitors are encouraged to understand the stories, ideas, materials, and
-              artistic practices behind them.
+            <p className="text-base text-muted-foreground leading-relaxed">
+              From the clean elegance of our Sterling Silver collection to the artistic charm of our
+              handcrafted jewellery, Raajsi celebrates different expressions of beauty.
             </p>
-            <div className="pt-4">
-              <Link to="/contact" className="cta-red">
-                Contact Atelier & Consultation →
-              </Link>
+            <div className="pt-2">
+              <span className="font-serif text-xl font-medium tracking-wide text-ink">
+                Raajsi — Timeless Luxury.
+              </span>
             </div>
           </div>
-          <div className="md:col-span-6">
-            <div className="grid grid-cols-2 gap-4">
-              <img
-                src={art1}
-                alt="Cultural Event"
-                className="w-full h-64 object-cover border border-hairline"
-              />
-              <img
-                src={art2}
-                alt="Gallery Guided Tour"
-                className="w-full h-64 object-cover border border-hairline mt-8"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Who the Gallery Serves */}
-      <section className="bg-mist border-y border-hairline py-24 md:py-32">
-        <div className="container-editorial">
-          <Reveal>
-            <div className="eyebrow mb-3">Community & Audience</div>
-            <h2 className="font-serif text-3xl md:text-5xl text-ink mb-12">
-              Who the Gallery Serves
-            </h2>
-          </Reveal>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {[
-              "First-time Art Buyers",
-              "Experienced Collectors",
-              "High-Net-Worth Individuals",
-              "Interior Designers & Architects",
-              "Hospitality Businesses",
-              "Corporate Collections",
-              "Art Consultants & Patrons",
-              "International Buyers & NRIs",
-              "Artists & Curators",
-              "Creative Professionals",
-              "Cultural Enthusiasts",
-              "Institutional Collectors",
-            ].map((audience, i) => (
-              <div key={i} className="p-4 bg-paper border border-hairline flex items-center gap-3">
-                <Sparkles size={14} className="text-[color:var(--accent)] shrink-0" />
-                <span className="text-sm font-medium text-ink">{audience}</span>
+          <div className="md:col-span-6 grid grid-cols-2 gap-4">
+            <div className="space-y-4">
+              <div className="aspect-[4/5] overflow-hidden border border-hairline rounded-sm">
+                <img
+                  src={ringImg}
+                  alt="Sterling Silver minimal elegance"
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                />
               </div>
-            ))}
+              <div className="text-center">
+                <span className="text-xs uppercase tracking-widest text-ink font-serif font-medium">
+                  Sterling Silver 925
+                </span>
+                <p className="text-[11px] text-muted-foreground">Modern • Minimal • Elegant</p>
+              </div>
+            </div>
+
+            <div className="space-y-4 pt-8">
+              <div className="aspect-[4/5] overflow-hidden border border-hairline rounded-sm">
+                <img
+                  src={banglesImg}
+                  alt="Handcrafted Jewels artistry"
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                />
+              </div>
+              <div className="text-center">
+                <span className="text-xs uppercase tracking-widest text-ink font-serif font-medium">
+                  Handcrafted Jewels
+                </span>
+                <p className="text-[11px] text-muted-foreground">Artistic • Whimsical • Expressive</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* What Makes Raajsi Jewels Unique (7 Points) */}
-      <section className="container-editorial py-24 md:py-32">
-        <Reveal>
-          <div className="eyebrow mb-3 text-[color:var(--accent)]">Distinction</div>
-          <h2 className="font-serif text-3xl md:text-5xl text-ink mb-12">
-            What Makes Raajsi Jewels Unique
-          </h2>
-        </Reveal>
+      {/* 5. EXPLORE OUR TWO DISTINCT COLLECTIONS (Clearly Separated) */}
+      <section className="bg-mist/30 border-t border-hairline py-20 md:py-28">
+        <div className="container-editorial">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <span className="text-[11px] uppercase tracking-[0.25em] text-[color:var(--gold)] font-medium block mb-2">
+              2. Collections
+            </span>
+            <h2 className="font-serif text-3xl md:text-5xl text-ink mb-4">
+              Our Collections
+            </h2>
+            <p className="text-muted-foreground text-sm md:text-base">
+              Explore two distinctive expressions of Raajsi jewellery — refined Sterling Silver and artistic handcrafted pieces.
+            </p>
+          </div>
 
-        <div className="space-y-4">
-          {[
-            {
-              num: "01",
-              title: "A Contemporary Art Practice with a Global Perspective",
-              desc: "Combining Jaipur's rich artistic heritage with international curatorial standards.",
-            },
-            {
-              num: "02",
-              title: "Commitment to Indian Artists",
-              desc: "Strengthening the presence and growing international relevance of modern and contemporary Indian practices.",
-            },
-            {
-              num: "03",
-              title: "Focus on Authenticity & Excellence",
-              desc: "Unwavering commitment to certified provenance, original ideas, and master materiality.",
-            },
-            {
-              num: "04",
-              title: "Beyond Commercial Dealing",
-              desc: "Extending into artist career development, institutional guidance, and public programming.",
-            },
-            {
-              num: "05",
-              title: "Diverse Multidisciplinary Venue",
-              desc: "Capable of hosting exhibitions, performances, literature launches, and corporate cultural events.",
-            },
-            {
-              num: "06",
-              title: "Immersive Guided Art Experiences",
-              desc: "Walk-throughs designed to foster restorative, art-led reflection and deep appreciation.",
-            },
-            {
-              num: "07",
-              title: "Relationship-Driven Approach",
-              desc: "Sustained connections bridging artists with collectors, businesses, patrons, and markets.",
-            },
-          ].map((item) => (
-            <div
-              key={item.num}
-              className="p-6 border border-hairline bg-paper flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-ink transition-colors"
-            >
-              <div className="flex items-start gap-4">
-                <span className="font-mono text-xs text-[color:var(--accent)] font-bold">
-                  {item.num}
-                </span>
-                <div>
-                  <h4 className="font-serif text-lg text-ink font-medium">{item.title}</h4>
-                  <p className="text-xs text-ink/70 mt-1">{item.desc}</p>
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+            {/* COLLECTION 01: STERLING SILVER 925 */}
+            <div className="bg-paper border border-hairline p-8 md:p-10 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between border-b border-hairline pb-3">
+                  <span className="text-xs font-mono text-[color:var(--gold)] font-semibold uppercase tracking-wider">
+                    Collection 01
+                  </span>
+                  <span className="text-[10px] uppercase tracking-wider bg-mist px-2.5 py-1 text-ink/80 rounded-xs">
+                    925 Hallmark
+                  </span>
+                </div>
+
+                <h3 className="font-serif text-2xl md:text-3xl text-ink">
+                  Sterling Silver 925
+                </h3>
+                <p className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
+                  Modern. Elegant. Timeless.
+                </p>
+
+                <p className="text-sm text-ink/80 leading-relaxed">
+                  Our Sterling Silver collection is crafted in 925 Sterling Silver, offering a refined and versatile
+                  aesthetic for everyday elegance and special occasions. Designed with a modern and minimal approach,
+                  these pieces are made for those who appreciate understated luxury. From delicate jewellery to
+                  contemporary statement pieces, the collection combines simplicity with sophisticated detailing.
+                </p>
+
+                <div className="pt-2">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-ink block mb-2">
+                    Collection Highlights:
+                  </span>
+                  <ul className="space-y-1.5 text-xs text-muted-foreground">
+                    <li className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--gold)]" />
+                      <span>925 Sterling Silver</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--gold)]" />
+                      <span>Modern and minimal designs</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--gold)]" />
+                      <span>Elegant everyday jewellery</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--gold)]" />
+                      <span>Versatile styling & Timeless aesthetic</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="text-xs text-ink/75 pt-1">
+                  <strong>Perfect for:</strong> Everyday wear, gifting, layering, and effortless occasions.
                 </div>
               </div>
+
+              <div className="pt-8">
+                <Link
+                  to="/collection"
+                  search={{ category: "sterling-silver" }}
+                  className="w-full text-center inline-flex items-center justify-center gap-2 py-3 px-6 text-xs uppercase tracking-[0.18em] bg-ink text-paper hover:bg-ink/90 transition-colors rounded-xs font-medium"
+                >
+                  <span>Explore Sterling Silver</span>
+                  <ArrowRight size={13} />
+                </Link>
+              </div>
             </div>
-          ))}
+
+            {/* COLLECTION 02: HANDCRAFTED JEWELS */}
+            <div className="bg-paper border border-hairline p-8 md:p-10 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between border-b border-hairline pb-3">
+                  <span className="text-xs font-mono text-[color:var(--gold)] font-semibold uppercase tracking-wider">
+                    Collection 02
+                  </span>
+                  <span className="text-[10px] uppercase tracking-wider bg-mist px-2.5 py-1 text-ink/80 rounded-xs">
+                    Artisanal Heritage
+                  </span>
+                </div>
+
+                <h3 className="font-serif text-2xl md:text-3xl text-ink">
+                  Handcrafted Jewels
+                </h3>
+                <p className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
+                  Artistic. Expressive. Unique.
+                </p>
+
+                <p className="text-sm text-ink/80 leading-relaxed">
+                  Our Handcrafted collection celebrates jewellery with character. Each piece is inspired by artistry,
+                  distinctive forms, colours, textures, and traditional influences while being designed to complement a
+                  contemporary wardrobe. These pieces are created for those who want jewellery that feels expressive,
+                  unconventional, and personal. From statement pieces to distinctive rings, cuffs, earrings, and
+                  necklaces, the Handcrafted collection brings a more artistic expression to Raajsi.
+                </p>
+
+                <div className="pt-2">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-ink block mb-2">
+                    Collection Highlights:
+                  </span>
+                  <ul className="space-y-1.5 text-xs text-muted-foreground">
+                    <li className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--gold)]" />
+                      <span>Handcrafted designs & Artistic distinctive forms</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--gold)]" />
+                      <span>Expressive styling</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--gold)]" />
+                      <span>Statement and occasion pieces</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--gold)]" />
+                      <span>Contemporary interpretation of traditional inspiration</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="text-xs text-ink/75 pt-1">
+                  <strong>Perfect for:</strong> Statement looks, occasions, gifting, and expressing your individual style.
+                </div>
+              </div>
+
+              <div className="pt-8">
+                <Link
+                  to="/collection"
+                  search={{ category: "handcrafted" }}
+                  className="w-full text-center inline-flex items-center justify-center gap-2 py-3 px-6 text-xs uppercase tracking-[0.18em] border border-ink text-ink hover:bg-ink hover:text-paper transition-colors rounded-xs font-medium"
+                >
+                  <span>Explore Handcrafted</span>
+                  <ArrowRight size={13} />
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
-
-      {/* Kinetic Divider */}
-      <KineticBand
-        reverse
-        words={[
-          { t: "Authenticity", c: "solid" },
-          { t: "is", c: "" },
-          { t: "Priceless", c: "red" },
-          { t: "·", c: "solid" },
-          { t: "Introduced", c: "" },
-          { t: "Interpreted", c: "red" },
-          { t: "·", c: "solid" },
-          { t: "Experienced", c: "" },
-          { t: "Collected", c: "red" },
-          { t: "·", c: "solid" },
-          { t: "Carried", c: "" },
-          { t: "Forward", c: "red" },
-        ]}
-      />
-
-      {/* Closing Statement */}
-      <section className="bg-mist border-t border-hairline py-24 md:py-32">
-        <div className="container-editorial text-center max-w-3xl">
-          <Reveal>
-            <div className="eyebrow mb-4">Closing Statement</div>
-            <h2 className="font-serif text-3xl md:text-5xl text-ink leading-tight mb-8">
-              "At Raajsi Jewels, art is not simply displayed. It is introduced, interpreted,
-              experienced, collected, and carried forward."
-            </h2>
-            <p className="text-base text-ink/80 leading-relaxed mb-10">
-              Raajsi Jewels exists at the pinnacle of Jaipur fine jewellery crafting — where
-              generations of royal goldsmiths, Kundan setters, and Meenakari artisans create
-              timeless heirloom jewellery for families across the world.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/collection" className="cta-red">
-                Explore the Collection →
-              </Link>
-              <Link to="/contact" className="cta-ghost">
-                Contact Our Atelier
-              </Link>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      <Testimonials eyebrow="Why collectors trust us" heading="A long view, on the record." />
-    </>
+    </div>
   );
 }
