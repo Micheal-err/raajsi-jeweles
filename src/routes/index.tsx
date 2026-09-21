@@ -6,7 +6,6 @@ import { resolveImage } from "@/lib/images";
 import { Reveal } from "@/components/Reveal";
 import { JewelleryCard, type JewelleryProduct } from "@/components/JewelleryCard";
 import { TrustStrip } from "@/components/TrustStrip";
-import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { MOCK_JEWELLERY_PRODUCTS } from "@/lib/jewellery-data";
 import { Parallax, ParallaxImage } from "@/components/Parallax";
 import { getLenis } from "@/components/SmoothScroll";
@@ -977,23 +976,6 @@ function Home() {
         </div>
       </section>
 
-      {/* ── 7. NEWSLETTER SECTION ───────────────────────────────────── */}
-      <section className="bg-paper py-16">
-        <div className="container-editorial grid md:grid-cols-2 gap-8 items-center">
-          <div>
-            <div className="text-[11px] uppercase tracking-[0.25em] text-[color:var(--gold)] font-medium mb-1">
-              Connect With Raajsi
-            </div>
-            <h2 className="font-serif text-2xl md:text-3xl text-ink">
-              New collections, styling inspiration & stories.
-            </h2>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Sign up to receive updates from our Jaipur atelier.
-            </p>
-          </div>
-          <NewsletterSignup />
-        </div>
-      </section>
     </>
   );
 }

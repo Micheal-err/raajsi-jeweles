@@ -21,7 +21,6 @@ import { useSession } from "@/hooks/useSession";
 import { useCart, useWishlist } from "@/hooks/useCommerce";
 import { CurrencySwitcher } from "@/lib/currency";
 import { LanguageSwitcher } from "@/lib/i18n";
-import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { GALLERY_HOURS } from "@/lib/gallery-hours";
 import { TrustStrip } from "@/components/TrustStrip";
 import { SearchModal } from "@/components/SearchModal";
