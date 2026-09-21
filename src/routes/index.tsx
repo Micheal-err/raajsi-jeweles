@@ -25,12 +25,11 @@ import {
   MapPin,
 } from "lucide-react";
 
-import heroSlide1 from "@/assets/hero-slide-1.jpg";
-import heroSlide2 from "@/assets/hero-slide-2.jpg";
-import heroImg from "@/assets/jewellery-hero.png";
-import interiorImg from "@/assets/gallery-interior.jpg";
-import womenBannerImg from "@/assets/jewellery-rings.png";
-import menBannerImg from "@/assets/jewellery-mens.png";
+import slider1 from "@/assets/slider-1.webp";
+import slider2 from "@/assets/slider-2.webp";
+import slider3 from "@/assets/slider-3.webp";
+import slider4 from "@/assets/slider-4.webp";
+import slider5 from "@/assets/slider-5.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -53,46 +52,77 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-// ── GRAND HERO SLIDES (BASED STRICTLY ON PDF COLLECTIONS) ───────────
+// ── GRAND HERO SLIDES (POWERED BY USER BANNERS SLIDER 1 TO 5) ────────
 const HERO_SLIDES = [
   {
-    id: "sterling-silver-925",
-    image: heroSlide2,
+    id: "sterling-silver-clover",
+    image: slider5,
     eyebrow: "Collection 01 · Sterling Silver 925",
     tag: "Modern • Minimal • Elegant",
     titlePrefix: "Modern. Elegant.",
     titleEm: "Timeless",
     titleSuffix: ".",
     description:
-      "Crafted in 925 Sterling Silver, offering a refined and versatile aesthetic for everyday elegance and special occasions. Designed with a modern, minimal approach.",
+      "Our Sterling Silver collection is crafted in 925 Sterling Silver, offering a refined and versatile aesthetic for everyday elegance and special occasions. Designed with a modern, minimal approach.",
     primaryCta: { label: "Explore Sterling Silver", to: "/collection", search: { category: "sterling-silver" } },
     secondaryCta: { label: "About Raajsi", to: "/about" },
+    caption: "925 Silver Clover Bracelet",
   },
   {
-    id: "handcrafted-jewels",
-    image: heroSlide1,
+    id: "handcrafted-sunburst-onyx",
+    image: slider1,
     eyebrow: "Collection 02 · Handcrafted Jewels",
     tag: "Artistic • Whimsical • Expressive",
     titlePrefix: "Artistic. Expressive.",
     titleEm: "Unique",
     titleSuffix: ".",
     description:
-      "Celebrating jewellery with character. Inspired by artistry, distinctive forms, colours, textures, and traditional Indian craftsmanship designed for a contemporary wardrobe.",
+      "Our Handcrafted collection celebrates jewellery with character. Each piece is inspired by artistry, distinctive forms, colours, and traditional Jaipur craftsmanship designed for a contemporary wardrobe.",
     primaryCta: { label: "Explore Handcrafted", to: "/collection", search: { category: "handcrafted" } },
     secondaryCta: { label: "Our Philosophy", to: "/about" },
+    caption: "Jaipur Sunburst Onyx Dangles",
   },
   {
-    id: "timeless-luxury",
-    image: heroImg,
-    eyebrow: "Raajsi · Jaipur, India",
+    id: "jaipur-heritage-payal",
+    image: slider3,
+    eyebrow: "Raajsi · Jaipur, Rajasthan, India",
     tag: "Timeless Luxury, Crafted for You",
     titlePrefix: "Timeless Luxury,",
     titleEm: "Crafted for You",
     titleSuffix: ".",
     description:
-      "We believe jewellery should be more than an accessory — it should reflect your personality, complement your individuality, and become a part of the moments you cherish.",
+      "Raajsi is a jewellery brand inspired by the beauty of timeless design, Indian craftsmanship, and modern elegance. We believe jewellery should reflect your individuality and cherish your finest moments.",
     primaryCta: { label: "Explore Both Collections", to: "/collection" },
-    secondaryCta: { label: "Contact Raajsi", to: "/contact" },
+    secondaryCta: { label: "Connect With Us", to: "/contact" },
+    caption: "Heritage Artisan Payal",
+  },
+  {
+    id: "understated-emerald-drops",
+    image: slider2,
+    eyebrow: "Collection 01 · Understated Luxury",
+    tag: "Delicate Everyday Jewellery",
+    titlePrefix: "Simplicity with",
+    titleEm: "Sophisticated Detailing",
+    titleSuffix: ".",
+    description:
+      "From delicate jewellery to contemporary statement pieces, the collection combines simplicity with sophisticated detailing. Made for those who appreciate understated everyday luxury.",
+    primaryCta: { label: "Explore Sterling Silver", to: "/collection", search: { category: "sterling-silver" } },
+    secondaryCta: { label: "Made to Be Yours", to: "/about" },
+    caption: "Emerald Petal Drops",
+  },
+  {
+    id: "artisan-leaf-ring",
+    image: slider4,
+    eyebrow: "Collection 02 · Artisan Form",
+    tag: "Artistic • Expressive • Unique",
+    titlePrefix: "Inspired by Artistry,",
+    titleEm: "Shaped by Hand",
+    titleSuffix: ".",
+    description:
+      "Created for those who want jewellery that feels expressive, unconventional, and personal. Distinctive forms, natural gemstone hues, and contemporary interpretations of traditional inspiration.",
+    primaryCta: { label: "Explore Handcrafted", to: "/collection", search: { category: "handcrafted" } },
+    secondaryCta: { label: "Our Atelier", to: "/about" },
+    caption: "Golden Leaf & Tiger-Eye Ring",
   },
 ];
 
@@ -259,7 +289,15 @@ function Home() {
         {/* Main Content Box */}
         <div className="relative z-20 container-editorial my-auto py-8 md:py-12">
           <div className="max-w-3xl">
-            <div className="flex items-center gap-3 mb-4 md:mb-6 animate-in fade-in slide-in-from-bottom-2 duration-500 key={slideIndex}">
+            {/* Live Jewellery Highlight Pill */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-paper/15 border border-paper/20 rounded-full backdrop-blur-md mb-4 text-[11px] text-paper/90 shadow-sm">
+              <Sparkles size={12} className="text-[color:var(--gold)]" />
+              <span className="font-serif italic text-paper">{currentSlide.caption}</span>
+              <span className="text-paper/40">·</span>
+              <span className="text-[10px] tracking-wider uppercase text-[color:var(--gold)] font-medium">Jaipur Atelier</span>
+            </div>
+
+            <div className="flex items-center gap-3 mb-4 md:mb-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
               <span className="h-px w-8 md:w-12 bg-[color:var(--gold)]" />
               <span className="text-[11px] md:text-xs tracking-[0.24em] uppercase font-semibold text-[color:var(--gold)]">
                 {currentSlide.eyebrow}
@@ -311,15 +349,16 @@ function Home() {
           </div>
         </div>
 
-        {/* Bottom Slide Controls */}
+        {/* Bottom Slide Controls & Interactive Thumbnails */}
         <div className="relative z-20 pb-6 md:pb-8 container-editorial">
-          <div className="flex items-center justify-between gap-6 pt-4 border-t border-paper/15">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-4 border-t border-paper/15 backdrop-blur-[2px]">
+            {/* Progress & Slide Count */}
             <div className="flex items-center gap-4">
               <span className="font-mono text-xs tracking-widest text-[color:var(--gold)] font-medium">
                 0{slideIndex + 1} <span className="text-paper/40">/ 0{HERO_SLIDES.length}</span>
               </span>
 
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-1.5 items-center">
                 {HERO_SLIDES.map((slide, i) => {
                   const isActive = i === slideIndex;
                   return (
@@ -330,8 +369,8 @@ function Home() {
                       className="group relative py-2 focus:outline-none"
                     >
                       <div
-                        className={`h-1 rounded-full transition-all duration-300 relative overflow-hidden ${
-                          isActive ? "w-12 md:w-16 bg-paper/25" : "w-4 md:w-6 bg-paper/20 hover:bg-paper/40"
+                        className={`h-1.5 rounded-full transition-all duration-300 relative overflow-hidden ${
+                          isActive ? "w-10 md:w-14 bg-paper/25" : "w-3 md:w-5 bg-paper/20 hover:bg-paper/40"
                         }`}
                       >
                         {isActive && (
@@ -349,7 +388,43 @@ function Home() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            {/* Interactive Luxury Thumbnails Strip (Desktop) */}
+            <div className="hidden lg:flex items-center gap-2">
+              {HERO_SLIDES.map((slide, i) => {
+                const isActive = i === slideIndex;
+                return (
+                  <button
+                    key={`thumb-${slide.id}`}
+                    type="button"
+                    onClick={() => setSlideIndex(i)}
+                    className={`flex items-center gap-2.5 p-1.5 pr-3 rounded border text-left transition-all backdrop-blur-md ${
+                      isActive
+                        ? "bg-paper/25 border-[color:var(--gold)] text-paper shadow-md scale-[1.03]"
+                        : "bg-ink/50 border-paper/15 text-paper/70 hover:bg-paper/15 hover:border-paper/30"
+                    }`}
+                  >
+                    <div className="w-10 h-7 rounded overflow-hidden relative shrink-0 border border-paper/20">
+                      <img
+                        src={resolveImage(slide.image)}
+                        alt={slide.caption}
+                        className="w-full h-full object-cover object-center"
+                      />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[9px] uppercase tracking-wider text-[color:var(--gold)] font-mono font-medium">
+                        0{i + 1}
+                      </span>
+                      <span className="text-[10px] font-serif font-medium leading-tight text-paper truncate max-w-[90px]">
+                        {slide.caption}
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Arrows */}
+            <div className="flex items-center gap-2 self-end lg:self-auto">
               <button
                 type="button"
                 onClick={prevSlide}
@@ -391,55 +466,83 @@ function Home() {
           </Reveal>
 
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-            {/* Card 1: Sterling Silver 925 */}
-            <div className="border border-hairline bg-paper p-8 md:p-10 flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow">
-              <div className="space-y-3">
-                <span className="text-[10px] font-mono text-[color:var(--gold)] uppercase tracking-widest font-semibold block">
-                  Collection 01
-                </span>
-                <h3 className="font-serif text-2xl md:text-3xl text-ink">Sterling Silver 925</h3>
-                <p className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
-                  Modern • Minimal • Elegant
-                </p>
-                <p className="text-sm text-ink/80 leading-relaxed font-light pt-1">
-                  Crafted in 925 Sterling Silver, offering a refined and versatile aesthetic for everyday elegance and special occasions.
-                </p>
+            {/* Card 1: Sterling Silver 925 with visual banner */}
+            <div className="border border-hairline bg-paper overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow group">
+              <div className="relative aspect-[16/7] overflow-hidden">
+                <img
+                  src={resolveImage(slider5)}
+                  alt="Collection 01 · Sterling Silver 925"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/20 to-transparent" />
+                <div className="absolute top-4 left-4">
+                  <span className="text-[10px] font-mono bg-paper/90 backdrop-blur text-ink px-2.5 py-1 rounded-xs uppercase tracking-widest font-semibold">
+                    Collection 01
+                  </span>
+                </div>
+                <div className="absolute bottom-4 left-4 right-4 text-paper">
+                  <div className="text-xs uppercase tracking-widest text-[color:var(--gold)] font-medium">
+                    Modern • Minimal • Elegant
+                  </div>
+                  <div className="font-serif text-xl font-medium text-paper">
+                    Sterling Silver 925
+                  </div>
+                </div>
               </div>
-              <div className="pt-6">
-                <Link
-                  to="/collection"
-                  search={{ category: "sterling-silver" }}
-                  className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] bg-ink text-paper px-6 py-3 hover:bg-ink/90 transition-colors rounded-xs"
-                >
-                  <span>Explore Sterling Silver</span>
-                  <ArrowRight size={13} />
-                </Link>
+              <div className="p-6 md:p-8 space-y-4 flex-1 flex flex-col justify-between">
+                <p className="text-sm text-ink/80 leading-relaxed font-light">
+                  Our Sterling Silver collection is crafted in 925 Sterling Silver, offering a refined and versatile aesthetic for everyday elegance and special occasions.
+                </p>
+                <div className="pt-2">
+                  <Link
+                    to="/collection"
+                    search={{ category: "sterling-silver" }}
+                    className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] bg-ink text-paper px-6 py-3 hover:bg-ink/90 transition-colors rounded-xs"
+                  >
+                    <span>Explore Sterling Silver</span>
+                    <ArrowRight size={13} />
+                  </Link>
+                </div>
               </div>
             </div>
 
-            {/* Card 2: Handcrafted Jewels */}
-            <div className="border border-hairline bg-paper p-8 md:p-10 flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow">
-              <div className="space-y-3">
-                <span className="text-[10px] font-mono text-[color:var(--gold)] uppercase tracking-widest font-semibold block">
-                  Collection 02
-                </span>
-                <h3 className="font-serif text-2xl md:text-3xl text-ink">Handcrafted Jewels</h3>
-                <p className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
-                  Artistic • Whimsical • Expressive
-                </p>
-                <p className="text-sm text-ink/80 leading-relaxed font-light pt-1">
-                  Celebrating jewellery with character. Inspired by artistry, distinctive forms, colours, textures, and traditional Indian craftsmanship.
-                </p>
+            {/* Card 2: Handcrafted Jewels with visual banner */}
+            <div className="border border-hairline bg-paper overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow group">
+              <div className="relative aspect-[16/7] overflow-hidden">
+                <img
+                  src={resolveImage(slider1)}
+                  alt="Collection 02 · Handcrafted Jewels"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/20 to-transparent" />
+                <div className="absolute top-4 left-4">
+                  <span className="text-[10px] font-mono bg-paper/90 backdrop-blur text-ink px-2.5 py-1 rounded-xs uppercase tracking-widest font-semibold">
+                    Collection 02
+                  </span>
+                </div>
+                <div className="absolute bottom-4 left-4 right-4 text-paper">
+                  <div className="text-xs uppercase tracking-widest text-[color:var(--gold)] font-medium">
+                    Artistic • Whimsical • Expressive
+                  </div>
+                  <div className="font-serif text-xl font-medium text-paper">
+                    Handcrafted Jewels
+                  </div>
+                </div>
               </div>
-              <div className="pt-6">
-                <Link
-                  to="/collection"
-                  search={{ category: "handcrafted" }}
-                  className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] border border-ink text-ink px-6 py-3 hover:bg-ink hover:text-paper transition-colors rounded-xs"
-                >
-                  <span>Explore Handcrafted</span>
-                  <ArrowRight size={13} />
-                </Link>
+              <div className="p-6 md:p-8 space-y-4 flex-1 flex flex-col justify-between">
+                <p className="text-sm text-ink/80 leading-relaxed font-light">
+                  Our Handcrafted collection celebrates jewellery with character. Inspired by artistry, distinctive forms, colours, textures, and traditional Indian craftsmanship.
+                </p>
+                <div className="pt-2">
+                  <Link
+                    to="/collection"
+                    search={{ category: "handcrafted" }}
+                    className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] border border-ink text-ink px-6 py-3 hover:bg-ink hover:text-paper transition-colors rounded-xs"
+                  >
+                    <span>Explore Handcrafted</span>
+                    <ArrowRight size={13} />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -478,6 +581,30 @@ function Home() {
               </Link>
             </div>
           </Reveal>
+
+          {/* Editorial Banner for Silver Collection (Using slider-2) */}
+          <div className="relative overflow-hidden rounded-xs border border-hairline mb-8 group shadow-xs">
+            <div className="aspect-[24/8] md:aspect-[32/9] max-h-[260px] w-full relative">
+              <img
+                src={resolveImage(slider2)}
+                alt="Sterling Silver 925 - Modern, Minimal, Elegant"
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-ink/90 via-ink/60 to-transparent flex items-center">
+                <div className="p-6 md:p-10 max-w-xl text-paper space-y-2">
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-[color:var(--gold)] font-mono font-semibold">
+                    The Modern Minimalist Edit
+                  </span>
+                  <h3 className="font-serif text-xl md:text-3xl text-paper">
+                    Understated Luxury for Every Moment
+                  </h3>
+                  <p className="text-xs md:text-sm text-paper/85 leading-relaxed line-clamp-2 font-light">
+                    From delicate everyday pieces to contemporary statement designs, each piece is hallmarked for purity and crafted for timeless longevity.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Highlights strip */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8 p-4 bg-mist/30 border border-hairline text-xs">
@@ -558,6 +685,30 @@ function Home() {
             </div>
           </Reveal>
 
+          {/* Editorial Banner for Handcrafted Jewels (Using slider-4) */}
+          <div className="relative overflow-hidden rounded-xs border border-hairline mb-8 group shadow-xs">
+            <div className="aspect-[24/8] md:aspect-[32/9] max-h-[260px] w-full relative">
+              <img
+                src={resolveImage(slider4)}
+                alt="Handcrafted Jewels - Artistic, Whimsical, Expressive"
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-ink/90 via-ink/60 to-transparent flex items-center">
+                <div className="p-6 md:p-10 max-w-xl text-paper space-y-2">
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-[color:var(--gold)] font-mono font-semibold">
+                    The Artisan Heritage Edit
+                  </span>
+                  <h3 className="font-serif text-xl md:text-3xl text-paper">
+                    Jewellery with Distinct Character & Soul
+                  </h3>
+                  <p className="text-xs md:text-sm text-paper/85 leading-relaxed line-clamp-2 font-light">
+                    Inspired by traditional Rajasthani craft, sculptural textures, and warm gemstone hues shaped into wearable art.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Highlights strip */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8 p-4 bg-paper border border-hairline text-xs">
             <div className="flex items-center gap-2">
@@ -607,22 +758,25 @@ function Home() {
       <section className="bg-paper py-20 md:py-28 border-b border-hairline">
         <div className="container-editorial">
           <div className="grid lg:grid-cols-12 gap-12 items-center">
-            {/* Left Column: Image with Atelier Details */}
+            {/* Left Column: Image with Atelier Details (Using slider-3) */}
             <div className="lg:col-span-5 relative">
-              <div className="aspect-[4/5] bg-paper overflow-hidden border border-hairline shadow-lg relative group">
+              <div className="aspect-[4/5] bg-paper overflow-hidden border border-hairline shadow-lg relative group rounded-xs">
                 <img
-                  src={resolveImage(interiorImg)}
-                  alt="Raajsi Jewellery Atelier in Jaipur"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  src={resolveImage(slider3)}
+                  alt="Raajsi Traditional Indian Jewellery Craftsmanship, Jaipur"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/75 via-transparent to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6 bg-paper/95 backdrop-blur p-4 border border-hairline">
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6 bg-paper/95 backdrop-blur p-4 border border-hairline shadow-md">
                   <div className="text-[10px] uppercase tracking-widest text-[color:var(--gold)] font-semibold">
-                    Location
+                    Jaipur Atelier & Origin
                   </div>
                   <div className="font-serif text-lg text-ink font-medium">
                     Jaipur, Rajasthan, India
                   </div>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Where traditional Indian craftsmanship meets modern elegance.
+                  </p>
                 </div>
               </div>
             </div>
