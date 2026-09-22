@@ -44,10 +44,34 @@ function loadRazorpayScript(): Promise<boolean> {
       resolve(true);
       return;
     }
+    const existing = document.querySelector('script[src*="checkout.razorpay.com"]');
+    if (existing) {
+      let checks = 0;
+      const interval = setInterval(() => {
+        if ((window as any).Razorpay) {
+          clearInterval(interval);
+          resolve(true);
+        } else if (++checks > 20) {
+          clearInterval(interval);
+          resolve(false);
+        }
+      }, 150);
+      return;
+    }
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
+    script.async = true;
+    const timeout = setTimeout(() => {
+      resolve(false);
+    }, 6000);
+    script.onload = () => {
+      clearTimeout(timeout);
+      resolve(true);
+    };
+    script.onerror = () => {
+      clearTimeout(timeout);
+      resolve(false);
+    };
     document.body.appendChild(script);
   });
 }
@@ -59,7 +83,8 @@ function CheckoutPage() {
   const fmt = useFormatPrice();
   const nav = useNavigate();
   const qc = useQueryClient();
-  const [placing, setPlacing] = useState(false);
+  const [openingRazorpay, setOpeningRazorpay] = useState(false);
+  const [finalizing, setFinalizing] = useState(false);
   const [payMethod, setPayMethod] = useState<"upi" | "card" | "netbanking">("upi");
 
   const rows = items ?? [];
@@ -125,7 +150,7 @@ function CheckoutPage() {
     shippingData: ShippingDetails;
   }) {
     if (!user) return;
-    setPlacing(true);
+    setFinalizing(true);
 
     try {
       const orderPayload = {
@@ -166,7 +191,7 @@ function CheckoutPage() {
       if (error || !createdOrder) {
         console.error("Order creation error:", error);
         toast.error("Could not record order: " + (error?.message || "Please contact support."));
-        setPlacing(false);
+        setFinalizing(false);
         return;
       }
 
@@ -207,24 +232,23 @@ function CheckoutPage() {
     } catch (err) {
       console.error("Finalize order error:", err);
       toast.error("Error finalizing order. Please check My Orders or contact support.");
-    } finally {
-      setPlacing(false);
+      setFinalizing(false);
     }
   }
 
   async function place(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!user || rows.length === 0 || placing) return;
+    if (!user || rows.length === 0 || openingRazorpay || finalizing) return;
 
     const shippingData = getShippingFromForm();
     if (!shippingData) return;
 
-    setPlacing(true);
+    setOpeningRazorpay(true);
 
     const loaded = await loadRazorpayScript();
     if (!loaded) {
-      toast.error("Razorpay SDK failed to load. Please check your connection.");
-      setPlacing(false);
+      toast.error("Razorpay SDK could not be loaded. Please disable any ad-blockers or check connection.");
+      setOpeningRazorpay(false);
       return;
     }
 
@@ -263,7 +287,7 @@ function CheckoutPage() {
       },
       modal: {
         ondismiss: function () {
-          setPlacing(false);
+          setOpeningRazorpay(false);
           toast.info("Payment window closed.");
         },
       },
@@ -284,6 +308,7 @@ function CheckoutPage() {
           } catch (_) {}
         });
         document.body.style.overflow = "auto";
+        setOpeningRazorpay(false);
 
         await finalizeConfirmedOrder({
           paymentId: response.razorpay_payment_id,
@@ -298,22 +323,23 @@ function CheckoutPage() {
       rzpInstance.on("payment.failed", function (failResp: any) {
         console.error("Razorpay payment failed:", failResp?.error);
         toast.error(failResp?.error?.description || "Payment failed. Please try another method.");
-        setPlacing(false);
+        setOpeningRazorpay(false);
       });
       rzpInstance.open();
+      setOpeningRazorpay(false);
     } catch (err) {
       console.error("Failed to open Razorpay modal:", err);
       toast.error("Could not launch Razorpay modal. You may use sandbox test checkout.");
-      setPlacing(false);
+      setOpeningRazorpay(false);
     }
   }
 
   async function handleTestSandboxPayment() {
-    if (!user || rows.length === 0 || placing) return;
+    if (!user || rows.length === 0 || openingRazorpay || finalizing) return;
     const shippingData = getShippingFromForm();
     if (!shippingData) return;
 
-    setPlacing(true);
+    setFinalizing(true);
     const mockPaymentId = `rzp_test_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
     toast.info("Processing sandbox test payment...");
     await finalizeConfirmedOrder({
@@ -336,13 +362,19 @@ function CheckoutPage() {
 
   return (
     <>
-      {placing && (
-        <div className="fixed inset-0 z-[99999] bg-ink/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-paper text-center">
+      {finalizing && (
+        <div className="fixed inset-0 z-50 bg-ink/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-paper text-center">
           <div className="w-12 h-12 border-3 border-[color:var(--gold)] border-t-transparent rounded-full animate-spin mb-4" />
-          <p className="font-serif text-2xl text-[color:var(--gold)] mb-2">Processing Your Order</p>
-          <p className="text-xs text-paper/80 max-w-sm leading-relaxed">
-            Please wait while we record your payment and generate your BIS Hallmark certificate...
+          <p className="font-serif text-2xl text-[color:var(--gold)] mb-2">Order Confirmed!</p>
+          <p className="text-xs text-paper/80 max-w-sm leading-relaxed mb-4">
+            Payment verified. We are recording your acquisition and preparing your BIS Hallmark Certificate...
           </p>
+          <a
+            href="/orders"
+            className="text-xs text-[color:var(--gold)] underline hover:opacity-80"
+          >
+            Click here if not redirected automatically →
+          </a>
         </div>
       )}
 
@@ -461,19 +493,21 @@ function CheckoutPage() {
 
           <button
             type="submit"
-            disabled={placing}
+            disabled={openingRazorpay || finalizing}
             className="cta-gold w-full !py-3.5 text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-50 shadow-md hover:shadow-lg transition-all"
           >
             <Lock size={15} />
-            {placing
-              ? "Launching Razorpay..."
-              : `Pay via Razorpay · ${fmt({ price_display: "fixed", price_min: null, price_max: null, display_price: total })}`}
+            {openingRazorpay
+              ? "Opening Razorpay..."
+              : finalizing
+                ? "Recording Order..."
+                : `Pay via Razorpay · ${fmt({ price_display: "fixed", price_min: null, price_max: null, display_price: total })}`}
           </button>
 
           <div className="flex flex-col items-center gap-2 pt-1">
             <button
               type="button"
-              disabled={placing}
+              disabled={openingRazorpay || finalizing}
               onClick={handleTestSandboxPayment}
               className="text-xs text-ink/70 hover:text-ink font-medium underline flex items-center gap-1.5 transition-colors disabled:opacity-40"
             >
