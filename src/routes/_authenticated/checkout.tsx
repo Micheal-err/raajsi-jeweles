@@ -193,7 +193,17 @@ function CheckoutPage() {
       toast.success(
         `Payment successful! Order #${createdOrder.id.slice(0, 8).toUpperCase()} placed. Hallmark Certificate included.`
       );
-      nav({ to: "/orders" });
+
+      // Cleanly remove any residual Razorpay iframes and backdrop
+      document.querySelectorAll(".razorpay-container, iframe[name^='razorpay']").forEach((el) => {
+        try {
+          el.remove();
+        } catch (_) {}
+      });
+      document.body.style.overflow = "auto";
+
+      // Redirect immediately to /orders page
+      window.location.replace("/orders");
     } catch (err) {
       console.error("Finalize order error:", err);
       toast.error("Error finalizing order. Please check My Orders or contact support.");
@@ -221,13 +231,14 @@ function CheckoutPage() {
     const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_live_TekiII2ARUOC0B";
     const amountInPaise = Math.round(total * 100);
 
+    let rzpInstance: any = null;
+
     const options = {
       key: keyId,
       amount: amountInPaise,
       currency: activeCurrency || "INR",
       name: "Raajsi Jewels",
       description: `Heritage Fine Jewellery (${rows.length} piece${rows.length > 1 ? "s" : ""})`,
-      image: "/favicon.ico",
       prefill: {
         name: shippingData.shippingName,
         email: user.email ?? "",
@@ -261,6 +272,19 @@ function CheckoutPage() {
         razorpay_order_id?: string;
         razorpay_signature?: string;
       }) {
+        // Immediately dismiss the Razorpay modal overlay so customer is never stuck
+        try {
+          if (rzpInstance && typeof rzpInstance.close === "function") {
+            rzpInstance.close();
+          }
+        } catch (_) {}
+        document.querySelectorAll(".razorpay-container, iframe[name^='razorpay']").forEach((el) => {
+          try {
+            el.remove();
+          } catch (_) {}
+        });
+        document.body.style.overflow = "auto";
+
         await finalizeConfirmedOrder({
           paymentId: response.razorpay_payment_id,
           paymentMethod: "razorpay",
@@ -270,13 +294,13 @@ function CheckoutPage() {
     };
 
     try {
-      const rzp = new (window as any).Razorpay(options);
-      rzp.on("payment.failed", function (failResp: any) {
+      rzpInstance = new (window as any).Razorpay(options);
+      rzpInstance.on("payment.failed", function (failResp: any) {
         console.error("Razorpay payment failed:", failResp?.error);
         toast.error(failResp?.error?.description || "Payment failed. Please try another method.");
         setPlacing(false);
       });
-      rzp.open();
+      rzpInstance.open();
     } catch (err) {
       console.error("Failed to open Razorpay modal:", err);
       toast.error("Could not launch Razorpay modal. You may use sandbox test checkout.");
@@ -312,6 +336,16 @@ function CheckoutPage() {
 
   return (
     <>
+      {placing && (
+        <div className="fixed inset-0 z-[99999] bg-ink/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-paper text-center">
+          <div className="w-12 h-12 border-3 border-[color:var(--gold)] border-t-transparent rounded-full animate-spin mb-4" />
+          <p className="font-serif text-2xl text-[color:var(--gold)] mb-2">Processing Your Order</p>
+          <p className="text-xs text-paper/80 max-w-sm leading-relaxed">
+            Please wait while we record your payment and generate your BIS Hallmark certificate...
+          </p>
+        </div>
+      )}
+
       <PageHero
         eyebrow="Checkout & Purchase"
         title={
