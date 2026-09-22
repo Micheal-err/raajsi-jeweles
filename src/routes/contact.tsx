@@ -146,7 +146,7 @@ function ContactPage() {
                       className="text-ink hover:text-[color:var(--gold)] font-medium flex items-center gap-2 transition-colors"
                     >
                       <Phone size={14} className="text-emerald-600 shrink-0" />
-                      <span>+91 70149 38562 (Gunnu)</span>
+                      <span>+91 70149 38562</span>
                     </a>
                   </div>
                 </div>

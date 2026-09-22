@@ -47,7 +47,7 @@ We reserve the right to update or modify these Terms & Conditions at any time wi
 Raajsi Jewels
 Jaipur, Rajasthan, India
 Email: raajsiforms@gmail.com
-Phone: +91 98291 45129 / +91 70149 38562 (Gunnu)
+Phone: +91 98291 45129 / +91 70149 38562
 GST: 08UQDPS5127K1ZY`,
   },
   privacy: {
@@ -121,7 +121,7 @@ Q: Can I exchange my order?
 A: Yes, we provide an easy 7-day exchange policy from the date of purchase.
 
 Q: How can I reach the Raajsi team?
-A: You can reach us via WhatsApp/Phone at +91 98291 45129 or +91 70149 38562 (Gunnu), or by email at raajsiforms@gmail.com. We are located in Jaipur, Rajasthan, India.`,
+A: You can reach us via WhatsApp/Phone at +91 98291 45129 or +91 70149 38562, or by email at raajsiforms@gmail.com. We are located in Jaipur, Rajasthan, India.`,
   },
 };
 
