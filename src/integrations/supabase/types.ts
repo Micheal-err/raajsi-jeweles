@@ -105,6 +105,7 @@ export type Database = {
           display_price: number | null;
           price?: number | null;
           stock_quantity?: number | null;
+          category?: string | null;
           metadata?: Json | null;
           featured: boolean;
           gallery_image_urls: string[] | null;
@@ -130,6 +131,7 @@ export type Database = {
           display_price?: number | null;
           price?: number | null;
           stock_quantity?: number | null;
+          category?: string | null;
           metadata?: Json | null;
           featured?: boolean;
           gallery_image_urls?: string[] | null;
@@ -155,6 +157,7 @@ export type Database = {
           display_price?: number | null;
           price?: number | null;
           stock_quantity?: number | null;
+          category?: string | null;
           metadata?: Json | null;
           featured?: boolean;
           gallery_image_urls?: string[] | null;

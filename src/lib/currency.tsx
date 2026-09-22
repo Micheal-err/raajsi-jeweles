@@ -159,27 +159,10 @@ export function useCurrency() {
   return ctx;
 }
 
-export const CURRENCIES: Currency[] = ["INR", "USD", "EUR", "GBP", "AED", "SGD", "CAD"];
+export const CURRENCIES: Currency[] = ["INR"];
 
 export function CurrencySwitcher({ className = "" }: { className?: string }) {
-  const { currency, setCurrency } = useCurrency();
-  return (
-    <label
-      className={`inline-flex items-center gap-1 text-[11px] tracking-widest uppercase ${className}`}
-    >
-      <span className="sr-only">Currency</span>
-      <select
-        value={currency}
-        onChange={(e) => setCurrency(e.target.value as Currency)}
-        className="bg-transparent border-0 focus:outline-none cursor-pointer font-medium"
-        aria-label="Currency"
-      >
-        {CURRENCIES.map((c) => (
-          <option key={c} value={c}>
-            {c}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
+  // Brand policy: Deal strictly in INR. No currency switching required.
+  return null;
 }
+

@@ -277,11 +277,11 @@ function JewelleryProductDetail() {
               </div>
               <div className="flex flex-col items-center gap-1">
                 <Truck size={18} className="text-[color:var(--gold)]" />
-                <span>Free Insured Delivery</span>
+                <span>Free Delivery &gt; ₹999</span>
               </div>
               <div className="flex flex-col items-center gap-1">
                 <RotateCcw size={18} className="text-[color:var(--gold)]" />
-                <span>Easy 7-Day Returns</span>
+                <span>7 Days Exchange</span>
               </div>
             </div>
           </div>

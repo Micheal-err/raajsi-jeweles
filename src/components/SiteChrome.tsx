@@ -19,8 +19,6 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/useSession";
 import { useCart, useWishlist } from "@/hooks/useCommerce";
-import { CurrencySwitcher } from "@/lib/currency";
-import { LanguageSwitcher } from "@/lib/i18n";
 import { GALLERY_HOURS } from "@/lib/gallery-hours";
 import { TrustStrip } from "@/components/TrustStrip";
 import { SearchModal } from "@/components/SearchModal";
@@ -190,9 +188,6 @@ export function SiteHeader() {
           </Link>
 
           <div className="flex items-center gap-1 pl-4 border-l border-hairline">
-            <LanguageSwitcher className="mr-1 text-ink/70 hover:text-ink" />
-            <CurrencySwitcher className="mr-2 text-ink/70 hover:text-ink" />
-
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
@@ -426,11 +421,6 @@ export function SiteHeader() {
                 </Link>
               </div>
             )}
-
-            <div className="pt-2 flex items-center gap-4">
-              <LanguageSwitcher />
-              <CurrencySwitcher />
-            </div>
           </nav>
         </div>
       )}
@@ -470,6 +460,12 @@ export function SiteFooter() {
             <p className="text-xs text-muted-foreground leading-relaxed pt-1">
               Inspired by the beauty of timeless design, Indian craftsmanship, and modern elegance.
             </p>
+            <div className="pt-2 text-[11px] text-muted-foreground space-y-1">
+              <div>GST: <span className="font-mono text-ink font-semibold">08UQDPS5127K1ZY</span></div>
+              <div className="text-[10px] text-[color:var(--gold)] font-medium">
+                Free Delivery Above ₹999 · 7 Days Exchange
+              </div>
+            </div>
           </div>
 
           {/* 2. Quick Links */}
@@ -547,6 +543,24 @@ export function SiteFooter() {
               <li>
                 <Link
                   to="/policies/$doc"
+                  params={{ doc: "terms" }}
+                  className="text-muted-foreground hover:text-ink transition-colors"
+                >
+                  Terms & Conditions
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/policies/$doc"
+                  params={{ doc: "privacy" }}
+                  className="text-muted-foreground hover:text-ink transition-colors"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/policies/$doc"
                   params={{ doc: "faqs" }}
                   className="text-muted-foreground hover:text-ink transition-colors"
                 >
@@ -562,23 +576,23 @@ export function SiteFooter() {
             <ul className="space-y-2.5 text-sm">
               <li>
                 <a
-                  href="https://instagram.com/raajsi_official"
+                  href="https://www.instagram.com/jewels_raajsi?stkn=NDZnM3dzeW13NXUz"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-ink transition-colors flex items-center gap-2 group"
                 >
-                  <Instagram size={15} className="group-hover:text-[color:var(--gold)] transition-colors" />
+                  <Instagram size={15} className="group-hover:text-[color:var(--gold)] transition-colors text-pink-600" />
                   <span>Instagram</span>
                 </a>
               </li>
               <li>
                 <a
-                  href="https://facebook.com/raajsiofficial"
+                  href="https://www.facebook.com/share/1QEN2B3By5/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-ink transition-colors flex items-center gap-2 group"
                 >
-                  <Facebook size={15} className="group-hover:text-[color:var(--gold)] transition-colors" />
+                  <Facebook size={15} className="group-hover:text-[color:var(--gold)] transition-colors text-blue-600" />
                   <span>Facebook</span>
                 </a>
               </li>
@@ -591,33 +605,35 @@ export function SiteFooter() {
             <ul className="space-y-2.5 text-sm">
               <li>
                 <div className="text-[11px] uppercase tracking-wider text-muted-foreground">Phone / WhatsApp:</div>
-                <div className="flex flex-col gap-1 mt-1">
+                <div className="flex flex-col gap-1.5 mt-1">
                   <a
-                    href="https://wa.me/919829012345"
+                    href="https://wa.me/919829145129"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-ink hover:text-[color:var(--gold)] font-medium flex items-center gap-1.5 transition-colors text-xs"
                   >
                     <MessageCircle size={14} className="text-emerald-600 shrink-0" />
-                    <span>+91 98290 12345</span>
+                    <span>+91 98291 45129</span>
                   </a>
                   <a
-                    href="tel:+919829012345"
-                    className="text-ink/80 hover:text-ink text-xs flex items-center gap-1.5 transition-colors"
+                    href="https://wa.me/917014938562"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-ink hover:text-[color:var(--gold)] font-medium flex items-center gap-1.5 transition-colors text-xs"
                   >
-                    <Phone size={13} className="shrink-0" />
-                    <span>Call Us</span>
+                    <Phone size={13} className="text-emerald-600 shrink-0" />
+                    <span>+91 70149 38562 (Gunnu)</span>
                   </a>
                 </div>
               </li>
               <li className="pt-2">
                 <div className="text-[11px] uppercase tracking-wider text-muted-foreground">Email:</div>
                 <a
-                  href="mailto:care@raajsi.com"
+                  href="mailto:raajsiforms@gmail.com"
                   className="text-ink hover:text-[color:var(--gold)] font-medium flex items-center gap-1.5 transition-colors mt-1 text-xs"
                 >
-                  <Mail size={14} className="shrink-0" />
-                  <span>care@raajsi.com</span>
+                  <Mail size={14} className="shrink-0 text-amber-700" />
+                  <span>raajsiforms@gmail.com</span>
                 </a>
               </li>
             </ul>
@@ -627,9 +643,9 @@ export function SiteFooter() {
         {/* Footer Bottom Bar */}
         <div className="border-t border-hairline py-6">
           <div className="container-editorial flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-            <div>© 2026 Raajsi. All Rights Reserved.</div>
+            <div>© 2026 Raajsi Jewels. All Rights Reserved.</div>
             <div className="tracking-widest uppercase text-[11px]" style={{ color: "var(--gold)" }}>
-              Timeless Luxury · Jaipur, India
+              GST: 08UQDPS5127K1ZY · Jaipur, Rajasthan, India
             </div>
           </div>
         </div>

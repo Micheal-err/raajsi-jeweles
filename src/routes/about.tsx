@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Reveal } from "@/components/Reveal";
 import { PageHero, KineticTitle } from "@/components/PageHero";
 import { KineticBand } from "@/components/KineticBand";
-import interior from "@/assets/gallery-interior.jpg";
+import heroSlide1 from "@/assets/hero-slide-1.jpg";
 import { ParallaxImage } from "@/components/Parallax";
 import heroImg from "@/assets/jewellery-hero.png";
 import ringImg from "@/assets/jewellery-rings.png";
@@ -71,7 +71,7 @@ function AboutPage() {
         <Reveal>
           <div className="relative overflow-hidden shadow-xl border border-hairline group">
             <ParallaxImage
-              src={interior}
+              src={heroSlide1}
               alt="Raajsi Jewellery Atelier in Jaipur, India"
               aspectRatio="aspect-[16/9]"
               className="w-full h-[400px] md:h-[580px]"

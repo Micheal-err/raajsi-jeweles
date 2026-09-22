@@ -129,22 +129,24 @@ function ContactPage() {
                   <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold block mb-1">
                     Phone / WhatsApp:
                   </span>
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col gap-2">
                     <a
-                      href="https://wa.me/919829012345"
+                      href="https://wa.me/919829145129"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-ink hover:text-[color:var(--gold)] font-medium flex items-center gap-2 transition-colors"
                     >
-                      <MessageCircle size={16} className="text-emerald-600" />
-                      <span>+91 98290 12345 (WhatsApp)</span>
+                      <MessageCircle size={16} className="text-emerald-600 shrink-0" />
+                      <span>+91 98291 45129 (WhatsApp / Call)</span>
                     </a>
                     <a
-                      href="tel:+919829012345"
-                      className="text-ink/80 hover:text-ink flex items-center gap-2 transition-colors text-xs pl-6"
+                      href="https://wa.me/917014938562"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-ink hover:text-[color:var(--gold)] font-medium flex items-center gap-2 transition-colors"
                     >
-                      <Phone size={13} />
-                      <span>+91 98290 12345 (Call Us)</span>
+                      <Phone size={14} className="text-emerald-600 shrink-0" />
+                      <span>+91 70149 38562 (Gunnu)</span>
                     </a>
                   </div>
                 </div>
@@ -155,11 +157,11 @@ function ContactPage() {
                     Email:
                   </span>
                   <a
-                    href="mailto:care@raajsi.com"
+                    href="mailto:raajsiforms@gmail.com"
                     className="text-ink hover:text-[color:var(--gold)] font-medium flex items-center gap-2 transition-colors"
                   >
-                    <Mail size={16} className="text-amber-700" />
-                    <span>care@raajsi.com</span>
+                    <Mail size={16} className="text-amber-700 shrink-0" />
+                    <span>raajsiforms@gmail.com</span>
                   </a>
                 </div>
 
@@ -169,13 +171,13 @@ function ContactPage() {
                     Instagram:
                   </span>
                   <a
-                    href="https://instagram.com/raajsi_official"
+                    href="https://www.instagram.com/jewels_raajsi?stkn=NDZnM3dzeW13NXUz"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-ink hover:text-[color:var(--gold)] font-medium flex items-center gap-2 transition-colors"
                   >
-                    <Instagram size={16} className="text-pink-600" />
-                    <span>@raajsi_official</span>
+                    <Instagram size={16} className="text-pink-600 shrink-0" />
+                    <span>@jewels_raajsi</span>
                   </a>
                 </div>
 
@@ -185,24 +187,27 @@ function ContactPage() {
                     Facebook:
                   </span>
                   <a
-                    href="https://facebook.com/raajsiofficial"
+                    href="https://www.facebook.com/share/1QEN2B3By5/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-ink hover:text-[color:var(--gold)] font-medium flex items-center gap-2 transition-colors"
                   >
-                    <Facebook size={16} className="text-blue-600" />
-                    <span>Raajsi Jewellery</span>
+                    <Facebook size={16} className="text-blue-600 shrink-0" />
+                    <span>Raajsi Jewels</span>
                   </a>
                 </div>
 
                 {/* Location */}
                 <div>
                   <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold block mb-1">
-                    Location:
+                    Location & GSTIN:
                   </span>
                   <div className="flex items-center gap-2 text-ink font-medium">
                     <MapPin size={16} className="text-[color:var(--gold)] shrink-0" />
                     <span>Jaipur, Rajasthan, India</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1 pl-6">
+                    GST: <span className="font-mono font-semibold text-ink">08UQDPS5127K1ZY</span>
                   </div>
                 </div>
               </div>
@@ -252,7 +257,7 @@ function ContactPage() {
                 </span>
                 <div className="grid grid-cols-2 gap-2.5">
                   <a
-                    href="https://instagram.com/raajsi_official"
+                    href="https://www.instagram.com/jewels_raajsi?stkn=NDZnM3dzeW13NXUz"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-3 border border-hairline bg-paper hover:bg-mist text-ink text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 transition-colors rounded-xs shadow-xs"
@@ -261,7 +266,7 @@ function ContactPage() {
                     <span>Instagram</span>
                   </a>
                   <a
-                    href="https://facebook.com/raajsiofficial"
+                    href="https://www.facebook.com/share/1QEN2B3By5/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-3 border border-hairline bg-paper hover:bg-mist text-ink text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 transition-colors rounded-xs shadow-xs"
@@ -270,7 +275,7 @@ function ContactPage() {
                     <span>Facebook</span>
                   </a>
                   <a
-                    href="https://wa.me/919829012345"
+                    href="https://wa.me/919829145129"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-3 border border-hairline bg-paper hover:bg-mist text-ink text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 transition-colors rounded-xs shadow-xs"
@@ -279,7 +284,7 @@ function ContactPage() {
                     <span>WhatsApp</span>
                   </a>
                   <a
-                    href="tel:+919829012345"
+                    href="tel:+919829145129"
                     className="p-3 border border-hairline bg-paper hover:bg-mist text-ink text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 transition-colors rounded-xs shadow-xs"
                   >
                     <Phone size={14} />
@@ -409,6 +414,36 @@ function ContactPage() {
                 </form>
               )}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. ATELIER LOCATION & GOOGLE MAP */}
+      <section className="border-t border-hairline bg-mist/30 py-16 md:py-20">
+        <div className="container-editorial">
+          <div className="max-w-2xl mb-8">
+            <span className="text-[11px] uppercase tracking-[0.25em] text-[color:var(--gold)] font-medium block mb-2">
+              Our Atelier Location
+            </span>
+            <h2 className="font-serif text-3xl md:text-4xl text-ink mb-3">
+              Visit Raajsi Jewels in Jaipur
+            </h2>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Discover our handcrafted jewellery and certified 925 sterling silver collections in Jaipur, Rajasthan, India.
+            </p>
+          </div>
+          <div className="w-full overflow-hidden border border-hairline shadow-md bg-paper rounded-xs">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3556.5937949334852!2d75.83351697544065!3d26.948089176626176!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjbCsDU2JzUzLjEiTiA3NcKwNTAnMDkuOSJF!5e0!3m2!1sen!2sin!4v1790098994078!5m2!1sen!2sin"
+              width="100%"
+              height="450"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              title="Raajsi Jewels Atelier Location"
+              className="w-full h-[400px] md:h-[480px]"
+            />
           </div>
         </div>
       </section>

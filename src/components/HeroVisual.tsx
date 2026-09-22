@@ -8,6 +8,10 @@ import artwork1 from "@/assets/artwork-1.jpg";
 import artwork2 from "@/assets/artwork-2.jpg";
 import artwork3 from "@/assets/artwork-3.jpg";
 import artwork4 from "@/assets/artwork-4.jpg";
+import jewelleryHero from "@/assets/jewellery-hero.png";
+import jewelleryNecklace from "@/assets/jewellery-necklace.jpg";
+import jewelleryRings from "@/assets/jewellery-rings.png";
+import jewelleryBangles from "@/assets/jewellery-bangles.jpg";
 
 export type HeroVisualVariant =
   | "gallery"
@@ -96,24 +100,24 @@ function renderVariant(v: HeroVisualVariant) {
       return (
         <>
           <Frame
-            src={interior}
-            alt="Gallery interior"
-            className="left-0 top-[8%] w-[68%] h-[62%]"
+            src={jewelleryHero}
+            alt="Raajsi Fine Royal Kundan Jewellery"
+            className="left-0 top-[6%] w-[68%] h-[64%]"
           />
           <Frame
-            src={artwork1}
-            alt="Artwork"
-            className="right-0 top-0 w-[42%] h-[38%]"
+            src={jewelleryRings}
+            alt="925 Sterling Silver Ring"
+            className="right-0 top-0 w-[44%] h-[40%]"
             style={{ transform: "rotate(2deg)" }}
           />
           <Frame
-            src={artist2}
-            alt="Artist portrait"
-            className="right-[4%] bottom-[4%] w-[52%] h-[46%]"
+            src={jewelleryNecklace}
+            alt="Handcrafted Choker & Necklace"
+            className="right-[2%] bottom-[4%] w-[54%] h-[48%]"
             style={{ transform: "rotate(-1.5deg)" }}
           />
-          <div className="absolute left-[2%] bottom-0 eyebrow bg-paper/95 px-3 py-1.5 backdrop-blur">
-            Est. 2009 · Jaipur
+          <div className="absolute left-[2%] bottom-0 eyebrow bg-paper/95 px-3 py-1.5 backdrop-blur border border-hairline shadow-sm">
+            Timeless Luxury · Jaipur
           </div>
           <span
             className="absolute left-[70%] top-[4%] w-2 h-2 rounded-full"

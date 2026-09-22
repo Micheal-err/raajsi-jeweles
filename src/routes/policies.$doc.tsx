@@ -2,43 +2,126 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { PageHero, KineticTitle } from "@/components/PageHero";
 
 const DOCS: Record<string, { title: string; lede: string; body: string }> = {
-  privacy: {
-    title: "Privacy Policy",
-    lede: "How we protect your personal information and respect your privacy.",
-    body: `We collect only what is necessary to deliver an exceptional Raajsi experience — your name, shipping address, contact details, and inquiry preferences. We do not sell or rent your personal data to third parties. Information is securely shared only with verified logistics partners to fulfill your orders.\n\nTo update your preferences or request data deletion, contact our concierge at care@raajsi.com.`,
-  },
   terms: {
     title: "Terms & Conditions",
-    lede: "Guidelines governing your acquisitions and interactions with Raajsi.",
-    body: `All jewellery specifications, metals (including 925 Sterling Silver), gemstones, and craftsmanship details are described with accuracy. Raajsi reserves the right to verify orders prior to dispatch. Each piece comes with our certificate of authenticity.\n\nFor custom or personalized commissions, production begins upon formal design confirmation.`,
+    lede: "Welcome to Raajsi Jewels. These Terms & Conditions govern your use of our website and purchase of products.",
+    body: `Welcome to Raajsi Jewels. These Terms & Conditions govern your use of our website and your purchase of any products from us. By accessing this website or placing an order, you agree to be bound by these terms. Please read them carefully.
+
+1. About Us
+Raajsi Jewels is a Jaipur-based fine jewellery brand dealing in Kundan, Polki, Meenakari and related handcrafted jewellery, as well as 925 Sterling Silver. Our GST registration number is 08UQDPS5127K1ZY.
+
+2. Eligibility
+By using this website and placing an order, you confirm that you are at least 18 years of age or are placing an order under the supervision of a parent or legal guardian, and that you have the legal capacity to enter into a binding contract.
+
+3. Products & Descriptions
+• We make every effort to display our products, their colours, and details as accurately as possible. However, slight variations in colour, finish, or stone placement may occur due to the handcrafted nature of the jewellery, photography, or screen display settings.
+• All jewellery listed as hallmarked is BIS Hallmark certified where applicable.
+• Product images are for illustrative purposes; minor variations from the actual product are possible.
+
+4. Pricing
+• All prices listed on the website are in Indian Rupees (INR) and are inclusive of applicable taxes unless otherwise stated.
+• We reserve the right to change prices at any time without prior notice. The price applicable at the time of order confirmation will be honoured.
+• In the event of a pricing error on the website, we reserve the right to cancel the order and issue a full refund.
+
+5. Orders & Payment
+• Orders are confirmed only after successful payment through our payment partner, Razorpay.
+• We accept payments via cards, UPI, net banking, and wallets, as supported by Razorpay.
+• We reserve the right to refuse or cancel any order at our discretion, including in cases of suspected fraud, pricing errors, or unavailability of stock. In such cases, a full refund will be processed.
+
+6. Shipping, Exchange & Returns
+Shipping timelines and our exchange policy are as it is available to exchange in under 7 days of purchase. Free delivery is provided on all orders above ₹999.
+
+7. Intellectual Property
+All content on this website, including but not limited to images, logos, product designs, text, and graphics, is the property of Raajsi Jewels and is protected under applicable intellectual property laws. No content may be copied, reproduced, or used without our prior written consent.
+
+8. Limitation of Liability
+Raajsi Jewels shall not be liable for any indirect, incidental, or consequential damages arising from the use of this website or products purchased, except as required under applicable Indian law.
+
+9. Governing Law & Jurisdiction
+These Terms & Conditions shall be governed by and construed in accordance with the laws of India. Any disputes arising shall be subject to the exclusive jurisdiction of the courts in Jaipur, Rajasthan.
+
+10. Changes to These Terms
+We reserve the right to update or modify these Terms & Conditions at any time without prior notice. Continued use of the website after changes are posted constitutes your acceptance of the revised terms.
+
+11. Contact Us
+Raajsi Jewels
+Jaipur, Rajasthan, India
+Email: raajsiforms@gmail.com
+Phone: +91 98291 45129 / +91 70149 38562 (Gunnu)
+GST: 08UQDPS5127K1ZY`,
+  },
+  privacy: {
+    title: "Privacy Policy",
+    lede: "How Raajsi Jewels collects, protects, and respects your privacy.",
+    body: `At Raajsi Jewels, we value your trust and are committed to safeguarding your privacy.
+
+1. Information We Collect
+We collect personal details you provide during order placement, account registration, or contact inquiries — including your name, contact phone number, shipping address, and email address.
+
+2. How We Use Your Information
+Your data is used strictly to process orders, facilitate secure delivery through reputed shipping carriers, issue order updates, provide customer support, and communicate important service notifications.
+
+3. Payment Security
+We do not store or process your credit/debit card numbers, UPI PINs, or net banking credentials on our servers. All financial transactions are securely processed by Razorpay through encrypted SSL channels.
+
+4. Non-Disclosure
+Raajsi Jewels does not sell, trade, or rent your personal information to third parties. Data is shared exclusively with logistics partners solely for delivery purposes.
+
+5. Your Rights & Contact
+You have the right to request access to or deletion of your personal details stored with us. For inquiries, email raajsiforms@gmail.com or call +91 98291 45129.`,
   },
   shipping: {
-    title: "Shipping & Delivery",
-    lede: "Insured, tamper-evident delivery from our Jaipur atelier directly to your door.",
-    body: `Domestic Shipping (India): Standard delivery arrives within 3–7 business days. Express shipping is available for major metropolitan cities (2–3 business days). All shipments are fully insured and tracked in real time.\n\nInternational Shipping: Orders are dispatched via reputed global couriers (DHL / FedEx) and typically arrive within 7–14 business days. Custom duties and local taxes, if applicable, are handled as per destination country regulations.`,
+    title: "Shipping & Delivery Policy",
+    lede: "Complimentary delivery on orders above ₹999, insured directly from our Jaipur atelier.",
+    body: `1. Free Delivery Threshold
+Enjoy FREE insured doorstep delivery across India on all orders above ₹999. For orders under ₹999, a nominal standard delivery charge of ₹99 is applicable.
+
+2. Dispatch Timelines
+All in-stock pieces are dispatched within 1–2 business days from our Jaipur workshop. Custom orders or personalized handcrafted creations are crafted to perfection and dispatched within 5–7 business days.
+
+3. Transit & Tracking
+Domestic orders typically arrive within 3–6 business days depending on location. Once your order is dispatched, you will receive a real-time tracking number (e.g., RJ-XXXXXX) viewable in your "My Orders" dashboard.
+
+4. Insured Packaging
+Every Raajsi parcel is packed in tamper-evident, secure luxury packaging and is 100% transit-insured until signed for at your door.`,
   },
   returns: {
-    title: "Returns & Exchange",
-    lede: "Our commitment to your complete satisfaction with every Raajsi creation.",
-    body: `We offer a 7-day return and exchange window from the date of delivery for unworn, unaltered jewellery in its original packaging with all security tags intact.\n\nTo initiate a return or exchange, simply contact our support team at care@raajsi.com or message us via WhatsApp with your order details. Once inspected at our Jaipur studio, refunds are processed within 5–7 business days to the original payment method.`,
+    title: "7 Days Exchange & Returns",
+    lede: "Shop with peace of mind. Exchange within 7 days of purchase.",
+    body: `1. 7 Days Exchange Guarantee
+We want you to love your Raajsi creation. We offer a hassle-free 7-day exchange window from the date of purchase/delivery for unworn, unaltered jewellery in original packaging with all security tags intact.
+
+2. Exchange Procedure
+To initiate an exchange:
+• Email us at raajsiforms@gmail.com or WhatsApp us at +91 98291 45129 / +91 70149 38562.
+• Provide your Order Number and photos of the item you wish to exchange.
+• Our team will arrange pickup or provide return transit instructions.
+
+3. Eligibility Criteria
+Items must show no signs of wear, sizing modifications, or damage. Custom commissions and engraved pieces are subject to specific review.
+
+4. Refunds
+In case of accepted cancellation or verified product defect, refunds are processed via Razorpay directly back to your original payment method within 5–7 banking days.`,
   },
   faqs: {
     title: "Frequently Asked Questions",
-    lede: "Answers to common questions about Raajsi jewellery, authenticity, care, and orders.",
-    body: `Q: Are your silver pieces genuine 925 Sterling Silver?
-A: Yes, every piece in our Sterling Silver collection is crafted in genuine 925 Sterling Silver, offering a refined, hypoallergenic, and timeless finish.
+    lede: "Common inquiries regarding 925 Sterling Silver, Handcrafted Jewels, and orders.",
+    body: `Q: What are the two core collections at Raajsi?
+A: Raajsi features two distinct collections:
+1. 925 Silver (Sterling Silver 925): Modern, minimal, and elegant everyday jewellery.
+2. Handcrafted Jewels: Artisanal, expressive Kundan, Polki, and Meenakari masterpieces.
 
-Q: What makes the Handcrafted Jewels collection unique?
-A: Our Handcrafted collection celebrates artistic character and Jaipur's celebrated artisanal heritage. Each piece is inspired by distinctive forms, textures, colours, and traditional influences designed for modern wear.
+Q: Are your silver pieces genuine 925 Sterling Silver?
+A: Yes! Every piece in our silver collection is crafted in genuine 925 Sterling Silver and certified.
 
-Q: How can I care for my Raajsi jewellery?
-A: Store each item individually in your Raajsi luxury box or moisture-free pouch. Avoid exposure to perfumes, lotions, and harsh chemicals. Gently buff silver with a soft microfiber cloth to preserve its radiant shine.
+Q: Is shipping free?
+A: Free Delivery is provided on all orders above ₹999 across India.
 
-Q: Can I place an order for gifting?
-A: Absolutely. Every Raajsi creation arrives in elegant gift-ready signature packaging. You can also include a personalized handwritten message at checkout.
+Q: Can I exchange my order?
+A: Yes, we provide an easy 7-day exchange policy from the date of purchase.
 
-Q: How do I contact the Raajsi team?
-A: You can reach us via WhatsApp at +91 98290 12345, email us at care@raajsi.com, or send a message through our Contact page. We are delighted to assist you.`,
+Q: How can I reach the Raajsi team?
+A: You can reach us via WhatsApp/Phone at +91 98291 45129 or +91 70149 38562 (Gunnu), or by email at raajsiforms@gmail.com. We are located in Jaipur, Rajasthan, India.`,
   },
 };
 

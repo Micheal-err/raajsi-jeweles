@@ -87,28 +87,38 @@ function CartPage() {
               ))}
             </div>
             <aside className="space-y-6">
-              <div className="border border-hairline p-6">
-                <div className="eyebrow mb-3">Estimated total</div>
-                <div className="font-serif text-3xl tabular-nums">
+              <div className="border border-hairline p-6 bg-paper space-y-4">
+                <div className="eyebrow mb-1">Order Subtotal</div>
+                <div className="font-serif text-3xl tabular-nums text-ink">
                   ₹{new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(total)}
                 </div>
-                <p className="text-xs text-muted-foreground mt-2">
-                  Displayed prices are indicative. Final price is confirmed by the gallery.
-                </p>
+                <div className="text-xs pt-1 border-t border-hairline/60 space-y-2">
+                  {total >= 999 ? (
+                    <div className="text-emerald-700 font-medium flex items-center gap-1.5">
+                      <span>✓</span>
+                      <span>Eligible for Free Delivery (Order &gt; ₹999)</span>
+                    </div>
+                  ) : (
+                    <div className="text-amber-800 text-[11px] leading-snug">
+                      Add ₹{999 - total} more for <strong>Free Delivery</strong> (Standard delivery: ₹99)
+                    </div>
+                  )}
+                  <div className="text-[11px] text-muted-foreground">
+                    • GST Free / Inclusive of all taxes<br />
+                    • 7 Days Exchange Policy<br />
+                    • 100% BIS Hallmark &amp; 925 Silver Certified
+                  </div>
+                </div>
               </div>
               <button
                 type="button"
                 onClick={() => navigate({ to: "/checkout" })}
-                className="cta-red w-full py-3 flex items-center justify-center gap-2 text-xs uppercase tracking-wider font-medium"
+                className="cta-gold w-full py-3.5 flex items-center justify-center gap-2 text-xs uppercase tracking-wider font-medium shadow-sm hover:shadow-md transition-all"
               >
-                {total <= 100000
-                  ? "Proceed to Online Checkout →"
-                  : "Proceed to Curatorial Acquisition →"}
+                Proceed to Checkout →
               </button>
-              <p className="text-[11px] text-center text-ink/60">
-                {total <= 100000
-                  ? "🟢 Eligible for Instant Online Payment (UPI, Cards, NetBanking)"
-                  : "🟡 Total exceeds ₹1 Lakh — Reserved via Jewellery Specialist Assistance"}
+              <p className="text-[11px] text-center text-ink/70">
+                🔒 Secure Razorpay Checkout (UPI, Cards, NetBanking)
               </p>
               <Link
                 to="/collection"

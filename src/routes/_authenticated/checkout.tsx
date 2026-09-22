@@ -92,8 +92,8 @@ function CheckoutPage() {
     (s, i) => s + (i.artwork.display_price ?? i.artwork.price_min ?? 0),
     0,
   );
-  const shipping = subtotal > 0 ? 0 : 0; // Free shipping on all orders
-  const tax = Math.round(subtotal * JEWELLERY_GST_RATE); // 3% GST on jewellery
+  const shipping = subtotal >= 999 ? 0 : subtotal > 0 ? 99 : 0; // Free delivery above ₹999
+  const tax = 0; // GST Free — all prices inclusive of taxes
   const total = subtotal + shipping + tax;
 
   // All orders go through Razorpay direct online payment
@@ -514,9 +514,9 @@ function CheckoutPage() {
               <CheckCircle2 size={13} className="text-emerald-600" />
               Test Mode: Instant Sandbox Checkout (Simulate Payment)
             </button>
-            <p className="text-[11px] text-center text-ink/50 flex items-center justify-center gap-1">
+            <p className="text-[11px] text-center text-ink/60 flex items-center justify-center gap-1">
               <ShieldCheck size={13} className="text-emerald-700" />
-              Every piece includes 100% BIS Hallmark Certificate &amp; Free Insured Delivery.
+              100% BIS Hallmark &amp; 925 Silver Certified · Free Delivery above ₹999 · 7 Days Exchange
             </p>
           </div>
         </form>
@@ -560,18 +560,17 @@ function CheckoutPage() {
               </div>
               <div className="flex justify-between text-ink/70">
                 <span>Shipping</span>
-                <span className="tabular-nums text-emerald-700 font-medium">FREE</span>
+                <span className="tabular-nums font-medium">
+                  {shipping === 0 ? (
+                    <span className="text-emerald-700">FREE (Above ₹999)</span>
+                  ) : (
+                    <span>₹99</span>
+                  )}
+                </span>
               </div>
               <div className="flex justify-between text-ink/70">
-                <span>GST (3%)</span>
-                <span className="tabular-nums">
-                  {fmt({
-                    price_display: "fixed",
-                    price_min: null,
-                    price_max: null,
-                    display_price: tax,
-                  })}
-                </span>
+                <span>GST / Taxes</span>
+                <span className="tabular-nums text-emerald-700 font-medium">FREE (Included)</span>
               </div>
               <div className="flex justify-between font-serif text-xl pt-3 border-t border-hairline text-ink font-medium">
                 <span>Total</span>

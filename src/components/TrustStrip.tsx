@@ -1,13 +1,12 @@
 import { ShieldCheck, BadgeCheck, Truck, RotateCcw, Gem, Award, Sparkles } from "lucide-react";
 
 const ITEMS = [
-  { Icon: ShieldCheck, label: "SSL Secured Checkout" },
+  { Icon: Truck, label: "Free Delivery Above ₹999" },
+  { Icon: RotateCcw, label: "7 Days Exchange Policy" },
   { Icon: Gem, label: "BIS Hallmark Certified" },
-  { Icon: Award, label: "925 Silver / 22K 18K Gold" },
-  { Icon: Truck, label: "Free India Shipping" },
-  { Icon: RotateCcw, label: "7-Day Easy Returns" },
-  { Icon: Sparkles, label: "Complimentary Gift Wrapping" },
-  { Icon: BadgeCheck, label: "Authenticity Guaranteed" },
+  { Icon: Award, label: "100% Genuine 925 Silver" },
+  { Icon: Sparkles, label: "Handcrafted in Jaipur" },
+  { Icon: ShieldCheck, label: "Secure Razorpay Checkout" },
 ];
 
 export function TrustStrip() {

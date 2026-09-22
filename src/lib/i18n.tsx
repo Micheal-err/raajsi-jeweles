@@ -142,24 +142,6 @@ export function useI18n() {
 export const LANGS: Lang[] = ["en", "hi", "fr"];
 
 export function LanguageSwitcher({ className = "" }: { className?: string }) {
-  const { lang, setLang } = useI18n();
-  return (
-    <label
-      className={`inline-flex items-center gap-1 text-[11px] tracking-widest uppercase ${className}`}
-    >
-      <span className="sr-only">Language</span>
-      <select
-        value={lang}
-        onChange={(e) => setLang(e.target.value as Lang)}
-        className="bg-transparent border-0 focus:outline-none cursor-pointer font-medium"
-        aria-label="Language"
-      >
-        {LANGS.map((l) => (
-          <option key={l} value={l}>
-            {LABEL[l]}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
+  // Brand policy: Standardized on English only.
+  return null;
 }

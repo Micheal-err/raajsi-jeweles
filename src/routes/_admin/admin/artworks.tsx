@@ -8,9 +8,8 @@ import { resolveImage } from "@/lib/images";
 import { MultiImageUploader } from "@/components/admin/MultiImageUploader";
 
 const CATEGORIES = [
-  { value: "women", label: "Women's Collection" },
-  { value: "men", label: "Men's Collection" },
-  { value: "unisex", label: "Unisex / Heritage" },
+  { value: "silver", label: "925 Silver (Sterling Silver)" },
+  { value: "handicraft", label: "Handcrafted Jewels" },
 ] as const;
 
 const SUBCATEGORIES = [
@@ -19,8 +18,9 @@ const SUBCATEGORIES = [
   { value: "earrings", label: "Earrings & Jhumkas" },
   { value: "bangles", label: "Bangles & Kadas" },
   { value: "chains", label: "Chains" },
-  { value: "bracelets", label: "Bracelets & Kadas" },
+  { value: "bracelets", label: "Bracelets & Cuffs" },
   { value: "pendants", label: "Pendants" },
+  { value: "mangalsutra", label: "Mangalsutra & Sets" },
 ] as const;
 
 const AVAILABILITY = ["available", "reserved", "sold", "not_for_sale"] as const;
@@ -102,7 +102,14 @@ function ArtworksPage() {
   const filtered =
     filterCategory === "all"
       ? rows
-      : rows.filter((r) => r.metadata?.category === filterCategory);
+      : rows.filter((r) => {
+          const cat = (r.metadata?.category || (r as any).category || "").toLowerCase();
+          const medium = (r.medium || "").toLowerCase();
+          if (filterCategory === "silver") {
+            return cat.includes("silver") || medium.includes("silver");
+          }
+          return cat.includes("handicraft") || (!cat.includes("silver") && !medium.includes("silver"));
+        });
 
   return (
     <div className="p-8">
@@ -215,7 +222,11 @@ function ArtworksPage() {
                     </td>
                     <td className="px-4 py-3">
                       <span className="inline-block px-2 py-0.5 text-[10px] tracking-wider uppercase bg-mist text-ink/80 rounded-sm">
-                        {item.metadata?.category || "Uncategorized"}
+                        {item.metadata?.category === "silver"
+                          ? "925 Silver"
+                          : item.metadata?.category === "handicraft"
+                          ? "Handcrafted"
+                          : item.metadata?.category || "Handcrafted"}
                       </span>
                       {item.metadata?.subcategory && (
                         <div className="text-[11px] text-muted-foreground mt-0.5 capitalize">
@@ -339,7 +350,7 @@ function ProductForm({
 
     const price = Number(fd.get("price") || 0);
     const stock = Number(fd.get("stock_quantity") || 10);
-    const category = String(fd.get("category") || "women");
+    const category = String(fd.get("category") || "silver");
     const subcategory = String(fd.get("subcategory") || "necklaces");
     const gemstone = String(fd.get("gemstone") || "").trim();
     const carat = String(fd.get("carat") || "").trim();
@@ -348,7 +359,7 @@ function ProductForm({
     const payload = {
       slug,
       title,
-      medium: String(fd.get("medium") ?? "22K Yellow Gold"),
+      medium: String(fd.get("medium") ?? "925 Sterling Silver"),
       price,
       display_price: price,
       price_display: "fixed" as const,
@@ -362,6 +373,7 @@ function ProductForm({
       primary_image_url: validImages[0],
       gallery_image_urls: validImages,
       origin_country: "Jaipur, India",
+      category,
       metadata: {
         category,
         subcategory,
@@ -535,7 +547,7 @@ function EditModal({
 
     const price = Number(fd.get("price") || 0);
     const stock = Number(fd.get("stock_quantity") || 0);
-    const category = String(fd.get("category") || "women");
+    const category = String(fd.get("category") || "silver");
     const subcategory = String(fd.get("subcategory") || "necklaces");
     const gemstone = String(fd.get("gemstone") || "").trim();
     const weight = String(fd.get("weight") || "").trim();
@@ -554,6 +566,7 @@ function EditModal({
       story: String(fd.get("story") ?? "") || null,
       primary_image_url: validImages[0] || artwork!.primary_image_url,
       gallery_image_urls: validImages,
+      category,
       metadata: {
         ...(artwork!.metadata ?? {}),
         category,
@@ -602,7 +615,7 @@ function EditModal({
             </span>
             <select
               name="category"
-              defaultValue={artwork.metadata?.category || "women"}
+              defaultValue={artwork.metadata?.category || "silver"}
               className="border border-hairline px-3 py-2 text-sm bg-transparent"
             >
               {CATEGORIES.map((c) => (
