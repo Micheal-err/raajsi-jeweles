@@ -40,7 +40,7 @@ export const Route = createFileRoute("/about")({
   component: AboutPage,
 });
 
-export function AboutPage() {
+function AboutPage() {
   return (
     <div className="bg-paper text-ink pb-24">
       {/* 1. HERO HEADER */}

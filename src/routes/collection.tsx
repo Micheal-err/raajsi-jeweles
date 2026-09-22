@@ -32,7 +32,7 @@ export const Route = createFileRoute("/collection")({
   component: CollectionPage,
 });
 
-export function CollectionPage() {
+function CollectionPage() {
   const searchParams = Route.useSearch();
   const navigate = useNavigate();
 

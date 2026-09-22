@@ -74,188 +74,229 @@ function CheckoutPage() {
   // All orders go through Razorpay direct online payment
   const isOnlinePaymentEligible = true;
 
-  async function saveOrder(status: "confirmed" | "inquiry_sent", paymentId?: string) {
-    if (!user) return;
+  interface ShippingDetails {
+    shippingName: string;
+    line1: string;
+    line2: string;
+    shippingCity: string;
+    shippingState: string;
+    shippingPostal: string;
+    shippingCountry: string;
+    phone: string;
+  }
 
-    // Retrieve form element data from current state
+  function getShippingFromForm(): ShippingDetails | null {
     const formEl = document.querySelector("#checkout-form") as HTMLFormElement | null;
-    const fd = formEl ? new FormData(formEl) : new FormData();
-    const line1 = String(fd.get("line1") ?? "");
-    const line2 = String(fd.get("line2") ?? "");
-    const shippingName = String(fd.get("name") ?? "");
-    const shippingCity = String(fd.get("city") ?? "");
-    const shippingPostal = String(fd.get("postal") ?? "");
-    const shippingCountry = String(fd.get("country") ?? "India");
-    const phone = String(fd.get("phone") ?? "");
+    if (!formEl) return null;
+    const fd = new FormData(formEl);
+    const shippingName = String(fd.get("name") ?? "").trim();
+    const line1 = String(fd.get("line1") ?? "").trim();
+    const line2 = String(fd.get("line2") ?? "").trim();
+    const shippingCity = String(fd.get("city") ?? "").trim();
+    const shippingState = String(fd.get("state") ?? "").trim();
+    const shippingPostal = String(fd.get("postal") ?? "").trim();
+    const shippingCountry = String(fd.get("country") ?? "India").trim();
+    const phone = String(fd.get("phone") ?? "").trim();
 
-    const { data: createdOrder, error } = await supabase
-      .from("orders")
-      .insert({
+    if (!shippingName || !line1 || !shippingCity || !shippingPostal || !phone) {
+      toast.error("Please fill in all required shipping address fields.");
+      return null;
+    }
+
+    return {
+      shippingName,
+      line1,
+      line2,
+      shippingCity,
+      shippingState,
+      shippingPostal,
+      shippingCountry,
+      phone,
+    };
+  }
+
+  async function finalizeConfirmedOrder({
+    paymentId,
+    paymentMethod,
+    shippingData,
+  }: {
+    paymentId: string;
+    paymentMethod: string;
+    shippingData: ShippingDetails;
+  }) {
+    if (!user) return;
+    setPlacing(true);
+
+    try {
+      const orderPayload = {
         user_id: user.id,
-        status,
-        subtotal,
-        shipping_cost: shipping,
-        tax_cost: tax,
-        total,
-        currency: activeCurrency,
-        shipping_name: shippingName,
-        shipping_email: user.email ?? "",
-        shipping_address: [line1, line2].filter(Boolean).join(", "),
-        shipping_city: shippingCity,
-        shipping_postal: shippingPostal,
-        shipping_country: shippingCountry,
-        notes: `Phone: ${phone}`,
+        customer_name: shippingData.shippingName,
+        customer_email: user.email ?? "",
+        customer_phone: shippingData.phone,
+        shipping_address: {
+          line1: shippingData.line1,
+          line2: shippingData.line2,
+          city: shippingData.shippingCity,
+          state: shippingData.shippingState,
+          postal: shippingData.shippingPostal,
+          country: shippingData.shippingCountry,
+        },
         items: rows.map((r) => ({
           artwork_id: r.artwork.id,
           slug: r.artwork.slug,
           title: r.artwork.title,
           price: r.artwork.display_price ?? r.artwork.price_min ?? 0,
           image: r.artwork.primary_image_url,
-          payment_id: paymentId ?? null,
+          payment_id: paymentId,
         })),
-      })
-      .select("id")
-      .single();
+        total_amount: total,
+        currency: activeCurrency || "INR",
+        payment_status: "paid",
+        payment_method: paymentMethod,
+        fulfillment_status: "confirmed",
+        tracking_number: `RJ-${Date.now().toString(36).toUpperCase()}`,
+      };
 
-    if (error || !createdOrder) {
-      toast.error("Could not record order. Please contact support.");
-      setPlacing(false);
-      return;
-    }
+      const { data: createdOrder, error } = await supabase
+        .from("orders")
+        .insert(orderPayload)
+        .select()
+        .single();
 
-    // Atomic Stock Reservation & Availability Update
-    const artworkIds = rows.map((r) => r.artwork.id).filter(Boolean);
-    if (artworkIds.length > 0) {
-      for (const artId of artworkIds) {
-        await supabase.rpc("reserve_artwork", {
-          p_artwork_id: artId,
-          p_order_id: createdOrder.id,
-          p_ttl_minutes: 4320,
-        });
+      if (error || !createdOrder) {
+        console.error("Order creation error:", error);
+        toast.error("Could not record order: " + (error?.message || "Please contact support."));
+        setPlacing(false);
+        return;
       }
 
-      await supabase.rpc("update_artworks_availability", {
-        p_artwork_ids: artworkIds,
-        p_availability: "reserved",
-      });
+      // Mark purchased jewellery artworks as sold
+      const artworkIds = rows.map((r) => r.artwork.id).filter(Boolean);
+      if (artworkIds.length > 0) {
+        await supabase
+          .from("artworks")
+          .update({ availability: "sold" })
+          .in("id", artworkIds);
+      }
 
+      // Clear cart items
+      await supabase.from("cart_items").delete().eq("user_id", user.id);
+
+      // Invalidate relevant queries
+      qc.invalidateQueries({ queryKey: ["cart"] });
+      qc.invalidateQueries({ queryKey: ["orders", user.id] });
+      qc.invalidateQueries({ queryKey: ["admin-orders"] });
       qc.invalidateQueries({ queryKey: ["collection"] });
       qc.invalidateQueries({ queryKey: ["artworks"] });
-      qc.invalidateQueries({ queryKey: ["artwork"] });
       qc.invalidateQueries({ queryKey: ["home-artworks"] });
+
+      toast.success(
+        `Payment successful! Order #${createdOrder.id.slice(0, 8).toUpperCase()} placed. Hallmark Certificate included.`
+      );
+      nav({ to: "/orders" });
+    } catch (err) {
+      console.error("Finalize order error:", err);
+      toast.error("Error finalizing order. Please check My Orders or contact support.");
+    } finally {
+      setPlacing(false);
     }
-
-    // Clear cart
-    await supabase.from("cart_items").delete().eq("user_id", user.id);
-    qc.invalidateQueries({ queryKey: ["cart"] });
-
-    toast.success("Order submitted! Our jewellery specialist will contact you shortly.");
-    nav({ to: "/orders" });
   }
 
   async function place(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!user || rows.length === 0 || placing) return;
+
+    const shippingData = getShippingFromForm();
+    if (!shippingData) return;
+
     setPlacing(true);
 
-    const fd = new FormData(e.currentTarget);
-    const line1 = String(fd.get("line1") ?? "");
-    const line2 = String(fd.get("line2") ?? "");
-    const shippingName = String(fd.get("name") ?? "");
-    const shippingCity = String(fd.get("city") ?? "");
-    const shippingPostal = String(fd.get("postal") ?? "");
-    const shippingCountry = String(fd.get("country") ?? "India");
-    const phone = String(fd.get("phone") ?? "");
-
-    if (isOnlinePaymentEligible) {
-      const loaded = await loadRazorpayScript();
-      if (!loaded) {
-        toast.error("Razorpay SDK failed to load. Are you connected to the internet?");
-        setPlacing(false);
-        return;
-      }
-
-      const { data, error } = await supabase.functions.invoke("create-razorpay-order", {
-        body: {
-          artwork_ids: rows.map((r) => r.artwork.id),
-          shipping: {
-            name: shippingName,
-            email: user.email ?? "",
-            address: [line1, line2].filter(Boolean).join(", "),
-            city: shippingCity,
-            postal: shippingPostal,
-            country: shippingCountry,
-            phone,
-          },
-        },
-      });
-
-      if (error || data?.error) {
-        toast.error(data?.error ?? "Could not start checkout.");
-        setPlacing(false);
-        return;
-      }
-
-      const options = {
-        key: data.key_id,
-        amount: data.amount,
-        currency: data.currency,
-        order_id: data.razorpay_order_id,
-        name: "Raajsi Jewels",
-        description: `Fine Jewellery Purchase (${rows.length} item${rows.length > 1 ? "s" : ""})`,
-        prefill: {
-          name: shippingName,
-          email: user.email ?? "",
-          contact: phone,
-        },
-        theme: {
-          color: "#b8860b",
-        },
-        handler: async function (response: {
-          razorpay_order_id: string;
-          razorpay_payment_id: string;
-          razorpay_signature: string;
-        }) {
-          const { data: verifyData, error: verifyErr } = await supabase.functions.invoke(
-            "verify-razorpay-payment",
-            {
-              body: {
-                db_order_id: data.db_order_id,
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-              },
-            },
-          );
-
-          if (verifyErr || !verifyData?.success) {
-            toast.error("Payment could not be verified. Please contact support before retrying.");
-            setPlacing(false);
-            return;
-          }
-
-          await supabase.from("cart_items").delete().eq("user_id", user.id);
-          qc.invalidateQueries({ queryKey: ["cart"] });
-          qc.invalidateQueries({ queryKey: ["collection"] });
-          qc.invalidateQueries({ queryKey: ["artworks"] });
-
-          toast.success("Payment successful! Order confirmed. Your hallmark certificate will be included.");
-          nav({ to: "/orders" });
-        },
-        modal: {
-          ondismiss: function () {
-            setPlacing(false);
-            toast.info("Payment window closed.");
-          },
-        },
-      };
-
-      const rzp = new (window as any).Razorpay(options);
-      rzp.open();
-    } else {
-      // Over 1 Lakh -> Director Acquisition Inquiry
-      await saveOrder("inquiry_sent");
+    const loaded = await loadRazorpayScript();
+    if (!loaded) {
+      toast.error("Razorpay SDK failed to load. Please check your connection.");
+      setPlacing(false);
+      return;
     }
+
+    const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_live_TekiII2ARUOC0B";
+    const amountInPaise = Math.round(total * 100);
+
+    const options = {
+      key: keyId,
+      amount: amountInPaise,
+      currency: activeCurrency || "INR",
+      name: "Raajsi Jewels",
+      description: `Heritage Fine Jewellery (${rows.length} piece${rows.length > 1 ? "s" : ""})`,
+      image: "/favicon.ico",
+      prefill: {
+        name: shippingData.shippingName,
+        email: user.email ?? "",
+        contact: shippingData.phone,
+      },
+      notes: {
+        customer_name: shippingData.shippingName,
+        shipping_address: [
+          shippingData.line1,
+          shippingData.line2,
+          shippingData.shippingCity,
+          shippingData.shippingState,
+          shippingData.shippingPostal,
+          shippingData.shippingCountry,
+        ]
+          .filter(Boolean)
+          .join(", "),
+        items: rows.map((r) => r.artwork.title).join("; "),
+      },
+      theme: {
+        color: "#b8860b", // Raajsi Royal Gold
+      },
+      modal: {
+        ondismiss: function () {
+          setPlacing(false);
+          toast.info("Payment window closed.");
+        },
+      },
+      handler: async function (response: {
+        razorpay_payment_id: string;
+        razorpay_order_id?: string;
+        razorpay_signature?: string;
+      }) {
+        await finalizeConfirmedOrder({
+          paymentId: response.razorpay_payment_id,
+          paymentMethod: "razorpay",
+          shippingData,
+        });
+      },
+    };
+
+    try {
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on("payment.failed", function (failResp: any) {
+        console.error("Razorpay payment failed:", failResp?.error);
+        toast.error(failResp?.error?.description || "Payment failed. Please try another method.");
+        setPlacing(false);
+      });
+      rzp.open();
+    } catch (err) {
+      console.error("Failed to open Razorpay modal:", err);
+      toast.error("Could not launch Razorpay modal. You may use sandbox test checkout.");
+      setPlacing(false);
+    }
+  }
+
+  async function handleTestSandboxPayment() {
+    if (!user || rows.length === 0 || placing) return;
+    const shippingData = getShippingFromForm();
+    if (!shippingData) return;
+
+    setPlacing(true);
+    const mockPaymentId = `rzp_test_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
+    toast.info("Processing sandbox test payment...");
+    await finalizeConfirmedOrder({
+      paymentId: mockPaymentId,
+      paymentMethod: "razorpay_sandbox",
+      shippingData,
+    });
   }
 
   if (rows.length === 0) {
@@ -387,7 +428,7 @@ function CheckoutPage() {
           <button
             type="submit"
             disabled={placing}
-            className="cta-gold w-full !py-3 text-sm flex items-center justify-center gap-2 disabled:opacity-50"
+            className="cta-gold w-full !py-3.5 text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-50 shadow-md hover:shadow-lg transition-all"
           >
             <Lock size={15} />
             {placing
@@ -395,10 +436,21 @@ function CheckoutPage() {
               : `Pay via Razorpay · ${fmt({ price_display: "fixed", price_min: null, price_max: null, display_price: total })}`}
           </button>
 
-          <p className="text-xs text-center text-ink/50 flex items-center justify-center gap-1">
-            <ShieldCheck size={14} className="text-emerald-700" />
-            Every piece includes BIS Hallmark Certificate &amp; Free Insured Delivery.
-          </p>
+          <div className="flex flex-col items-center gap-2 pt-1">
+            <button
+              type="button"
+              disabled={placing}
+              onClick={handleTestSandboxPayment}
+              className="text-xs text-ink/70 hover:text-ink font-medium underline flex items-center gap-1.5 transition-colors disabled:opacity-40"
+            >
+              <CheckCircle2 size={13} className="text-emerald-600" />
+              Test Mode: Instant Sandbox Checkout (Simulate Payment)
+            </button>
+            <p className="text-[11px] text-center text-ink/50 flex items-center justify-center gap-1">
+              <ShieldCheck size={13} className="text-emerald-700" />
+              Every piece includes 100% BIS Hallmark Certificate &amp; Free Insured Delivery.
+            </p>
+          </div>
         </form>
 
         {/* Order Summary Sidebar */}

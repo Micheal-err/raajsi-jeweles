@@ -94,16 +94,19 @@ function OrdersPage() {
       cancel_reason?: string | null;
       notes?: string | null;
     }) => {
-      const { id, ...rest } = payload;
+      const { id, tracking_number } = payload;
       const { error } = await supabase
         .from("orders")
-        .update({ ...rest, updated_at: new Date().toISOString() })
+        .update({
+          tracking_number: tracking_number || null,
+          updated_at: new Date().toISOString(),
+        })
         .eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin-orders"] });
-      toast.success("Shipping & fulfillment details saved");
+      toast.success("Shipping & tracking details saved");
     },
     onError: (err: any) => {
       console.error("[Admin] Fulfillment update failed:", err);
@@ -394,34 +397,43 @@ function OrderRow({
                 <div className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground mb-2">
                   Shipping Destination
                 </div>
-                <p className="font-medium">{o.shipping_name}</p>
-                <p>{o.shipping_address}</p>
-                <p>
-                  {[o.shipping_city, o.shipping_postal, o.shipping_country]
-                    .filter(Boolean)
-                    .join(", ")}
-                </p>
+                <p className="font-medium">{customerName}</p>
+                {typeof o.shipping_address === "string" ? (
+                  <p>{o.shipping_address}</p>
+                ) : typeof o.shipping_address === "object" && o.shipping_address !== null ? (
+                  <div className="space-y-0.5">
+                    <p>{[(o.shipping_address as any).line1, (o.shipping_address as any).line2].filter(Boolean).join(", ")}</p>
+                    <p>{[(o.shipping_address as any).city, (o.shipping_address as any).state, (o.shipping_address as any).postal].filter(Boolean).join(", ")}</p>
+                    <p>{(o.shipping_address as any).country || "India"}</p>
+                  </div>
+                ) : (
+                  <p>
+                    {[o.shipping_city, o.shipping_postal, o.shipping_country]
+                      .filter(Boolean)
+                      .join(", ")}
+                  </p>
+                )}
               </div>
               <div>
                 <div className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground mb-2">
-                  Price Breakdown
+                  Price &amp; Payment
                 </div>
                 <div className="space-y-1">
                   <div className="flex justify-between">
-                    <span>Subtotal</span>
-                    <span className="tabular-nums">{fmt(Number(o.subtotal ?? 0))}</span>
+                    <span>Total Amount</span>
+                    <span className="tabular-nums font-semibold">{fmt(totalAmount)}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Shipping</span>
-                    <span className="tabular-nums">{fmt(Number(o.shipping_cost ?? 0))}</span>
+                  <div className="flex justify-between text-muted-foreground text-[11px]">
+                    <span>Payment Status</span>
+                    <span className="uppercase tracking-wider font-medium text-emerald-700">
+                      {(o as any).payment_status || "PAID"}
+                    </span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Tax</span>
-                    <span className="tabular-nums">{fmt(Number(o.tax_cost ?? 0))}</span>
-                  </div>
-                  <div className="flex justify-between font-medium border-t border-hairline pt-1 mt-1">
-                    <span>Total</span>
-                    <span className="tabular-nums">{fmt(Number(o.total ?? 0))}</span>
+                  <div className="flex justify-between text-muted-foreground text-[11px]">
+                    <span>Gateway</span>
+                    <span className="uppercase tracking-wider">
+                      {(o as any).payment_method || "RAZORPAY"}
+                    </span>
                   </div>
                 </div>
               </div>

@@ -44,32 +44,66 @@ interface OrderItem {
   artistName?: string;
   price?: number;
   image?: string;
+  payment_id?: string | null;
 }
 
 interface Order {
   id: string;
-  status: string;
+  user_id?: string;
   created_at: string;
-  total: number | null;
-  currency: string;
-  shipping_name: string | null;
-  shipping_address: string | null;
-  shipping_city: string | null;
-  shipping_country: string | null;
+  updated_at?: string;
+  total_amount?: number | null;
+  total?: number | null;
+  currency?: string;
+  customer_name?: string | null;
+  customer_email?: string | null;
+  customer_phone?: string | null;
+  shipping_name?: string | null;
+  shipping_address?: unknown;
+  shipping_city?: string | null;
+  shipping_country?: string | null;
   items: unknown;
-  carrier_name?: string | null;
+  payment_status?: string | null;
+  payment_method?: string | null;
+  fulfillment_status?: string | null;
+  status?: string | null;
   tracking_number?: string | null;
+  carrier_name?: string | null;
   estimated_delivery?: string | null;
   cancelled_at?: string | null;
   cancel_reason?: string | null;
 }
 
 const STATUS_STEPS = [
-  { key: "inquiry_sent", label: "Inquiry Sent", icon: Clock },
   { key: "confirmed", label: "Confirmed", icon: CheckCircle2 },
+  { key: "processing", label: "Processing & Hallmarking", icon: Clock },
   { key: "shipped", label: "Shipped", icon: Truck },
   { key: "delivered", label: "Delivered", icon: Package },
 ];
+
+function renderShippingAddressContent(addr: unknown, city?: string | null, country?: string | null) {
+  if (!addr) {
+    const fallback = [city, country].filter(Boolean).join(", ");
+    return fallback ? <p>{fallback}</p> : <p className="text-ink/50 italic">Standard registered address</p>;
+  }
+  if (typeof addr === "string") {
+    return <p>{[addr, city, country].filter(Boolean).join(", ")}</p>;
+  }
+  if (typeof addr === "object" && addr !== null) {
+    const a = addr as Record<string, string>;
+    const lineStr = [a.line1, a.line2].filter(Boolean).join(", ");
+    const cityStr = [a.city, a.state, a.postal].filter(Boolean).join(", ");
+    const cStr = a.country || country || "India";
+    return (
+      <div className="space-y-0.5">
+        {lineStr && <p>{lineStr}</p>}
+        {cityStr && <p>{cityStr}</p>}
+        {cStr && <p>{cStr}</p>}
+      </div>
+    );
+  }
+  return null;
+}
 
 function OrdersPage() {
   const { user } = useSession();
@@ -99,12 +133,24 @@ function OrdersPage() {
   });
 
   const cancelOrderMutation = useMutation({
-    mutationFn: async ({ orderId, reason }: { orderId: string; reason: string }) => {
-      const { error } = await supabase.rpc("cancel_own_order", {
-        p_order_id: orderId,
-        p_reason: reason || "Cancelled by customer within 24-hour window",
-      });
+    mutationFn: async ({ order, reason }: { order: Order; reason: string }) => {
+      const { error } = await supabase
+        .from("orders")
+        .update({
+          fulfillment_status: "cancelled",
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", order.id);
       if (error) throw error;
+
+      // Revert artwork availability back to available
+      const rawItems = Array.isArray(order.items) ? (order.items as OrderItem[]) : [];
+      const artworkIds = rawItems.map((i) => i.artwork_id || i.id).filter(Boolean) as string[];
+      if (artworkIds.length > 0) {
+        await supabase.from("artworks").update({ availability: "available" }).in("id", artworkIds);
+        qc.invalidateQueries({ queryKey: ["collection"] });
+        qc.invalidateQueries({ queryKey: ["artworks"] });
+      }
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["orders", user?.id] });
@@ -112,7 +158,10 @@ function OrdersPage() {
       setCancelModalOrder(null);
       setCancelReasonInput("");
     },
-    onError: () => toast.error("Could not cancel order. Please contact support."),
+    onError: (err: any) => {
+      console.error("Cancel order error:", err);
+      toast.error("Could not cancel order: " + (err?.message || "Please contact support."));
+    },
   });
 
   return (
@@ -147,8 +196,15 @@ function OrdersPage() {
           <div className="space-y-12">
             {orders.map((o) => {
               const rawItems = Array.isArray(o.items) ? (o.items as OrderItem[]) : [];
-              const activeStepIdx = STATUS_STEPS.findIndex((s) => s.key === o.status);
+              const orderStatus = o.fulfillment_status || o.status || "confirmed";
+              const isCancelled = orderStatus === "cancelled";
+              const activeStepIdx = STATUS_STEPS.findIndex((s) => s.key === orderStatus);
               const currentStepIdx = activeStepIdx >= 0 ? activeStepIdx : 0;
+              const customerName = o.customer_name || o.shipping_name || "Valued Collector";
+              const totalDisplay = Number(o.total_amount ?? o.total ?? 0);
+              const isPaid = (o.payment_status || "paid").toLowerCase() === "paid";
+              const orderTracking = o.tracking_number;
+              const paymentId = rawItems.find((i) => i.payment_id)?.payment_id;
 
               return (
                 <div
@@ -158,19 +214,26 @@ function OrdersPage() {
                   {/* Header Row */}
                   <div className="flex flex-wrap items-start justify-between gap-4 pb-6 border-b border-hairline">
                     <div>
-                      <div className="flex items-center gap-3 mb-1">
+                      <div className="flex flex-wrap items-center gap-2.5 mb-1.5">
                         <span className="eyebrow">
-                          Acquisition #{o.id.slice(0, 8).toUpperCase()}
+                          Order #{o.id.slice(0, 8).toUpperCase()}
                         </span>
-                        {o.status === "cancelled" ? (
+                        {isCancelled ? (
                           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase bg-red-100 text-red-800 border border-red-200 rounded">
                             <XCircle size={12} />
                             Cancelled
                           </span>
                         ) : (
                           <span className="px-2.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase bg-mist border border-hairline text-ink/80 rounded">
-                            {STATUS_STEPS.find((s) => s.key === o.status)?.label ??
-                              o.status.replace(/_/g, " ")}
+                            {STATUS_STEPS.find((s) => s.key === orderStatus)?.label ??
+                              orderStatus.replace(/_/g, " ")}
+                          </span>
+                        )}
+
+                        {isPaid && (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase bg-emerald-50 text-emerald-800 border border-emerald-300 rounded">
+                            <ShieldCheck size={12} className="text-emerald-600" />
+                            Razorpay Verified
                           </span>
                         )}
                       </div>
@@ -178,33 +241,39 @@ function OrdersPage() {
                         Placed on{" "}
                         {new Date(o.created_at).toLocaleDateString("en-IN", { dateStyle: "long" })}
                       </h3>
+                      <p className="text-xs text-ink/60 mt-0.5">
+                        Customer: <span className="font-medium text-ink">{customerName}</span>
+                        {o.customer_phone ? ` · ${o.customer_phone}` : ""}
+                      </p>
                     </div>
                     <div className="text-right">
                       <div className="text-xs uppercase tracking-widest text-ink/50 mb-1">
                         Total Amount
                       </div>
-                      <div className="font-serif text-2xl text-ink">
-                        {formatCurrencyWithCode(o.total, o.currency)}
+                      <div className="font-serif text-2xl text-ink font-medium">
+                        {formatCurrencyWithCode(totalDisplay, o.currency || "INR")}
                       </div>
+                      <span className="text-[11px] text-emerald-700 font-medium">
+                        Free Insured Delivery
+                      </span>
                     </div>
                   </div>
 
                   {/* Status Progress Bar or Cancellation Notice */}
                   <div>
                     <h4 className="text-[10px] tracking-[0.22em] uppercase text-ink/40 mb-4">
-                      Status & Tracking
+                      Fulfillment &amp; Hallmarking Status
                     </h4>
-                    {o.status === "cancelled" ? (
+                    {isCancelled ? (
                       <div className="p-4 border border-red-200 bg-red-50/80 text-red-900 rounded-sm flex items-start gap-3">
                         <XCircle size={20} className="text-red-600 flex-shrink-0 mt-0.5" />
                         <div>
                           <div className="text-xs font-semibold uppercase tracking-wider text-red-800">
-                            Acquisition Cancelled
+                            Order Cancelled
                           </div>
                           <div className="text-xs text-red-700 mt-1">
-                            This acquisition has been cancelled. If you believe this is an error or
-                            require assistance, please contact our directors at hello@raajsijewels.com
-                            or WhatsApp +91 141 237 0439.
+                            This jewellery order has been cancelled. For any questions, please contact our
+                            concierge team at care@raajsi.com or WhatsApp +91 98290 12345.
                             {o.cancel_reason && (
                               <p className="mt-1 font-medium italic">Reason: {o.cancel_reason}</p>
                             )}
@@ -223,7 +292,7 @@ function OrdersPage() {
                                 key={step.key}
                                 className={`p-3 border transition-colors ${
                                   isCurrent
-                                    ? "border-[color:var(--accent)] bg-[color:var(--accent)]/5 text-ink"
+                                    ? "border-[color:var(--accent)] bg-[color:var(--accent)]/5 text-ink shadow-sm"
                                     : isDone
                                       ? "border-hairline bg-mist/50 text-ink/70"
                                       : "border-hairline/40 opacity-40 text-ink/40"
@@ -246,34 +315,26 @@ function OrdersPage() {
                           })}
                         </div>
 
-                        {/* Live Shipping & Delivery Details */}
-                        {(o.carrier_name || o.tracking_number || o.estimated_delivery) && (
-                          <div className="mt-4 p-4 border border-hairline bg-mist/30 rounded-sm grid sm:grid-cols-3 gap-4 text-xs">
-                            {o.carrier_name && (
-                              <div>
-                                <div className="text-[10px] uppercase tracking-wider text-ink/40 font-medium">
-                                  Logistics Carrier
-                                </div>
-                                <div className="font-medium text-ink mt-0.5">{o.carrier_name}</div>
-                              </div>
-                            )}
-                            {o.tracking_number && (
+                        {/* Tracking Details */}
+                        {(orderTracking || paymentId) && (
+                          <div className="mt-4 p-4 border border-hairline bg-mist/30 rounded-sm grid sm:grid-cols-2 gap-4 text-xs">
+                            {orderTracking && (
                               <div>
                                 <div className="text-[10px] uppercase tracking-wider text-ink/40 font-medium">
                                   Tracking Number
                                 </div>
-                                <div className="font-mono text-ink mt-0.5 select-all">
-                                  {o.tracking_number}
+                                <div className="font-mono text-ink mt-0.5 select-all font-semibold">
+                                  {orderTracking}
                                 </div>
                               </div>
                             )}
-                            {o.estimated_delivery && (
+                            {paymentId && (
                               <div>
                                 <div className="text-[10px] uppercase tracking-wider text-ink/40 font-medium">
-                                  Estimated Delivery
+                                  Razorpay Payment ID
                                 </div>
-                                <div className="font-serif text-sm font-medium text-ink mt-0.5">
-                                  {o.estimated_delivery}
+                                <div className="font-mono text-ink/80 mt-0.5 select-all">
+                                  {paymentId}
                                 </div>
                               </div>
                             )}
@@ -288,11 +349,11 @@ function OrdersPage() {
                     {/* Item list */}
                     <div className="md:col-span-2 space-y-4">
                       <h4 className="text-[10px] tracking-[0.22em] uppercase text-ink/40 mb-2">
-                        Artworks ({rawItems.length})
+                        Acquired Jewellery Pieces ({rawItems.length})
                       </h4>
                       {rawItems.length === 0 ? (
                         <p className="text-xs text-ink/50 italic">
-                          Artwork details recorded in order file.
+                          Piece details recorded in order file.
                         </p>
                       ) : (
                         rawItems.map((item, i) => (
@@ -303,24 +364,24 @@ function OrdersPage() {
                             {item.image && (
                               <img
                                 src={resolveImage(item.image)}
-                                alt={item.title || "Artwork"}
+                                alt={item.title || "Jewellery piece"}
                                 className="w-14 h-16 object-cover border border-hairline shrink-0"
                               />
                             )}
                             <div className="flex-1 min-w-0">
                               <p className="font-serif text-sm font-medium text-ink truncate">
-                                {item.title || "Untitled Artwork"}
+                                {item.title || "Heritage Jewellery"}
                               </p>
                               {item.artistName && (
                                 <p className="text-xs text-ink/60">{item.artistName}</p>
                               )}
                               {item.price && (
                                 <p className="text-xs font-serif mt-0.5 text-ink/70">
-                                  {formatCurrencyWithCode(item.price, o.currency)}
+                                  {formatCurrencyWithCode(item.price, o.currency || "INR")}
                                 </p>
                               )}
                             </div>
-                            {o.status !== "cancelled" && (
+                            {!isCancelled && (
                               <button
                                 type="button"
                                 onClick={() =>
@@ -336,23 +397,18 @@ function OrdersPage() {
                       )}
                     </div>
 
-                    {/* Shipping Address */}
+                    {/* Shipping Destination */}
                     <div className="border-l border-hairline md:pl-6 space-y-3">
                       <h4 className="text-[10px] tracking-[0.22em] uppercase text-ink/40 flex items-center gap-1">
-                        <MapPin size={12} /> Shipping Destination
+                        <MapPin size={12} /> Insured Delivery Destination
                       </h4>
                       <div className="text-xs space-y-1 text-ink/80">
-                        {o.shipping_name && (
-                          <p className="font-medium text-ink">{o.shipping_name}</p>
-                        )}
-                        {o.shipping_address && <p>{o.shipping_address}</p>}
-                        {(o.shipping_city || o.shipping_country) && (
-                          <p>{[o.shipping_city, o.shipping_country].filter(Boolean).join(", ")}</p>
-                        )}
+                        <p className="font-medium text-ink">{customerName}</p>
+                        {renderShippingAddressContent(o.shipping_address, o.shipping_city, o.shipping_country)}
                       </div>
                       <div className="pt-3 border-t border-hairline flex items-center gap-1.5 text-[11px] text-ink/50">
-                        <ShieldCheck size={14} className="text-green-700" /> Insured White-Glove
-                        Delivery
+                        <ShieldCheck size={14} className="text-emerald-700" /> Insured White-Glove
+                        Delivery &amp; BIS Hallmark Included
                       </div>
                     </div>
                   </div>
@@ -363,13 +419,13 @@ function OrdersPage() {
                       (Date.now() - new Date(o.created_at).getTime()) / (1000 * 60 * 60);
                     const isCancelEligible =
                       hoursSinceOrder <= 24 &&
-                      (o.status === "inquiry_sent" || o.status === "confirmed");
-                    if (o.status === "cancelled") return null;
+                      (orderStatus === "inquiry_sent" || orderStatus === "confirmed");
+                    if (isCancelled) return null;
                     return (
                       <div className="pt-4 border-t border-hairline flex items-center justify-between gap-4 text-xs">
                         <div className="text-ink/60 text-[11px]">
                           {isCancelEligible ? (
-                            <span className="text-green-800 font-medium">
+                            <span className="text-emerald-800 font-medium">
                               Eligible for 24-hour self-cancellation
                             </span>
                           ) : (
@@ -386,7 +442,7 @@ function OrdersPage() {
                           </button>
                         ) : (
                           <a
-                            href="mailto:hello@raajsijewels.com"
+                            href="mailto:care@raajsi.com"
                             className="text-[11px] text-ink/60 hover:text-ink link-underline"
                           >
                             Request Cancellation via Support
@@ -544,7 +600,7 @@ function OrdersPage() {
                 disabled={cancelOrderMutation.isPending}
                 onClick={() =>
                   cancelOrderMutation.mutate({
-                    orderId: cancelModalOrder.id,
+                    order: cancelModalOrder,
                     reason: cancelReasonInput,
                   })
                 }

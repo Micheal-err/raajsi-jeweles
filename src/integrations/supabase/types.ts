@@ -406,7 +406,7 @@ export type Database = {
           id: string;
           items: Json;
           notes: string | null;
-          shipping_address: string | null;
+          shipping_address: Json | string | null;
           shipping_city: string | null;
           shipping_cost: number | null;
           shipping_country: string | null;
@@ -438,7 +438,7 @@ export type Database = {
           id?: string;
           items?: Json;
           notes?: string | null;
-          shipping_address?: string | null;
+          shipping_address?: Json | string | null;
           shipping_city?: string | null;
           shipping_cost?: number | null;
           shipping_country?: string | null;
@@ -470,7 +470,7 @@ export type Database = {
           id?: string;
           items?: Json;
           notes?: string | null;
-          shipping_address?: string | null;
+          shipping_address?: Json | string | null;
           shipping_city?: string | null;
           shipping_cost?: number | null;
           shipping_country?: string | null;
