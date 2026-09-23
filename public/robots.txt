@@ -1,3 +1,24 @@
+# Raajsi Jewels - Robots.txt
+# https://www.raajsijewels.com
+
 User-agent: *
 Allow: /
-Sitemap: /sitemap.xml
+Allow: /collection
+Allow: /about
+Allow: /contact
+Allow: /artworks/
+Allow: /policies/
+
+# Disallow private/authenticated paths
+Disallow: /admin/
+Disallow: /auth
+Disallow: /cart
+Disallow: /checkout
+Disallow: /profile
+Disallow: /orders
+Disallow: /wishlist
+Disallow: /inquire
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://www.raajsijewels.com/sitemap.xml

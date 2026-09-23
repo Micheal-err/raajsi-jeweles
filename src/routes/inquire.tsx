@@ -15,23 +15,27 @@ const searchSchema = z.object({
   artwork: z.string().optional(),
   cart: z.union([z.literal(1), z.literal("1"), z.boolean()]).optional(),
 });
+import { canonical, breadcrumbSchema, SITE_NAME, defaultOgImage } from "@/components/seo-head";
 
 export const Route = createFileRoute("/inquire")({
   validateSearch: (s) => searchSchema.parse(s),
   head: () => ({
     meta: [
-      { title: "Acquire — Raajsi Jewels" },
+      { title: "Inquire — Raajsi Jewels | Buy Jewellery Online" },
       {
         name: "description",
         content:
-          "Inquire about acquiring a work from Raajsi Jewels. Personal response within one business day.",
+          "Inquire about acquiring jewellery from Raajsi Jewels, Jaipur. Personal response within one business day.",
       },
-      { property: "og:title", content: "Acquire — Raajsi Jewels" },
+      { name: "robots", content: "noindex, follow" },
+      { property: "og:title", content: "Inquire — Raajsi Jewels" },
       {
         property: "og:description",
-        content: "Inquire about a work. Personal response within one business day.",
+        content: "Inquire about a jewellery piece. Personal response within one business day.",
       },
+      { property: "og:image", content: defaultOgImage() },
     ],
+    links: [{ rel: "canonical", href: canonical("/inquire") }],
   }),
   component: InquirePage,
 });

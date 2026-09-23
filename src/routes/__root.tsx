@@ -24,6 +24,15 @@ import { CompareBar } from "@/components/CompareBar";
 import { LiveChat } from "@/components/LiveChat";
 import { CookieConsent } from "@/components/CookieConsent";
 
+import {
+  SITE_URL,
+  SITE_NAME,
+  SITE_LOCALE,
+  organizationSchema,
+  webSiteSchema,
+  defaultOgImage,
+} from "@/components/seo-head";
+
 function NotFoundComponent() {
   return (
     <section className="container-editorial py-32 flex items-center justify-center">
@@ -77,47 +86,108 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Raajsi Jewels — Fine Indian Jewellery, Jaipur" },
-      {
-        name: "description",
-        content:
-          "Raajsi Jewels, Jaipur. Fine Indian jewellery crafted since 2009. BIS Hallmark certified on every piece — free insured shipping.",
-      },
-      { name: "author", content: "Raajsi Jewels" },
-      { property: "og:title", content: "Raajsi Jewels — Fine Indian Jewellery, Jaipur" },
-      {
-        property: "og:description",
-        content:
-          "Exquisite Indian jewellery crafted in Jaipur since 2009. BIS Hallmark certified. Kundan, Polki, Meenakari and more.",
-      },
-      { name: "theme-color", content: "#fdfaf5" },
-      { name: "apple-mobile-web-app-capable", content: "yes" },
-      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
-      { name: "apple-mobile-web-app-title", content: "Raajsi Jewels" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "data:," },
-      { rel: "preconnect", href: "https://ldkrcpdsutebayruhrjg.supabase.co" },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap",
-      },
-    ],
-  }),
-  component: RootComponent,
-  notFoundComponent: NotFoundComponent,
-  errorComponent: ErrorComponent,
-});
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
+  {
+    head: () => ({
+      meta: [
+        { charSet: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        {
+          title:
+            "Raajsi Jewels — Buy 925 Sterling Silver & Handcrafted Jewellery Online | Jaipur, India",
+        },
+        {
+          name: "description",
+          content:
+            "Shop exquisite 925 Sterling Silver & Handcrafted Jewellery online from Raajsi Jewels, Jaipur. BIS Hallmark certified. Free delivery above ₹999. 7 days exchange. Kundan, Polki, Meenakari & more.",
+        },
+        { name: "author", content: SITE_NAME },
+        {
+          name: "keywords",
+          content:
+            "raajsi jewels, 925 sterling silver jewellery, handcrafted jewellery jaipur, buy silver jewellery online india, fine jewellery jaipur, kundan jewellery, polki jewellery, meenakari jewellery, BIS hallmark jewellery, silver bracelet online, handcrafted earrings india",
+        },
+        {
+          name: "robots",
+          content:
+            "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+        },
+        {
+          property: "og:title",
+          content:
+            "Raajsi Jewels — Buy 925 Sterling Silver & Handcrafted Jewellery Online | Jaipur",
+        },
+        {
+          property: "og:description",
+          content:
+            "Shop exquisite 925 Sterling Silver & Handcrafted Jewellery from Jaipur. BIS Hallmark certified. Free delivery above ₹999.",
+        },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: SITE_URL },
+        { property: "og:image", content: defaultOgImage() },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        {
+          property: "og:image:alt",
+          content: "Raajsi Jewels — Timeless Luxury Jewellery from Jaipur",
+        },
+        { property: "og:site_name", content: SITE_NAME },
+        { property: "og:locale", content: SITE_LOCALE },
+        { name: "twitter:card", content: "summary_large_image" },
+        {
+          name: "twitter:title",
+          content: "Raajsi Jewels — Fine Jewellery from Jaipur, India",
+        },
+        {
+          name: "twitter:description",
+          content:
+            "925 Sterling Silver & Handcrafted Jewellery. BIS Hallmark certified. Free delivery above ₹999.",
+        },
+        { name: "twitter:image", content: defaultOgImage() },
+        { name: "theme-color", content: "#fdfaf5" },
+        { name: "apple-mobile-web-app-capable", content: "yes" },
+        {
+          name: "apple-mobile-web-app-status-bar-style",
+          content: "default",
+        },
+        { name: "apple-mobile-web-app-title", content: SITE_NAME },
+      ],
+      links: [
+        { rel: "stylesheet", href: appCss },
+        { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+        { rel: "apple-touch-icon", href: "/logo.png" },
+        { rel: "canonical", href: SITE_URL },
+        {
+          rel: "preconnect",
+          href: "https://ldkrcpdsutebayruhrjg.supabase.co",
+        },
+        { rel: "preconnect", href: "https://fonts.googleapis.com" },
+        {
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossOrigin: "anonymous",
+        },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap",
+        },
+      ],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify(organizationSchema()),
+        },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify(webSiteSchema()),
+        },
+      ],
+    }),
+    component: RootComponent,
+    notFoundComponent: NotFoundComponent,
+    errorComponent: ErrorComponent,
+  },
+);
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();

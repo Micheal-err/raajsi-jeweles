@@ -20,20 +20,67 @@ import {
   Compass,
 } from "lucide-react";
 
+import {
+  SITE_NAME,
+  SITE_LOCALE,
+  canonical,
+  defaultOgImage,
+  breadcrumbSchema,
+} from "@/components/seo-head";
+
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About Raajsi — Timeless Luxury | Jaipur, India" },
+      {
+        title:
+          "About Raajsi Jewels — Handcrafted Jewellery Brand from Jaipur, India | Our Story",
+      },
       {
         name: "description",
         content:
-          "Raajsi is a jewellery brand inspired by the beauty of timeless design, Indian craftsmanship, and modern elegance. Handcrafted in Jaipur, India.",
+          "Learn about Raajsi Jewels — a Jaipur-based jewellery brand crafting 925 Sterling Silver and Handcrafted Jewellery since 2009. Inspired by timeless design, Indian craftsmanship, and modern elegance.",
       },
-      { property: "og:title", content: "About Raajsi — Timeless Luxury" },
+      {
+        name: "keywords",
+        content:
+          "about raajsi jewels, jaipur jewellery brand, indian handcrafted jewellery story, 925 silver jewellery brand india, artisan jewellery jaipur",
+      },
+      {
+        property: "og:title",
+        content: "About Raajsi Jewels — Our Story | Jaipur, India",
+      },
       {
         property: "og:description",
         content:
-          "Explore the philosophy, craftsmanship, and distinctive collections of Raajsi — Timeless Luxury, Crafted for You.",
+          "Discover the philosophy, craftsmanship, and distinctive collections of Raajsi — Timeless Luxury, Crafted for You.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: canonical("/about") },
+      { property: "og:image", content: defaultOgImage() },
+      { property: "og:site_name", content: SITE_NAME },
+      { property: "og:locale", content: SITE_LOCALE },
+      { name: "twitter:card", content: "summary_large_image" },
+      {
+        name: "twitter:title",
+        content: "About Raajsi Jewels — Jaipur Jewellery Brand",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Handcrafted jewellery inspired by Indian craftsmanship & modern elegance. Since 2009.",
+      },
+      { name: "twitter:image", content: defaultOgImage() },
+    ],
+    links: [{ rel: "canonical", href: canonical("/about") }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(
+          breadcrumbSchema([
+            { name: "Home", url: canonical("/") },
+            { name: "About Us", url: canonical("/about") },
+          ]),
+        ),
       },
     ],
   }),

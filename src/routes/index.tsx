@@ -30,22 +30,72 @@ import slider3 from "@/assets/slider-3.webp";
 import slider4 from "@/assets/slider-4.webp";
 import slider5 from "@/assets/slider-5.webp";
 
+import {
+  SITE_URL,
+  SITE_NAME,
+  SITE_LOCALE,
+  canonical,
+  defaultOgImage,
+  localBusinessSchema,
+  breadcrumbSchema,
+} from "@/components/seo-head";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Raajsi — Timeless Luxury | Fine Jewellery, Jaipur" },
+      {
+        title:
+          "Raajsi Jewels — Buy 925 Sterling Silver & Handcrafted Jewellery Online | Jaipur, India",
+      },
       {
         name: "description",
         content:
-          "Raajsi is a jewellery brand inspired by the beauty of timeless design, Indian craftsmanship, and modern elegance. Explore Sterling Silver 925 and Handcrafted Jewels in Jaipur, India.",
+          "Shop 925 Sterling Silver & Handcrafted Jewellery online from Raajsi Jewels, Jaipur. BIS Hallmark certified. Free delivery above ₹999. 7 days easy exchange. Kundan, Polki, Meenakari & modern silver jewellery.",
       },
-      { property: "og:title", content: "Raajsi — Timeless Luxury" },
+      {
+        name: "keywords",
+        content:
+          "raajsi jewels, buy 925 sterling silver jewellery online, handcrafted jewellery jaipur, fine jewellery india, BIS hallmark silver jewellery, kundan polki meenakari, free delivery jewellery india",
+      },
+      {
+        property: "og:title",
+        content:
+          "Raajsi Jewels — Buy 925 Sterling Silver & Handcrafted Jewellery | Jaipur",
+      },
       {
         property: "og:description",
         content:
-          "Explore two distinctive expressions of Raajsi jewellery: refined Sterling Silver 925 and artistic Handcrafted Jewels.",
+          "Two distinctive collections: refined Sterling Silver 925 and artistic Handcrafted Jewels. BIS Hallmark certified. Free delivery above ₹999.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: canonical("/") },
+      { property: "og:image", content: defaultOgImage() },
+      { property: "og:site_name", content: SITE_NAME },
+      { property: "og:locale", content: SITE_LOCALE },
+      { name: "twitter:card", content: "summary_large_image" },
+      {
+        name: "twitter:title",
+        content: "Raajsi Jewels — 925 Silver & Handcrafted Jewellery | Jaipur",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Shop BIS Hallmark certified jewellery. Free delivery above ₹999. 7 days exchange.",
+      },
+      { name: "twitter:image", content: defaultOgImage() },
+    ],
+    links: [{ rel: "canonical", href: canonical("/") }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(localBusinessSchema()),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(
+          breadcrumbSchema([{ name: "Home", url: canonical("/") }]),
+        ),
+      },
     ],
   }),
   component: Home,

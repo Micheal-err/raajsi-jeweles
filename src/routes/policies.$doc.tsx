@@ -1,6 +1,75 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { PageHero, KineticTitle } from "@/components/PageHero";
 
+import {
+  SITE_NAME,
+  SITE_LOCALE,
+  canonical,
+  defaultOgImage,
+  breadcrumbSchema,
+  faqSchema,
+} from "@/components/seo-head";
+
+// ── Per-doc SEO titles and descriptions ──────────────────────────────
+const DOC_SEO: Record<string, { seoTitle: string; seoDesc: string }> = {
+  terms: {
+    seoTitle: "Terms & Conditions — Raajsi Jewels | Jaipur Jewellery Store",
+    seoDesc:
+      "Read the Terms & Conditions for shopping at Raajsi Jewels. Policies on orders, payments, pricing, and more.",
+  },
+  privacy: {
+    seoTitle: "Privacy Policy — Raajsi Jewels | Data Protection",
+    seoDesc:
+      "Raajsi Jewels privacy policy. How we collect, use, and protect your personal data when you shop with us.",
+  },
+  shipping: {
+    seoTitle:
+      "Shipping & Delivery Policy — Raajsi Jewels | Free Delivery Above ₹999",
+    seoDesc:
+      "Free delivery on orders above ₹999 across India. Learn about Raajsi Jewels shipping timelines, tracking, and delivery policy.",
+  },
+  returns: {
+    seoTitle: "Returns & Exchange Policy — Raajsi Jewels | 7 Days Exchange",
+    seoDesc:
+      "Easy 7-day exchange policy at Raajsi Jewels. Learn about our returns process, eligibility, and refund timelines.",
+  },
+  faqs: {
+    seoTitle:
+      "FAQs — Raajsi Jewels | Sterling Silver & Handcrafted Jewellery Questions",
+    seoDesc:
+      "Frequently asked questions about Raajsi Jewels collections, 925 Sterling Silver, shipping, exchanges, and contacting us.",
+  },
+};
+
+// ── FAQ structured data (extracted for JSON-LD) ──────────────────────
+const FAQ_ITEMS = [
+  {
+    question: "What are the two core collections at Raajsi?",
+    answer:
+      "Raajsi features two distinct collections: 1) 925 Silver (Sterling Silver 925) — Modern, minimal, and elegant everyday jewellery. 2) Handcrafted Jewels — Artisanal, expressive Kundan, Polki, and Meenakari masterpieces.",
+  },
+  {
+    question: "Are your silver pieces genuine 925 Sterling Silver?",
+    answer:
+      "Yes! Every piece in our silver collection is crafted in genuine 925 Sterling Silver and certified.",
+  },
+  {
+    question: "Is shipping free?",
+    answer:
+      "Free Delivery is provided on all orders above ₹999 across India.",
+  },
+  {
+    question: "Can I exchange my order?",
+    answer:
+      "Yes, we provide an easy 7-day exchange policy from the date of purchase.",
+  },
+  {
+    question: "How can I reach the Raajsi team?",
+    answer:
+      "You can reach us via WhatsApp/Phone at +91 98291 45129 or +91 70149 38562, or by email at raajsiforms@gmail.com. We are located in Jaipur, Rajasthan, India.",
+  },
+];
+
 const DOCS: Record<string, { title: string; lede: string; body: string }> = {
   terms: {
     title: "Terms & Conditions",
@@ -129,16 +198,54 @@ export const Route = createFileRoute("/policies/$doc")({
   loader: ({ params }) => {
     const d = DOCS[params.doc];
     if (!d) throw notFound();
-    return d;
+    return { ...d, docKey: params.doc };
   },
-  head: ({ loaderData }) => ({
-    meta: [
-      { title: loaderData ? `${loaderData.title} — Raajsi Jewels` : "Policies — Raajsi Jewels" },
-      { name: "description", content: loaderData?.lede ?? "Raajsi Jewels policies." },
-      { property: "og:title", content: loaderData?.title ?? "Policies" },
-      { property: "og:description", content: loaderData?.lede ?? "Raajsi Jewels policies." },
-    ],
-  }),
+  head: ({ loaderData, params }) => {
+    const seo = DOC_SEO[params.doc];
+    const title = seo?.seoTitle ?? (loaderData ? `${loaderData.title} — Raajsi Jewels` : "Policies — Raajsi Jewels");
+    const description = seo?.seoDesc ?? loaderData?.lede ?? "Raajsi Jewels policies.";
+    const url = canonical(`/policies/${params.doc}`);
+
+    const scripts: Array<{ type: string; children: string }> = [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(
+          breadcrumbSchema([
+            { name: "Home", url: canonical("/") },
+            { name: loaderData?.title ?? "Policy", url },
+          ]),
+        ),
+      },
+    ];
+
+    // Add FAQPage JSON-LD for the FAQs page
+    if (params.doc === "faqs") {
+      scripts.push({
+        type: "application/ld+json",
+        children: JSON.stringify(faqSchema(FAQ_ITEMS)),
+      });
+    }
+
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: url },
+        { property: "og:image", content: defaultOgImage() },
+        { property: "og:site_name", content: SITE_NAME },
+        { property: "og:locale", content: SITE_LOCALE },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+        { name: "twitter:image", content: defaultOgImage() },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts,
+    };
+  },
   component: PolicyPage,
   notFoundComponent: () => <div className="container-editorial py-24">Not found.</div>,
 });

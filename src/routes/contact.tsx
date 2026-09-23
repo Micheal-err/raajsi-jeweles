@@ -16,20 +16,72 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+import {
+  SITE_NAME,
+  SITE_LOCALE,
+  canonical,
+  defaultOgImage,
+  localBusinessSchema,
+  breadcrumbSchema,
+} from "@/components/seo-head";
+
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact Us — Raajsi | Timeless Luxury, Jaipur" },
+      {
+        title:
+          "Contact Raajsi Jewels — Phone, WhatsApp, Email | Jaipur, Rajasthan",
+      },
       {
         name: "description",
         content:
-          "Have a question about a product, your order, shipping, or anything else? Our team would be happy to help. Reach out to Raajsi in Jaipur, India.",
+          "Contact Raajsi Jewels in Jaipur, Rajasthan. Call +91 98291 45129, WhatsApp, or email raajsiforms@gmail.com. Visit our atelier for 925 Sterling Silver & Handcrafted Jewellery.",
       },
-      { property: "og:title", content: "Contact Us — Raajsi" },
+      {
+        name: "keywords",
+        content:
+          "contact raajsi jewels, raajsi jewels phone number, jewellery shop jaipur contact, raajsi whatsapp, raajsi email",
+      },
+      {
+        property: "og:title",
+        content: "Contact Raajsi Jewels — Jaipur, Rajasthan",
+      },
       {
         property: "og:description",
         content:
-          "Connect with Raajsi via Phone, WhatsApp, Email, or visit us in Jaipur, Rajasthan, India.",
+          "Reach out via Phone, WhatsApp, Email, or visit us in Jaipur. Our team is happy to help.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: canonical("/contact") },
+      { property: "og:image", content: defaultOgImage() },
+      { property: "og:site_name", content: SITE_NAME },
+      { property: "og:locale", content: SITE_LOCALE },
+      { name: "twitter:card", content: "summary_large_image" },
+      {
+        name: "twitter:title",
+        content: "Contact Raajsi Jewels | Jaipur",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Call, WhatsApp, or email us. Visit our Jaipur atelier.",
+      },
+      { name: "twitter:image", content: defaultOgImage() },
+    ],
+    links: [{ rel: "canonical", href: canonical("/contact") }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(localBusinessSchema()),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(
+          breadcrumbSchema([
+            { name: "Home", url: canonical("/") },
+            { name: "Contact Us", url: canonical("/contact") },
+          ]),
+        ),
       },
     ],
   }),

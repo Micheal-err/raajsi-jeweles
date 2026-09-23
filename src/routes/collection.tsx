@@ -7,6 +7,14 @@ import { MOCK_JEWELLERY_PRODUCTS } from "@/lib/jewellery-data";
 import { Reveal } from "@/components/Reveal";
 import { Search, Sparkles, Check, Gem, ShieldCheck, ArrowRight } from "lucide-react";
 
+import {
+  SITE_NAME,
+  SITE_LOCALE,
+  canonical,
+  defaultOgImage,
+  breadcrumbSchema,
+} from "@/components/seo-head";
+
 export const Route = createFileRoute("/collection")({
   validateSearch: (search: Record<string, unknown>): { category?: string } => {
     return {
@@ -15,17 +23,57 @@ export const Route = createFileRoute("/collection")({
   },
   head: () => ({
     meta: [
-      { title: "Our Collections — Raajsi | Timeless Luxury Jewellery" },
+      {
+        title:
+          "Shop 925 Sterling Silver & Handcrafted Jewellery Collection | Raajsi Jewels, Jaipur",
+      },
       {
         name: "description",
         content:
-          "Explore two distinctive expressions of Raajsi jewellery: refined Sterling Silver 925 and artistic Handcrafted Jewels. Handcrafted in Jaipur, India.",
+          "Browse our curated collections of 925 Sterling Silver and Handcrafted Jewellery. BIS Hallmark certified. Free delivery above ₹999. Shop rings, earrings, bracelets, necklaces & more from Jaipur.",
       },
-      { property: "og:title", content: "Our Collections — Raajsi" },
+      {
+        name: "keywords",
+        content:
+          "925 sterling silver jewellery collection, handcrafted jewellery collection, buy silver rings online, silver earrings jaipur, silver bracelet india, artisan jewellery online",
+      },
+      {
+        property: "og:title",
+        content:
+          "Shop Sterling Silver 925 & Handcrafted Jewellery | Raajsi Jewels",
+      },
       {
         property: "og:description",
         content:
-          "Explore Sterling Silver 925 (Modern • Minimal • Elegant) and Handcrafted Jewels (Artistic • Whimsical • Expressive).",
+          "Two distinctive collections: Modern Sterling Silver 925 and Artistic Handcrafted Jewels. Free delivery above ₹999.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: canonical("/collection") },
+      { property: "og:image", content: defaultOgImage() },
+      { property: "og:site_name", content: SITE_NAME },
+      { property: "og:locale", content: SITE_LOCALE },
+      { name: "twitter:card", content: "summary_large_image" },
+      {
+        name: "twitter:title",
+        content: "Jewellery Collection | Raajsi Jewels, Jaipur",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "925 Sterling Silver & Handcrafted Jewellery. BIS Hallmark certified. Free delivery above ₹999.",
+      },
+      { name: "twitter:image", content: defaultOgImage() },
+    ],
+    links: [{ rel: "canonical", href: canonical("/collection") }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(
+          breadcrumbSchema([
+            { name: "Home", url: canonical("/") },
+            { name: "Collections", url: canonical("/collection") },
+          ]),
+        ),
       },
     ],
   }),

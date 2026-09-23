@@ -24,6 +24,15 @@ import {
   Award,
 } from "lucide-react";
 
+import {
+  SITE_NAME,
+  SITE_LOCALE,
+  SITE_URL,
+  canonical,
+  defaultOgImage,
+  breadcrumbSchema,
+} from "@/components/seo-head";
+
 export const Route = createFileRoute("/artworks/$slug")({
   head: ({ params }) => {
     const formattedTitle = params.slug
@@ -33,17 +42,68 @@ export const Route = createFileRoute("/artworks/$slug")({
 
     return {
       meta: [
-        { title: `${formattedTitle} — Raajsi Jewels` },
+        {
+          title: `${formattedTitle} — Buy Online | Raajsi Jewels, Jaipur`,
+        },
         {
           name: "description",
-          content: `Buy ${formattedTitle} fine jewellery from Raajsi Jewels. BIS Hallmark certified gold & silver jewellery. Handcrafted in Jaipur. Free insured shipping.`,
+          content: `Buy ${formattedTitle} from Raajsi Jewels. BIS Hallmark certified 925 Sterling Silver & Handcrafted Jewellery. Free delivery above ₹999. 7 days exchange. Handcrafted in Jaipur, India.`,
         },
-        { property: "og:title", content: `${formattedTitle} — Raajsi Jewels` },
+        {
+          name: "keywords",
+          content: `${formattedTitle.toLowerCase()}, buy ${formattedTitle.toLowerCase()} online, raajsi jewels ${formattedTitle.toLowerCase()}, silver jewellery jaipur, handcrafted jewellery india`,
+        },
+        {
+          property: "og:title",
+          content: `${formattedTitle} — Raajsi Jewels`,
+        },
         {
           property: "og:description",
-          content: `Exquisite jewellery piece: ${formattedTitle}. BIS Hallmark certified with direct online purchase.`,
+          content: `Exquisite ${formattedTitle}. BIS Hallmark certified. Free delivery above ₹999.`,
         },
-        { property: "og:type", content: "website" },
+        { property: "og:type", content: "product" },
+        {
+          property: "og:url",
+          content: canonical(`/artworks/${params.slug}`),
+        },
+        { property: "og:image", content: defaultOgImage() },
+        { property: "og:site_name", content: SITE_NAME },
+        { property: "og:locale", content: SITE_LOCALE },
+        {
+          property: "product:brand",
+          content: SITE_NAME,
+        },
+        { name: "twitter:card", content: "summary_large_image" },
+        {
+          name: "twitter:title",
+          content: `${formattedTitle} — Raajsi Jewels`,
+        },
+        {
+          name: "twitter:description",
+          content: `Buy ${formattedTitle}. BIS Hallmark certified. Free delivery above ₹999.`,
+        },
+        { name: "twitter:image", content: defaultOgImage() },
+      ],
+      links: [
+        {
+          rel: "canonical",
+          href: canonical(`/artworks/${params.slug}`),
+        },
+      ],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify(
+            breadcrumbSchema([
+              { name: "Home", url: canonical("/") },
+              { name: "Collections", url: canonical("/collection") },
+              {
+                name: formattedTitle,
+                url: canonical(`/artworks/${params.slug}`),
+              },
+            ]),
+          ),
+        },
       ],
     };
   },
@@ -105,6 +165,52 @@ function JewelleryProductDetail() {
 
   if (!product) throw notFound();
 
+  // ── Product JSON-LD (injected client-side for dynamic product data) ──
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.title,
+    description: product.story || `${product.title} — Fine jewellery from Raajsi Jewels, Jaipur.`,
+    image: product.primary_image_url
+      ? resolveImage(product.primary_image_url)
+      : defaultOgImage(),
+    url: canonical(`/artworks/${slug}`),
+    sku: slug,
+    brand: { "@type": "Brand", name: SITE_NAME },
+    category: product.metadata?.category || "Jewellery",
+    material: product.medium || product.metadata?.material || undefined,
+    offers: {
+      "@type": "Offer",
+      url: canonical(`/artworks/${slug}`),
+      priceCurrency: "INR",
+      price: product.price ?? product.display_price ?? 0,
+      availability:
+        product.availability === "sold"
+          ? "https://schema.org/SoldOut"
+          : product.availability === "reserved"
+          ? "https://schema.org/LimitedAvailability"
+          : "https://schema.org/InStock",
+      seller: { "@type": "Organization", name: SITE_NAME },
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingRate: {
+          "@type": "MonetaryAmount",
+          value: (product.price ?? 0) >= 999 ? "0" : "99",
+          currency: "INR",
+        },
+        shippingDestination: { "@type": "DefinedRegion", addressCountry: "IN" },
+      },
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "IN",
+        returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+        merchantReturnDays: 7,
+        returnMethod: "https://schema.org/ReturnByMail",
+        returnFees: "https://schema.org/FreeReturn",
+      },
+    },
+  };
+
   const inCart = (cart.data ?? []).some((item) => item.artwork.slug === slug);
 
   // Extract structured jewellery fields from metadata or fallback defaults
@@ -159,6 +265,11 @@ function JewelleryProductDetail() {
 
   return (
     <div className="bg-paper pb-24">
+      {/* Product JSON-LD for SEO Rich Snippets */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       {/* Breadcrumb Navigation */}
       <nav className="border-b border-hairline bg-mist/30 py-3">
         <div className="container-editorial flex items-center gap-2 text-[11px] tracking-wider uppercase text-ink/50 overflow-x-auto">
