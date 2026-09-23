@@ -93,16 +93,10 @@ function CartPage() {
                   ₹{new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(total)}
                 </div>
                 <div className="text-xs pt-1 border-t border-hairline/60 space-y-2">
-                  {total >= 999 ? (
-                    <div className="text-emerald-700 font-medium flex items-center gap-1.5">
-                      <span>✓</span>
-                      <span>Eligible for Free Delivery (Order &gt; ₹999)</span>
-                    </div>
-                  ) : (
-                    <div className="text-amber-800 text-[11px] leading-snug">
-                      Add ₹{999 - total} more for <strong>Free Delivery</strong> (Standard delivery: ₹99)
-                    </div>
-                  )}
+                  <div className="text-emerald-700 font-medium flex items-center gap-1.5">
+                    <span>✓</span>
+                    <span>Free Delivery Applied (Special Offer on All Orders)</span>
+                  </div>
                   <div className="text-[11px] text-muted-foreground">
                     • GST Free / Inclusive of all taxes<br />
                     • 7 Days Exchange Policy<br />

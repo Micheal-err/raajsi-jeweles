@@ -92,7 +92,7 @@ function CheckoutPage() {
     (s, i) => s + (i.artwork.display_price ?? i.artwork.price_min ?? 0),
     0,
   );
-  const shipping = subtotal >= 999 ? 0 : subtotal > 0 ? 99 : 0; // Free delivery above ₹999
+  const shipping = 0; // Free delivery on all orders (promotional offer)
   const tax = 0; // GST Free — all prices inclusive of taxes
   const total = subtotal + shipping + tax;
 
@@ -516,7 +516,7 @@ function CheckoutPage() {
             </button>
             <p className="text-[11px] text-center text-ink/60 flex items-center justify-center gap-1">
               <ShieldCheck size={13} className="text-emerald-700" />
-              100% BIS Hallmark &amp; 925 Silver Certified · Free Delivery above ₹999 · 7 Days Exchange
+              100% BIS Hallmark &amp; 925 Silver Certified · Free Delivery on All Orders · 7 Days Exchange
             </p>
           </div>
         </form>
@@ -562,7 +562,7 @@ function CheckoutPage() {
                 <span>Shipping</span>
                 <span className="tabular-nums font-medium">
                   {shipping === 0 ? (
-                    <span className="text-emerald-700">FREE (Above ₹999)</span>
+                    <span className="text-emerald-700">FREE</span>
                   ) : (
                     <span>₹99</span>
                   )}

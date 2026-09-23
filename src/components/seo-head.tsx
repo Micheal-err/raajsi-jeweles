@@ -17,7 +17,7 @@ export const BUSINESS_INFO = {
   name: "Raajsi Jewels",
   legalName: "Raajsi Jewels",
   description:
-    "Raajsi Jewels is a Jaipur-based jewellery brand offering 925 Sterling Silver and Handcrafted Jewellery. BIS Hallmark certified, free delivery above ₹999, 7 days exchange.",
+    "Raajsi Jewels is a Jaipur-based jewellery brand offering 925 Sterling Silver and Handcrafted Jewellery. BIS Hallmark certified, free delivery on all orders, 7 days exchange.",
   url: SITE_URL,
   logo: SITE_LOGO,
   telephone: ["+919829145129", "+917014938562"],
@@ -199,7 +199,7 @@ export function productSchema(product: {
         "@type": "OfferShippingDetails",
         shippingRate: {
           "@type": "MonetaryAmount",
-          value: product.price >= 999 ? "0" : "99",
+          value: "0",
           currency: SITE_CURRENCY,
         },
         shippingDestination: {

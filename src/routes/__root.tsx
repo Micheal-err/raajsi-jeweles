@@ -99,7 +99,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         {
           name: "description",
           content:
-            "Shop exquisite 925 Sterling Silver & Handcrafted Jewellery online from Raajsi Jewels, Jaipur. BIS Hallmark certified. Free delivery above ₹999. 7 days exchange. Kundan, Polki, Meenakari & more.",
+            "Shop exquisite 925 Sterling Silver & Handcrafted Jewellery online from Raajsi Jewels, Jaipur. BIS Hallmark certified. Free delivery on all orders. 7 days exchange. Kundan, Polki, Meenakari & more.",
         },
         { name: "author", content: SITE_NAME },
         {
@@ -120,7 +120,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         {
           property: "og:description",
           content:
-            "Shop exquisite 925 Sterling Silver & Handcrafted Jewellery from Jaipur. BIS Hallmark certified. Free delivery above ₹999.",
+            "Shop exquisite 925 Sterling Silver & Handcrafted Jewellery from Jaipur. BIS Hallmark certified. Free delivery on all orders.",
         },
         { property: "og:type", content: "website" },
         { property: "og:url", content: SITE_URL },
@@ -141,7 +141,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         {
           name: "twitter:description",
           content:
-            "925 Sterling Silver & Handcrafted Jewellery. BIS Hallmark certified. Free delivery above ₹999.",
+            "925 Sterling Silver & Handcrafted Jewellery. BIS Hallmark certified. Free delivery on all orders.",
         },
         { name: "twitter:image", content: defaultOgImage() },
         { name: "theme-color", content: "#fdfaf5" },

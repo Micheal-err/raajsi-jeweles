@@ -47,7 +47,7 @@ export const Route = createFileRoute("/artworks/$slug")({
         },
         {
           name: "description",
-          content: `Buy ${formattedTitle} from Raajsi Jewels. BIS Hallmark certified 925 Sterling Silver & Handcrafted Jewellery. Free delivery above ₹999. 7 days exchange. Handcrafted in Jaipur, India.`,
+          content: `Buy ${formattedTitle} from Raajsi Jewels. BIS Hallmark certified 925 Sterling Silver & Handcrafted Jewellery. Free delivery on all orders. 7 days exchange. Handcrafted in Jaipur, India.`,
         },
         {
           name: "keywords",
@@ -59,7 +59,7 @@ export const Route = createFileRoute("/artworks/$slug")({
         },
         {
           property: "og:description",
-          content: `Exquisite ${formattedTitle}. BIS Hallmark certified. Free delivery above ₹999.`,
+          content: `Exquisite ${formattedTitle}. BIS Hallmark certified. Free delivery on all orders.`,
         },
         { property: "og:type", content: "product" },
         {
@@ -80,7 +80,7 @@ export const Route = createFileRoute("/artworks/$slug")({
         },
         {
           name: "twitter:description",
-          content: `Buy ${formattedTitle}. BIS Hallmark certified. Free delivery above ₹999.`,
+          content: `Buy ${formattedTitle}. BIS Hallmark certified. Free delivery on all orders.`,
         },
         { name: "twitter:image", content: defaultOgImage() },
       ],
@@ -195,7 +195,7 @@ function JewelleryProductDetail() {
         "@type": "OfferShippingDetails",
         shippingRate: {
           "@type": "MonetaryAmount",
-          value: (product.price ?? 0) >= 999 ? "0" : "99",
+          value: "0",
           currency: "INR",
         },
         shippingDestination: { "@type": "DefinedRegion", addressCountry: "IN" },
@@ -388,7 +388,7 @@ function JewelleryProductDetail() {
               </div>
               <div className="flex flex-col items-center gap-1">
                 <Truck size={18} className="text-[color:var(--gold)]" />
-                <span>Free Delivery &gt; ₹999</span>
+                <span>Free Delivery</span>
               </div>
               <div className="flex flex-col items-center gap-1">
                 <RotateCcw size={18} className="text-[color:var(--gold)]" />

@@ -30,7 +30,7 @@ export const Route = createFileRoute("/collection")({
       {
         name: "description",
         content:
-          "Browse our curated collections of 925 Sterling Silver and Handcrafted Jewellery. BIS Hallmark certified. Free delivery above ₹999. Shop rings, earrings, bracelets, necklaces & more from Jaipur.",
+          "Browse our curated collections of 925 Sterling Silver and Handcrafted Jewellery. BIS Hallmark certified. Free delivery on all orders. Shop rings, earrings, bracelets, necklaces & more from Jaipur.",
       },
       {
         name: "keywords",
@@ -45,7 +45,7 @@ export const Route = createFileRoute("/collection")({
       {
         property: "og:description",
         content:
-          "Two distinctive collections: Modern Sterling Silver 925 and Artistic Handcrafted Jewels. Free delivery above ₹999.",
+          "Two distinctive collections: Modern Sterling Silver 925 and Artistic Handcrafted Jewels. Free delivery on all orders.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: canonical("/collection") },
@@ -60,7 +60,7 @@ export const Route = createFileRoute("/collection")({
       {
         name: "twitter:description",
         content:
-          "925 Sterling Silver & Handcrafted Jewellery. BIS Hallmark certified. Free delivery above ₹999.",
+          "925 Sterling Silver & Handcrafted Jewellery. BIS Hallmark certified. Free delivery on all orders.",
       },
       { name: "twitter:image", content: defaultOgImage() },
     ],

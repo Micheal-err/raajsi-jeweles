@@ -24,9 +24,9 @@ const DOC_SEO: Record<string, { seoTitle: string; seoDesc: string }> = {
   },
   shipping: {
     seoTitle:
-      "Shipping & Delivery Policy — Raajsi Jewels | Free Delivery Above ₹999",
+      "Shipping & Delivery Policy — Raajsi Jewels | Free Delivery on All Orders",
     seoDesc:
-      "Free delivery on orders above ₹999 across India. Learn about Raajsi Jewels shipping timelines, tracking, and delivery policy.",
+      "Free delivery on all orders across India. Learn about Raajsi Jewels shipping timelines, tracking, and delivery policy.",
   },
   returns: {
     seoTitle: "Returns & Exchange Policy — Raajsi Jewels | 7 Days Exchange",
@@ -56,7 +56,7 @@ const FAQ_ITEMS = [
   {
     question: "Is shipping free?",
     answer:
-      "Free Delivery is provided on all orders above ₹999 across India.",
+      "Yes! Currently, 100% Free Doorstep Delivery is provided on all orders across India.",
   },
   {
     question: "Can I exchange my order?",
@@ -98,7 +98,7 @@ By using this website and placing an order, you confirm that you are at least 18
 • We reserve the right to refuse or cancel any order at our discretion, including in cases of suspected fraud, pricing errors, or unavailability of stock. In such cases, a full refund will be processed.
 
 6. Shipping, Exchange & Returns
-Shipping timelines and our exchange policy are as it is available to exchange in under 7 days of purchase. Free delivery is provided on all orders above ₹999.
+Shipping timelines and our exchange policy are as it is available to exchange in under 7 days of purchase. Free delivery is currently provided on all orders across India.
 
 7. Intellectual Property
 All content on this website, including but not limited to images, logos, product designs, text, and graphics, is the property of Raajsi Jewels and is protected under applicable intellectual property laws. No content may be copied, reproduced, or used without our prior written consent.
@@ -141,9 +141,9 @@ You have the right to request access to or deletion of your personal details sto
   },
   shipping: {
     title: "Shipping & Delivery Policy",
-    lede: "Complimentary delivery on orders above ₹999, insured directly from our Jaipur atelier.",
-    body: `1. Free Delivery Threshold
-Enjoy FREE insured doorstep delivery across India on all orders above ₹999. For orders under ₹999, a nominal standard delivery charge of ₹99 is applicable.
+    lede: "Complimentary delivery on all orders across India, insured directly from our Jaipur atelier.",
+    body: `1. Free Delivery on All Orders
+Enjoy FREE insured doorstep delivery across India on all orders as part of our current promotional offer. No minimum purchase required!
 
 2. Dispatch Timelines
 All in-stock pieces are dispatched within 1–2 business days from our Jaipur workshop. Custom orders or personalized handcrafted creations are crafted to perfection and dispatched within 5–7 business days.
@@ -184,7 +184,7 @@ Q: Are your silver pieces genuine 925 Sterling Silver?
 A: Yes! Every piece in our silver collection is crafted in genuine 925 Sterling Silver and certified.
 
 Q: Is shipping free?
-A: Free Delivery is provided on all orders above ₹999 across India.
+A: Yes! Currently, 100% Free Doorstep Delivery is provided on all orders across India.
 
 Q: Can I exchange my order?
 A: Yes, we provide an easy 7-day exchange policy from the date of purchase.
