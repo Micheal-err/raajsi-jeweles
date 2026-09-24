@@ -50,12 +50,12 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Shop 925 Sterling Silver & Handcrafted Jewellery online from Raajsi Jewels, Jaipur. BIS Hallmark certified. Free delivery on all orders. 7 days easy exchange. Kundan, Polki, Meenakari & modern silver jewellery.",
+          "Shop 925 Sterling Silver & Handcrafted Jewellery online from Raajsi Jewels, Jaipur. BIS Hallmark certified. Free delivery above ₹999. 7 days exchange. We make customized jewellery with reference too.",
       },
       {
         name: "keywords",
         content:
-          "raajsi jewels, buy 925 sterling silver jewellery online, handcrafted jewellery jaipur, fine jewellery india, BIS hallmark silver jewellery, kundan polki meenakari, free delivery jewellery india",
+          "raajsi jewels, buy 925 sterling silver jewellery online, handcrafted jewellery jaipur, customized jewellery jaipur, fine jewellery india, BIS hallmark silver jewellery, kundan polki meenakari",
       },
       {
         property: "og:title",
@@ -65,7 +65,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Two distinctive collections: refined Sterling Silver 925 and artistic Handcrafted Jewels. BIS Hallmark certified. Free delivery on all orders.",
+          "Two distinctive collections: refined Sterling Silver 925 and artistic Handcrafted Jewels. Free delivery above ₹999. We make customized jewellery with reference too.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: canonical("/") },
@@ -80,7 +80,7 @@ export const Route = createFileRoute("/")({
       {
         name: "twitter:description",
         content:
-          "Shop BIS Hallmark certified jewellery. Free delivery on all orders. 7 days exchange.",
+          "Shop BIS Hallmark certified jewellery. Free delivery above ₹999. 7 days exchange. We make customized jewellery with reference too.",
       },
       { name: "twitter:image", content: defaultOgImage() },
     ],

@@ -20,6 +20,7 @@ import { PageHero, KineticTitle } from "@/components/PageHero";
 import { useFormatPrice } from "@/lib/currency-format";
 import { resolveImage } from "@/lib/images";
 import { formatCurrencyWithCode } from "@/lib/currency";
+import randomImg1 from "@/assets/random-img-1.webp";
 
 export const Route = createFileRoute("/_authenticated/orders")({
   head: () => ({
@@ -361,13 +362,11 @@ function OrdersPage() {
                             key={i}
                             className="flex items-center gap-4 p-3 bg-mist/30 border border-hairline"
                           >
-                            {item.image && (
-                              <img
-                                src={resolveImage(item.image)}
-                                alt={item.title || "Jewellery piece"}
-                                className="w-14 h-16 object-cover border border-hairline shrink-0"
-                              />
-                            )}
+                            <img
+                              src={resolveImage(item.image) || randomImg1}
+                              alt={item.title || "Jewellery piece"}
+                              className="w-14 h-16 object-cover border border-hairline shrink-0"
+                            />
                             <div className="flex-1 min-w-0">
                               <p className="font-serif text-sm font-medium text-ink truncate">
                                 {item.title || "Heritage Jewellery"}
@@ -484,13 +483,11 @@ function OrdersPage() {
 
             {/* Certificate Body */}
             <div className="space-y-6 text-center">
-              {selectedCoa.item.image && (
                 <img
-                  src={resolveImage(selectedCoa.item.image)}
+                  src={resolveImage(selectedCoa.item.image) || randomImg1}
                   alt={selectedCoa.item.title}
                   className="w-28 h-32 object-cover border border-hairline mx-auto shadow-sm"
                 />
-              )}
               <div>
                 <p className="text-[10px] tracking-[0.25em] uppercase text-ink/50 mb-1">
                   Work Title

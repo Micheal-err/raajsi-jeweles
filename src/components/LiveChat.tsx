@@ -1,29 +1,62 @@
 import { useEffect, useRef, useState } from "react";
-import { MessageCircle, X, Send } from "lucide-react";
-import { useI18n } from "@/lib/i18n";
+import { MessageCircle, X, Send, Sparkles, Phone, ExternalLink } from "lucide-react";
 
-type Msg = { from: "gallery" | "you"; text: string; ts: number };
+type Msg = { from: "concierge" | "you"; text: string; ts: number; isWhatsappLink?: boolean };
 
-const REPLIES: Record<string, string[]> = {
-  en: [
-    "Thank you — a jewellery specialist will be with you shortly. Meanwhile, feel free to browse our collection or share the work you're interested in.",
-    "That's a beautiful choice. Would you like more details on provenance, framing, or shipping?",
-    "We're happy to arrange a private viewing at the gallery, or a video walkthrough — whichever you prefer.",
-  ],
-  hi: [
-    "धन्यवाद — गैलरी निदेशक शीघ्र ही आपसे संपर्क करेंगे। तब तक हमारा संग्रह देखें।",
-    "बहुत सुंदर चुनाव है। क्या आप प्रामाणिकता, फ़्रेमिंग या शिपिंग के बारे में और जानना चाहेंगे?",
-    "हम व्यक्तिगत दर्शन या वीडियो टूर का आयोजन ख़ुशी से कर सकते हैं।",
-  ],
-  fr: [
-    "Merci — un directeur de la galerie vous répondra sous peu. En attendant, parcourez notre collection.",
-    "Un très beau choix. Souhaitez-vous plus de détails sur la provenance, l'encadrement ou l'expédition ?",
-    "Nous pouvons organiser une visite privée à la galerie ou une visite vidéo, selon votre préférence.",
-  ],
-};
+const WHATSAPP_PHONE = "919829145129";
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(
+  "Hello Raajsi Jewels! I would like to inquire about your jewellery / custom jewellery."
+)}`;
+
+const QUICK_ACTIONS = [
+  { label: "✨ Custom Jewellery", query: "Can you make customized jewellery with reference?" },
+  { label: "🚚 Shipping & Delivery", query: "What is your shipping cost and delivery policy?" },
+  { label: "💎 925 Silver & Hallmark", query: "Are your silver pieces certified 925 Sterling Silver?" },
+  { label: "💬 Chat on WhatsApp", isWhatsapp: true },
+];
+
+function getBotReply(userText: string): { text: string; isWhatsappLink?: boolean } {
+  const t = userText.toLowerCase();
+
+  if (t.includes("custom") || t.includes("reference") || t.includes("bespoke") || t.includes("order")) {
+    return {
+      text: "WE MAKE CUSTOMIZED JEWELLERY WITH REFERENCE TOO! ✨\n\nShare your reference photo, sketch, or design ideas with us on WhatsApp (+91 98291 45129 or +91 70149 38562) or email raajsiforms@gmail.com. Our Jaipur artisans will craft your custom piece to perfection!",
+      isWhatsappLink: true,
+    };
+  }
+
+  if (t.includes("ship") || t.includes("deliver") || t.includes("cost") || t.includes("charges") || t.includes("999") || t.includes("free")) {
+    return {
+      text: "Free Delivery is provided on all orders above ₹999 across India! 🚚\n\nFor orders under ₹999, a nominal standard delivery charge of ₹99 is applicable. All parcels are 100% transit-insured from our Jaipur atelier.",
+    };
+  }
+
+  if (t.includes("exchange") || t.includes("return")) {
+    return {
+      text: "We offer an easy 7-day exchange window from the date of delivery for all unworn jewellery in its original packaging with tags intact. Contact us via WhatsApp or email to initiate an exchange.",
+    };
+  }
+
+  if (t.includes("silver") || t.includes("hallmark") || t.includes("authentic") || t.includes("pure") || t.includes("certificate")) {
+    return {
+      text: "Every piece in our collection is crafted in genuine 925 Sterling Silver or authentic Kundan/Polki gold craftsmanship, complete with official BIS Hallmarking certification.",
+    };
+  }
+
+  if (t.includes("contact") || t.includes("number") || t.includes("phone") || t.includes("call") || t.includes("location") || t.includes("jaipur")) {
+    return {
+      text: "📍 Raajsi Jewels, Jaipur, Rajasthan, India.\n📞 Phone / WhatsApp: +91 98291 45129 or +91 70149 38562\n✉️ Email: raajsiforms@gmail.com\n\nWe are happy to assist you anytime!",
+      isWhatsappLink: true,
+    };
+  }
+
+  return {
+    text: "Thank you for contacting Raajsi Jewels! A jewellery specialist is here to assist you. WE MAKE CUSTOMIZED JEWELLERY WITH REFERENCE TOO. You can also chat with us directly on WhatsApp for real-time video walkthroughs & custom design consultations.",
+    isWhatsappLink: true,
+  };
+}
 
 export function LiveChat() {
-  const { t, lang } = useI18n();
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
@@ -31,80 +64,186 @@ export function LiveChat() {
 
   useEffect(() => {
     if (open && msgs.length === 0) {
-      setMsgs([{ from: "gallery", text: REPLIES[lang]?.[0] ?? REPLIES.en[0], ts: Date.now() }]);
+      setMsgs([
+        {
+          from: "concierge",
+          text: "Namaste! Welcome to Raajsi Jewels, Jaipur.\n\nHow can we assist you with our 925 Sterling Silver & Handcrafted Jewellery collections today? ✨",
+          ts: Date.now(),
+        },
+      ]);
     }
-  }, [open, lang, msgs.length]);
+  }, [open, msgs.length]);
 
   useEffect(() => {
-    if (listRef.current) listRef.current.scrollTop = listRef.current.scrollHeight;
+    if (listRef.current) {
+      listRef.current.scrollTop = listRef.current.scrollHeight;
+    }
   }, [msgs, open]);
 
-  const send = () => {
-    const text = input.trim();
+  const handleSend = (textToSend?: string) => {
+    const text = (textToSend || input).trim();
     if (!text) return;
     setInput("");
-    setMsgs((m) => [...m, { from: "you", text, ts: Date.now() }]);
-    const bank = REPLIES[lang] ?? REPLIES.en;
-    const reply = bank[Math.min(msgs.filter((m) => m.from === "gallery").length, bank.length - 1)];
+
+    setMsgs((prev) => [...prev, { from: "you", text, ts: Date.now() }]);
+
     setTimeout(() => {
-      setMsgs((m) => [...m, { from: "gallery", text: reply, ts: Date.now() }]);
-    }, 900);
+      const reply = getBotReply(text);
+      setMsgs((prev) => [
+        ...prev,
+        {
+          from: "concierge",
+          text: reply.text,
+          isWhatsappLink: reply.isWhatsappLink,
+          ts: Date.now(),
+        },
+      ]);
+    }, 600);
   };
 
   return (
     <>
-      <button
-        type="button"
-        aria-label={t("cta.chat")}
-        onClick={() => setOpen((v) => !v)}
-        className="fixed bottom-4 right-4 z-40 w-14 h-14 rounded-full bg-[color:var(--accent)] text-[color:var(--accent-foreground)] shadow-lg flex items-center justify-center hover:brightness-110 transition"
-      >
-        {open ? <X size={20} /> : <MessageCircle size={22} />}
-      </button>
+      {/* Floating Chat Trigger Button */}
+      <div className="fixed bottom-5 right-5 z-50 flex items-center gap-2">
+        {!open && (
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 bg-paper/95 text-ink border border-hairline shadow-lg text-xs font-serif italic hover:shadow-xl transition-all hover:scale-102 backdrop-blur-sm"
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Chat with us · Jaipur Atelier</span>
+          </button>
+        )}
+
+        <button
+          type="button"
+          aria-label="Open live chat concierge"
+          onClick={() => setOpen((v) => !v)}
+          className="w-14 h-14 rounded-full bg-ink text-paper shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all border border-hairline relative group"
+          style={{ background: open ? "var(--ink)" : "var(--gold, #b8860b)" }}
+        >
+          {open ? (
+            <X size={22} className="text-paper" />
+          ) : (
+            <>
+              <MessageCircle size={24} className="text-paper" />
+              <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-paper rounded-full" />
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* Chat Window Modal */}
       {open && (
-        <div className="fixed bottom-24 right-4 z-40 w-[92vw] max-w-sm h-[70vh] max-h-[520px] bg-paper border border-hairline shadow-2xl flex flex-col">
-          <div className="p-4 border-b border-hairline">
-            <div className="eyebrow">Raajsi Jewels · Live</div>
-            <div className="font-serif text-lg">{t("cta.chat")}</div>
-            <div className="text-[11px] text-muted-foreground mt-0.5">
-              Typically replies in a few minutes.
+        <div className="fixed bottom-22 right-4 sm:right-6 z-50 w-[92vw] max-w-sm h-[72vh] max-h-[560px] bg-paper border border-hairline shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
+          {/* Header */}
+          <div className="p-4 border-b border-hairline bg-mist/60 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-full bg-[color:var(--gold)]/20 border border-[color:var(--gold)]/40 flex items-center justify-center text-[color:var(--gold)]">
+                <Sparkles size={16} />
+              </div>
+              <div>
+                <div className="font-serif font-semibold text-ink text-sm leading-tight">
+                  Raajsi Jewellery Concierge
+                </div>
+                <div className="text-[10px] text-emerald-700 font-medium flex items-center gap-1 mt-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                  <span>Online · Jaipur, India</span>
+                </div>
+              </div>
             </div>
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1.5 bg-emerald-600 text-white rounded-xs hover:bg-emerald-700 transition flex items-center gap-1 shadow-xs"
+              title="Open WhatsApp chat"
+            >
+              <span>WhatsApp</span>
+              <ExternalLink size={10} />
+            </a>
           </div>
-          <div ref={listRef} className="flex-1 overflow-y-auto p-4 space-y-3">
+
+          {/* Quick Notice */}
+          <div className="bg-ink text-[#fcf9f2] text-[10px] py-1.5 px-3 text-center tracking-wide border-b border-hairline">
+            ✦ Free Delivery Above ₹999 · Customized Jewellery with Reference ✦
+          </div>
+
+          {/* Messages Area */}
+          <div ref={listRef} className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#fdfbf7]/60">
             {msgs.map((m, i) => (
-              <div key={i} className={m.from === "you" ? "flex justify-end" : "flex justify-start"}>
+              <div
+                key={i}
+                className={m.from === "you" ? "flex justify-end" : "flex justify-start"}
+              >
                 <div
-                  className={
-                    "max-w-[80%] px-3 py-2 text-sm leading-snug " +
-                    (m.from === "you"
-                      ? "bg-ink text-paper"
-                      : "bg-mist text-ink border border-hairline")
-                  }
+                  className={`max-w-[85%] px-3.5 py-2.5 text-xs leading-relaxed ${
+                    m.from === "you"
+                      ? "bg-ink text-paper rounded-xs"
+                      : "bg-paper text-ink border border-hairline shadow-xs rounded-xs"
+                  }`}
                 >
-                  {m.text}
+                  <p className="whitespace-pre-line">{m.text}</p>
+                  {m.isWhatsappLink && (
+                    <div className="mt-2.5 pt-2 border-t border-hairline">
+                      <a
+                        href={WHATSAPP_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 hover:underline"
+                      >
+                        <Phone size={11} />
+                        <span>Chat directly on WhatsApp (+91 98291 45129) →</span>
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
           </div>
+
+          {/* Quick Action Chips */}
+          <div className="p-2.5 border-t border-hairline bg-paper/95 overflow-x-auto flex gap-1.5 scrollbar-none">
+            {QUICK_ACTIONS.map((action, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => {
+                  if (action.isWhatsapp) {
+                    window.open(WHATSAPP_URL, "_blank");
+                  } else if (action.query) {
+                    handleSend(action.query);
+                  }
+                }}
+                className="whitespace-nowrap px-2.5 py-1 text-[11px] border border-hairline bg-mist/40 hover:bg-mist text-ink/80 hover:text-ink transition-colors rounded-xs shrink-0"
+              >
+                {action.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Input Form */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              send();
+              handleSend();
             }}
-            className="border-t border-hairline p-3 flex items-center gap-2"
+            className="border-t border-hairline p-2.5 bg-paper flex items-center gap-2"
           >
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Write a message…"
-              className="flex-1 bg-transparent border border-hairline px-3 py-2 text-sm focus:outline-none focus:border-ink"
+              placeholder="Ask about 925 silver, custom jewellery, shipping…"
+              className="flex-1 bg-transparent border border-hairline px-3 py-2 text-xs focus:outline-none focus:border-ink placeholder:text-ink/40"
             />
             <button
               type="submit"
-              aria-label="Send"
-              className="w-10 h-10 flex items-center justify-center bg-[color:var(--accent)] text-[color:var(--accent-foreground)]"
+              disabled={!input.trim()}
+              aria-label="Send message"
+              className="w-9 h-9 flex items-center justify-center bg-ink text-paper hover:bg-ink/90 transition-colors disabled:opacity-40"
             >
-              <Send size={15} />
+              <Send size={13} />
             </button>
           </form>
         </div>

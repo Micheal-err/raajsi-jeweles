@@ -75,10 +75,10 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 bg-paper/95 backdrop-blur-sm border-b border-hairline">
-      {/* Promotional Free Shipping Announcement Bar */}
+      {/* Promotional Announcement Bar */}
       <div className="bg-ink text-[#fcf9f2] text-[11px] sm:text-xs py-1.5 px-4 text-center tracking-wider border-b border-white/10 flex items-center justify-center gap-2">
         <span className="text-[color:var(--gold)]">✦</span>
-        <span>Special Offer: <strong className="text-[color:var(--gold)] font-semibold">Free Delivery on All Orders</strong> Across India · 100% Insured Delivery</span>
+        <span>Free Delivery Above ₹999 Across India · 7 Days Exchange · <strong className="text-[color:var(--gold)] font-semibold">We make customized jewellery with reference too</strong></span>
         <span className="text-[color:var(--gold)]">✦</span>
       </div>
       <div className="container-editorial flex items-center justify-between h-16 md:h-20">
@@ -469,7 +469,10 @@ export function SiteFooter() {
             <div className="pt-2 text-[11px] text-muted-foreground space-y-1">
               <div>GST: <span className="font-mono text-ink font-semibold">08UQDPS5127K1ZY</span></div>
               <div className="text-[10px] text-[color:var(--gold)] font-medium">
-                Free Delivery on All Orders · 7 Days Exchange
+                Free Delivery Above ₹999 · 7 Days Exchange
+              </div>
+              <div className="text-[10px] text-ink/80 font-medium">
+                ✨ We make customized jewellery with reference too
               </div>
             </div>
           </div>

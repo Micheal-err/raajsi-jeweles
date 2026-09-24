@@ -7,6 +7,7 @@ import { useSession } from "@/hooks/useSession";
 import { useFormatPrice } from "@/lib/currency-format";
 import { useCurrency } from "@/lib/currency";
 import { PageHero, KineticTitle } from "@/components/PageHero";
+import { resolveImage } from "@/lib/images";
 import { toast } from "sonner";
 import {
   ShieldCheck,
@@ -89,10 +90,10 @@ function CheckoutPage() {
 
   const rows = items ?? [];
   const subtotal = rows.reduce(
-    (s, i) => s + (i.artwork.display_price ?? i.artwork.price_min ?? 0),
+    (s, i) => s + (i.artwork.display_price ?? i.artwork.price_min ?? 0) * (i.quantity ?? 1),
     0,
   );
-  const shipping = 0; // Free delivery on all orders (promotional offer)
+  const shipping = subtotal >= 999 ? 0 : subtotal > 0 ? 99 : 0; // 99 shipping under 999, above 999 is free
   const tax = 0; // GST Free — all prices inclusive of taxes
   const total = subtotal + shipping + tax;
 
@@ -170,6 +171,7 @@ function CheckoutPage() {
           artwork_id: r.artwork.id,
           slug: r.artwork.slug,
           title: r.artwork.title,
+          quantity: r.quantity ?? 1,
           price: r.artwork.display_price ?? r.artwork.price_min ?? 0,
           image: r.artwork.primary_image_url,
           payment_id: paymentId,
@@ -516,7 +518,7 @@ function CheckoutPage() {
             </button>
             <p className="text-[11px] text-center text-ink/60 flex items-center justify-center gap-1">
               <ShieldCheck size={13} className="text-emerald-700" />
-              100% BIS Hallmark &amp; 925 Silver Certified · Free Delivery on All Orders · 7 Days Exchange
+              100% BIS Hallmark &amp; 925 Silver Certified · Free Delivery above ₹999 · 7 Days Exchange
             </p>
           </div>
         </form>
@@ -528,22 +530,43 @@ function CheckoutPage() {
               Order Summary
             </h3>
             <div className="space-y-3 text-xs">
-              {rows.map((r) => (
-                <div
-                  key={r.id}
-                  className="flex justify-between gap-4 py-1 border-b border-hairline/40"
-                >
-                  <span className="truncate italic font-serif text-ink">{r.artwork.title}</span>
-                  <span className="tabular-nums font-serif text-ink shrink-0">
-                    {fmt({
-                      price_display: "fixed",
-                      price_min: null,
-                      price_max: null,
-                      display_price: r.artwork.display_price ?? r.artwork.price_min ?? 0,
-                    })}
-                  </span>
-                </div>
-              ))}
+              {rows.map((r) => {
+                const qty = r.quantity ?? 1;
+                const unitPrice = r.artwork.display_price ?? r.artwork.price_min ?? 0;
+                const itemTotal = unitPrice * qty;
+
+                return (
+                  <div
+                    key={r.id}
+                    className="flex items-center gap-3 py-2 border-b border-hairline/40"
+                  >
+                    <div className="w-12 h-14 bg-mist overflow-hidden border border-hairline/60 rounded-xs shrink-0">
+                      {r.artwork.primary_image_url && (
+                        <img
+                          src={resolveImage(r.artwork.primary_image_url)}
+                          alt={r.artwork.title}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="truncate italic font-serif text-ink text-xs">{r.artwork.title}</p>
+                      <p className="text-[11px] text-muted-foreground mt-0.5">
+                        Qty: <span className="font-semibold text-ink font-mono">{qty}</span>
+                        {qty > 1 && ` × ${fmt({ price_display: "fixed", price_min: null, price_max: null, display_price: unitPrice })}`}
+                      </p>
+                    </div>
+                    <span className="tabular-nums font-serif text-ink shrink-0 text-xs font-medium">
+                      {fmt({
+                        price_display: "fixed",
+                        price_min: null,
+                        price_max: null,
+                        display_price: itemTotal,
+                      })}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
 
             <div className="space-y-1.5 text-xs pt-2">
@@ -562,7 +585,7 @@ function CheckoutPage() {
                 <span>Shipping</span>
                 <span className="tabular-nums font-medium">
                   {shipping === 0 ? (
-                    <span className="text-emerald-700">FREE</span>
+                    <span className="text-emerald-700">FREE (Above ₹999)</span>
                   ) : (
                     <span>₹99</span>
                   )}

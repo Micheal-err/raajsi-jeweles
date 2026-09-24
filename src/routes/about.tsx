@@ -2,12 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Reveal } from "@/components/Reveal";
 import { PageHero, KineticTitle } from "@/components/PageHero";
 import { KineticBand } from "@/components/KineticBand";
-import heroSlide1 from "@/assets/hero-slide-1.jpg";
 import { ParallaxImage } from "@/components/Parallax";
-import heroImg from "@/assets/jewellery-hero.png";
-import ringImg from "@/assets/jewellery-rings.png";
-import banglesImg from "@/assets/jewellery-bangles.jpg";
-import necklaceImg from "@/assets/jewellery-necklace.jpg";
+import randomImg1 from "@/assets/random-img-1.webp";
+import randomImg2 from "@/assets/random-img-2.webp";
+import randomImg3 from "@/assets/random-img-3.webp";
+import randomImg4 from "@/assets/random-img-4.webp";
+import randomImg5 from "@/assets/random-img-5.webp";
 import {
   Sparkles,
   ShieldCheck,
@@ -118,7 +118,7 @@ function AboutPage() {
         <Reveal>
           <div className="relative overflow-hidden shadow-xl border border-hairline group">
             <ParallaxImage
-              src={heroSlide1}
+              src={randomImg1}
               alt="Raajsi Jewellery Atelier in Jaipur, India"
               aspectRatio="aspect-[16/9]"
               className="w-full h-[400px] md:h-[580px]"
@@ -288,7 +288,7 @@ function AboutPage() {
             <div className="space-y-4">
               <div className="aspect-[4/5] overflow-hidden border border-hairline rounded-sm">
                 <img
-                  src={ringImg}
+                  src={randomImg2}
                   alt="Sterling Silver minimal elegance"
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                 />
@@ -304,7 +304,7 @@ function AboutPage() {
             <div className="space-y-4 pt-8">
               <div className="aspect-[4/5] overflow-hidden border border-hairline rounded-sm">
                 <img
-                  src={banglesImg}
+                  src={randomImg3}
                   alt="Handcrafted Jewels artistry"
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                 />

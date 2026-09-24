@@ -24,9 +24,9 @@ const DOC_SEO: Record<string, { seoTitle: string; seoDesc: string }> = {
   },
   shipping: {
     seoTitle:
-      "Shipping & Delivery Policy — Raajsi Jewels | Free Delivery on All Orders",
+      "Shipping & Delivery Policy — Raajsi Jewels | Free Delivery Above ₹999",
     seoDesc:
-      "Free delivery on all orders across India. Learn about Raajsi Jewels shipping timelines, tracking, and delivery policy.",
+      "Free delivery on orders above ₹999 across India (₹99 standard shipping below ₹999). Learn about Raajsi Jewels shipping timelines, tracking, and delivery policy.",
   },
   returns: {
     seoTitle: "Returns & Exchange Policy — Raajsi Jewels | 7 Days Exchange",
@@ -46,17 +46,22 @@ const FAQ_ITEMS = [
   {
     question: "What are the two core collections at Raajsi?",
     answer:
-      "Raajsi features two distinct collections: 1) 925 Silver (Sterling Silver 925) — Modern, minimal, and elegant everyday jewellery. 2) Handcrafted Jewels — Artisanal, expressive Kundan, Polki, and Meenakari masterpieces.",
+      "Raajsi features two distinct collections: 1) 925 Silver (Sterling Silver 925) — Modern, minimal, and elegant everyday jewellery. 2) Handcrafted Jewels — Whimsical, handcrafted jewellery where artistic details meet contemporary elegance. Designed to be playful, distinctive, and effortlessly expressive—made for those who love jewellery with a story.",
   },
   {
     question: "Are your silver pieces genuine 925 Sterling Silver?",
     answer:
-      "Yes! Every piece in our silver collection is crafted in genuine 925 Sterling Silver and certified.",
+      "Yes! Every piece in our silver collection is crafted in genuine 925 Sterling Silver and certified with official BIS Hallmarking.",
   },
   {
     question: "Is shipping free?",
     answer:
-      "Yes! Currently, 100% Free Doorstep Delivery is provided on all orders across India.",
+      "Free Delivery is provided on all orders above ₹999 across India. For orders under ₹999, a nominal standard delivery charge of ₹99 is applicable.",
+  },
+  {
+    question: "Do you make customized jewellery?",
+    answer:
+      "Yes! WE MAKE CUSTOMIZED JEWELLERY WITH REFERENCE TOO. Share your reference photo, sketch, or design requirements via WhatsApp (+91 98291 45129 / +91 70149 38562) or email at raajsiforms@gmail.com, and our Jaipur master artisans will bring your bespoke piece to life.",
   },
   {
     question: "Can I exchange my order?",
@@ -141,9 +146,11 @@ You have the right to request access to or deletion of your personal details sto
   },
   shipping: {
     title: "Shipping & Delivery Policy",
-    lede: "Complimentary delivery on all orders across India, insured directly from our Jaipur atelier.",
-    body: `1. Free Delivery on All Orders
-Enjoy FREE insured doorstep delivery across India on all orders as part of our current promotional offer. No minimum purchase required!
+    lede: "Complimentary delivery on orders above ₹999, insured directly from our Jaipur atelier.",
+    body: `1. Shipping & Free Delivery Threshold
+Enjoy FREE insured doorstep delivery across India on all orders above ₹999. For orders under ₹999, a nominal standard delivery charge of ₹99 is applicable.
+
+WE MAKE CUSTOMIZED JEWELLERY WITH REFERENCE TOO. Custom orders are handcrafted and dispatched with priority insured logistics.
 
 2. Dispatch Timelines
 All in-stock pieces are dispatched within 1–2 business days from our Jaipur workshop. Custom orders or personalized handcrafted creations are crafted to perfection and dispatched within 5–7 business days.
@@ -178,13 +185,16 @@ In case of accepted cancellation or verified product defect, refunds are process
     body: `Q: What are the two core collections at Raajsi?
 A: Raajsi features two distinct collections:
 1. 925 Silver (Sterling Silver 925): Modern, minimal, and elegant everyday jewellery.
-2. Handcrafted Jewels: Artisanal, expressive Kundan, Polki, and Meenakari masterpieces.
+2. Handcrafted Jewels: Whimsical, handcrafted jewellery where artistic details meet contemporary elegance. Designed to be playful, distinctive, and effortlessly expressive—made for those who love jewellery with a story.
 
 Q: Are your silver pieces genuine 925 Sterling Silver?
 A: Yes! Every piece in our silver collection is crafted in genuine 925 Sterling Silver and certified.
 
 Q: Is shipping free?
-A: Yes! Currently, 100% Free Doorstep Delivery is provided on all orders across India.
+A: Free Delivery is provided on all orders above ₹999 across India. For orders under ₹999, a nominal standard delivery charge of ₹99 is applicable.
+
+Q: Do you make customized jewellery?
+A: Yes! WE MAKE CUSTOMIZED JEWELLERY WITH REFERENCE TOO. Share your reference picture, design, or ideas via WhatsApp (+91 98291 45129 / +91 70149 38562) or email at raajsiforms@gmail.com and our Jaipur master artisans will handcraft it for you.
 
 Q: Can I exchange my order?
 A: Yes, we provide an easy 7-day exchange policy from the date of purchase.

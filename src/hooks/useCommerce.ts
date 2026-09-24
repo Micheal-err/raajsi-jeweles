@@ -7,6 +7,7 @@ import { useSession } from "./useSession";
 export type CartItem = {
   id: string;
   artwork_id: string;
+  quantity?: number;
   created_at: string;
   artwork: {
     id: string;
@@ -33,11 +34,14 @@ export function useCart() {
       if (!user) return [];
       const { data, error } = await supabase
         .from("cart_items")
-        .select(`id,artwork_id,created_at,artwork:artworks(${artworkSelect})`)
+        .select(`id,artwork_id,quantity,created_at,artwork:artworks(${artworkSelect})`)
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return (data ?? []) as unknown as CartItem[];
+      return (data ?? []).map((row: any) => ({
+        ...row,
+        quantity: Math.max(1, Number(row.quantity) || 1),
+      })) as unknown as CartItem[];
     },
   });
 }
@@ -76,12 +80,32 @@ export function useAddToCart() {
   const { user } = useSession();
   const guard = useAuthGuard();
   return useMutation({
-    mutationFn: async (artworkId: string) => {
+    mutationFn: async (args: string | { artworkId: string; quantity?: number }) => {
       if (!guard()) throw new Error("auth");
-      const { error } = await supabase
+      const artworkId = typeof args === "string" ? args : args.artworkId;
+      const addQty = typeof args === "object" && args.quantity ? args.quantity : 1;
+
+      // Check if item already exists in cart
+      const { data: existing } = await supabase
         .from("cart_items")
-        .insert({ artwork_id: artworkId, user_id: user!.id });
-      if (error && !`${error.message}`.toLowerCase().includes("duplicate")) throw error;
+        .select("id, quantity")
+        .eq("user_id", user!.id)
+        .eq("artwork_id", artworkId)
+        .maybeSingle();
+
+      if (existing) {
+        const newQty = (existing.quantity || 1) + addQty;
+        const { error } = await supabase
+          .from("cart_items")
+          .update({ quantity: newQty })
+          .eq("id", existing.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from("cart_items")
+          .insert({ artwork_id: artworkId, user_id: user!.id, quantity: addQty });
+        if (error && !`${error.message}`.toLowerCase().includes("duplicate")) throw error;
+      }
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["cart"] });
@@ -93,11 +117,43 @@ export function useAddToCart() {
   });
 }
 
+export function useUpdateCartQuantity() {
+  const qc = useQueryClient();
+  const { user } = useSession();
+  return useMutation({
+    mutationFn: async ({ artworkId, quantity }: { artworkId: string; quantity: number }) => {
+      if (!user) return;
+      if (quantity <= 0) {
+        const { error } = await supabase
+          .from("cart_items")
+          .delete()
+          .eq("user_id", user.id)
+          .eq("artwork_id", artworkId);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from("cart_items")
+          .update({ quantity })
+          .eq("user_id", user.id)
+          .eq("artwork_id", artworkId);
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["cart"] }),
+  });
+}
+
 export function useRemoveFromCart() {
   const qc = useQueryClient();
+  const { user } = useSession();
   return useMutation({
     mutationFn: async (artworkId: string) => {
-      const { error } = await supabase.from("cart_items").delete().eq("artwork_id", artworkId);
+      if (!user) return;
+      const { error } = await supabase
+        .from("cart_items")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("artwork_id", artworkId);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["cart"] }),

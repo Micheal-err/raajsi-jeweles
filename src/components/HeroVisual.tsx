@@ -1,17 +1,10 @@
+import randomImg1 from "@/assets/random-img-1.webp";
+import randomImg2 from "@/assets/random-img-2.webp";
+import randomImg3 from "@/assets/random-img-3.webp";
+import randomImg4 from "@/assets/random-img-4.webp";
+import randomImg5 from "@/assets/random-img-5.webp";
 import interior from "@/assets/gallery-interior.jpg";
 import hero from "@/assets/hero-artwork.jpg";
-import artist1 from "@/assets/artist-1.jpg";
-import artist2 from "@/assets/artist-2.jpg";
-import artist3 from "@/assets/artist-3.jpg";
-import artist4 from "@/assets/artist-4.jpg";
-import artwork1 from "@/assets/artwork-1.jpg";
-import artwork2 from "@/assets/artwork-2.jpg";
-import artwork3 from "@/assets/artwork-3.jpg";
-import artwork4 from "@/assets/artwork-4.jpg";
-import jewelleryHero from "@/assets/jewellery-hero.png";
-import jewelleryNecklace from "@/assets/jewellery-necklace.jpg";
-import jewelleryRings from "@/assets/jewellery-rings.png";
-import jewelleryBangles from "@/assets/jewellery-bangles.jpg";
 
 export type HeroVisualVariant =
   | "gallery"
@@ -100,18 +93,18 @@ function renderVariant(v: HeroVisualVariant) {
       return (
         <>
           <Frame
-            src={jewelleryHero}
+            src={randomImg1}
             alt="Raajsi Fine Royal Kundan Jewellery"
             className="left-0 top-[6%] w-[68%] h-[64%]"
           />
           <Frame
-            src={jewelleryRings}
+            src={randomImg2}
             alt="925 Sterling Silver Ring"
             className="right-0 top-0 w-[44%] h-[40%]"
             style={{ transform: "rotate(2deg)" }}
           />
           <Frame
-            src={jewelleryNecklace}
+            src={randomImg4}
             alt="Handcrafted Choker & Necklace"
             className="right-[2%] bottom-[4%] w-[54%] h-[48%]"
             style={{ transform: "rotate(-1.5deg)" }}
@@ -150,7 +143,7 @@ function renderVariant(v: HeroVisualVariant) {
       return (
         <>
           <Frame
-            src={artwork3}
+            src={randomImg3}
             alt="Journal cover"
             className="left-0 top-0 w-[62%] h-[70%]"
             style={{ transform: "rotate(-2deg)" }}
@@ -166,7 +159,7 @@ function renderVariant(v: HeroVisualVariant) {
               className="font-serif italic leading-none"
               style={{ fontSize: "clamp(1.4rem, 3vw, 2.4rem)" }}
             >
-              on <br /> patience, <br /> and paint.
+              on <br /> patience, <br /> and craft.
             </div>
             <div className="text-[10px] tracking-widest uppercase text-muted-foreground">
               Raajsi Jewels · Journal
@@ -174,23 +167,23 @@ function renderVariant(v: HeroVisualVariant) {
           </div>
           <div className="absolute left-[10%] bottom-0 flex items-center gap-3 bg-paper/95 backdrop-blur px-3 py-1.5">
             <span className="h-px w-8" style={{ background: ACCENT }} />
-            <span className="eyebrow">Essays · Interviews</span>
+            <span className="eyebrow">Heritage · Atelier</span>
           </div>
         </>
       );
     case "studios":
       return (
         <>
-          <Frame src={artist1} alt="Studio portrait" className="left-0 top-[6%] w-[46%] h-[54%]" />
+          <Frame src={randomImg1} alt="Raajsi Workshop Jaipur" className="left-0 top-[6%] w-[46%] h-[54%]" />
           <Frame
-            src={artist3}
-            alt="Studio portrait"
+            src={randomImg3}
+            alt="Handcrafted Silver Casting"
             className="right-[2%] top-0 w-[44%] h-[48%]"
             style={{ transform: "rotate(2deg)" }}
           />
           <Frame
-            src={artist4}
-            alt="Studio portrait"
+            src={randomImg4}
+            alt="Artisan Benchwork"
             className="left-[14%] bottom-0 w-[52%] h-[48%]"
             style={{ transform: "rotate(-1.5deg)" }}
           />
@@ -198,7 +191,7 @@ function renderVariant(v: HeroVisualVariant) {
             className="absolute right-0 bottom-[10%] font-serif italic leading-none text-ink/80"
             style={{ fontSize: "clamp(1.4rem, 3vw, 2.2rem)" }}
           >
-            four <br /> studios.
+            jaipur <br /> atelier.
           </div>
           <span
             className="absolute right-[6%] top-[52%] w-2 h-2 rounded-full"
@@ -209,10 +202,10 @@ function renderVariant(v: HeroVisualVariant) {
     case "collection":
       return (
         <>
-          <Frame src={artwork1} alt="Artwork" className="left-0 top-0 w-[46%] h-[46%]" />
-          <Frame src={artwork2} alt="Artwork" className="right-0 top-[4%] w-[46%] h-[38%]" />
-          <Frame src={artwork3} alt="Artwork" className="left-[4%] bottom-0 w-[46%] h-[44%]" />
-          <Frame src={artwork4} alt="Artwork" className="right-0 bottom-[2%] w-[46%] h-[50%]" />
+          <Frame src={randomImg1} alt="Raajsi Jewellery" className="left-0 top-0 w-[46%] h-[46%]" />
+          <Frame src={randomImg2} alt="Raajsi Jewellery" className="right-0 top-[4%] w-[46%] h-[38%]" />
+          <Frame src={randomImg3} alt="Raajsi Jewellery" className="left-[4%] bottom-0 w-[46%] h-[44%]" />
+          <Frame src={randomImg4} alt="Raajsi Jewellery" className="right-0 bottom-[2%] w-[46%] h-[50%]" />
           <div className="absolute inset-x-0 top-[47%] flex items-center justify-center pointer-events-none">
             <span className="bg-paper px-3 py-1 eyebrow border border-hairline">112 works</span>
           </div>
@@ -261,21 +254,21 @@ function renderVariant(v: HeroVisualVariant) {
     case "cart":
       return (
         <>
-          <Frame src={artwork2} alt="Selected work" className="left-0 top-0 w-[52%] h-[42%]" />
+          <Frame src={randomImg3} alt="Selected jewellery piece" className="left-0 top-0 w-[52%] h-[42%]" />
           <Frame
-            src={artwork4}
-            alt="Selected work"
+            src={randomImg5}
+            alt="Selected jewellery piece"
             className="right-0 top-[8%] w-[46%] h-[38%]"
             style={{ transform: "rotate(1.5deg)" }}
           />
           <Frame
-            src={artwork1}
-            alt="Selected work"
+            src={randomImg4}
+            alt="Selected jewellery piece"
             className="left-[8%] bottom-[4%] w-[56%] h-[42%]"
             style={{ transform: "rotate(-1.5deg)" }}
           />
           <div className="absolute right-0 bottom-[10%] bg-paper border border-hairline px-4 py-3 text-[10px] tracking-[0.22em] uppercase">
-            <div className="text-muted-foreground mb-1">Shortlist</div>
+            <div className="text-muted-foreground mb-1">Raajsi</div>
             <div
               className="font-serif italic text-2xl normal-case tracking-normal"
               style={{ color: ACCENT }}
@@ -288,10 +281,10 @@ function renderVariant(v: HeroVisualVariant) {
     case "wishlist":
       return (
         <>
-          <Frame src={artwork3} alt="Saved work" className="left-0 top-[6%] w-[54%] h-[62%]" />
+          <Frame src={randomImg4} alt="Saved jewellery piece" className="left-0 top-[6%] w-[54%] h-[62%]" />
           <Frame
-            src={artwork1}
-            alt="Saved work"
+            src={randomImg5}
+            alt="Saved jewellery piece"
             className="right-0 bottom-[6%] w-[52%] h-[54%]"
             style={{ transform: "rotate(2deg)" }}
           />

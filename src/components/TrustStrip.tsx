@@ -1,7 +1,7 @@
 import { ShieldCheck, BadgeCheck, Truck, RotateCcw, Gem, Award, Sparkles } from "lucide-react";
 
 const ITEMS = [
-  { Icon: Truck, label: "Free Delivery on All Orders" },
+  { Icon: Truck, label: "Free Delivery Above ₹999" },
   { Icon: RotateCcw, label: "7 Days Exchange Policy" },
   { Icon: Gem, label: "BIS Hallmark Certified" },
   { Icon: Award, label: "100% Genuine 925 Silver" },

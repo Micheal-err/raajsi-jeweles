@@ -191,6 +191,7 @@ export type Database = {
           id: string;
           reserved_at: string | null;
           user_id: string;
+          quantity: number;
         };
         Insert: {
           artwork_id: string;
@@ -198,6 +199,7 @@ export type Database = {
           id?: string;
           reserved_at?: string | null;
           user_id: string;
+          quantity?: number;
         };
         Update: {
           artwork_id?: string;
@@ -205,6 +207,7 @@ export type Database = {
           id?: string;
           reserved_at?: string | null;
           user_id?: string;
+          quantity?: number;
         };
         Relationships: [
           {

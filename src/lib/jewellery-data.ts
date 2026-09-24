@@ -1,7 +1,16 @@
 import { type JewelleryProduct } from "@/components/JewelleryCard";
-import jewelleryHero from "@/assets/jewellery-hero.png";
-import jewelleryRings from "@/assets/jewellery-rings.png";
-import jewelleryMens from "@/assets/jewellery-mens.png";
+import randomImg1 from "@/assets/random-img-1.webp";
+import randomImg2 from "@/assets/random-img-2.webp";
+import randomImg3 from "@/assets/random-img-3.webp";
+import randomImg4 from "@/assets/random-img-4.webp";
+import randomImg5 from "@/assets/random-img-5.webp";
+
+// Map jewellery assets to authentic Raajsi product photography (random-img-1 to 5)
+const jewelleryHero = randomImg1;
+const jewelleryRings = randomImg2;
+const jewelleryMens = randomImg3;
+const jewelleryNecklace = randomImg4;
+const jewelleryBangles = randomImg5;
 
 export const MOCK_JEWELLERY_PRODUCTS: JewelleryProduct[] = [
   // ── RINGS (min 3) ───────────────────────────────────────────────────

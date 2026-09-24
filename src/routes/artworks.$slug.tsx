@@ -22,7 +22,14 @@ import {
   X,
   Gem,
   Award,
+  Minus,
+  Plus,
 } from "lucide-react";
+import randomImg1 from "@/assets/random-img-1.webp";
+import randomImg2 from "@/assets/random-img-2.webp";
+import randomImg3 from "@/assets/random-img-3.webp";
+import randomImg4 from "@/assets/random-img-4.webp";
+import randomImg5 from "@/assets/random-img-5.webp";
 
 import {
   SITE_NAME,
@@ -195,7 +202,7 @@ function JewelleryProductDetail() {
         "@type": "OfferShippingDetails",
         shippingRate: {
           "@type": "MonetaryAmount",
-          value: "0",
+          value: (product.price ?? 0) >= 999 ? "0" : "99",
           currency: "INR",
         },
         shippingDestination: { "@type": "DefinedRegion", addressCountry: "IN" },
@@ -234,12 +241,13 @@ function JewelleryProductDetail() {
     ...(Array.isArray(meta.gallery_images) ? meta.gallery_images : []),
     ...(Array.isArray(meta.images) ? meta.images : []),
   ];
-  const distinctImages: string[] = Array.from(new Set(rawList.filter(Boolean)));
+  const distinctImages = Array.from(new Set(rawList.filter(Boolean))).map((u) => resolveImage(u));
   const fallbackAngles = [
-    "/jewellery/jewellery-necklace.jpg",
-    "/jewellery/jewellery-hero.png",
-    "/jewellery/jewellery-bangles.jpg",
-    "/jewellery/jewellery-rings.png",
+    randomImg1,
+    randomImg2,
+    randomImg3,
+    randomImg4,
+    randomImg5,
   ];
   const images = [...distinctImages];
   while (images.length < 4) {
@@ -255,11 +263,11 @@ function JewelleryProductDetail() {
     "Alternate View",
   ];
 
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
+
   const handleBuyNow = async () => {
     if (!product.id) return;
-    if (!inCart) {
-      await addToCart.mutateAsync(product.id);
-    }
+    await addToCart.mutateAsync({ artworkId: product.id, quantity: selectedQuantity });
     nav({ to: "/checkout" });
   };
 
@@ -388,7 +396,7 @@ function JewelleryProductDetail() {
               </div>
               <div className="flex flex-col items-center gap-1">
                 <Truck size={18} className="text-[color:var(--gold)]" />
-                <span>Free Delivery</span>
+                <span>Free Delivery &gt; ₹999</span>
               </div>
               <div className="flex flex-col items-center gap-1">
                 <RotateCcw size={18} className="text-[color:var(--gold)]" />
@@ -428,30 +436,60 @@ function JewelleryProductDetail() {
 
             <hr className="border-hairline" />
 
-            {/* Quick Action Buttons (Add to Cart / Buy Now) */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                onClick={() => product.id && addToCart.mutate(product.id)}
-                disabled={addToCart.isPending || !product.id}
-                className="flex-1 cta-gold flex items-center justify-center gap-2 py-4 text-sm font-medium"
-              >
-                {inCart ? (
-                  <>
-                    <Check size={18} /> In Your Shopping Bag
-                  </>
-                ) : (
-                  <>
-                    <ShoppingBag size={18} /> Add to Cart
-                  </>
-                )}
-              </button>
+            {/* Quantity Selector & Action Buttons */}
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-3">
+                <span className="text-xs uppercase tracking-wider text-ink/70 font-medium">Quantity:</span>
+                <div className="flex items-center border border-hairline bg-paper">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedQuantity((q) => Math.max(1, q - 1))}
+                    className="w-9 h-9 flex items-center justify-center text-ink/70 hover:text-ink hover:bg-mist transition-colors"
+                    aria-label="Decrease quantity"
+                  >
+                    <Minus size={14} />
+                  </button>
+                  <span className="w-10 text-center text-sm font-mono font-semibold tabular-nums text-ink">
+                    {selectedQuantity}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedQuantity((q) => q + 1)}
+                    className="w-9 h-9 flex items-center justify-center text-ink/70 hover:text-ink hover:bg-mist transition-colors"
+                    aria-label="Increase quantity"
+                  >
+                    <Plus size={14} />
+                  </button>
+                </div>
+                <span className="text-[11px] text-muted-foreground">
+                  ({stock})
+                </span>
+              </div>
 
-              <button
-                onClick={handleBuyNow}
-                className="flex-1 cta-outline flex items-center justify-center gap-2 py-4 text-sm font-medium border-ink hover:bg-ink hover:text-paper"
-              >
-                Buy Now (Direct Checkout) →
-              </button>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={() => product.id && addToCart.mutate({ artworkId: product.id, quantity: selectedQuantity })}
+                  disabled={addToCart.isPending || !product.id}
+                  className="flex-1 cta-gold flex items-center justify-center gap-2 py-4 text-sm font-medium"
+                >
+                  {inCart ? (
+                    <>
+                      <Check size={18} /> In Your Shopping Bag
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingBag size={18} /> Add to Cart {selectedQuantity > 1 ? `(${selectedQuantity})` : ""}
+                    </>
+                  )}
+                </button>
+
+                <button
+                  onClick={handleBuyNow}
+                  className="flex-1 cta-outline flex items-center justify-center gap-2 py-4 text-sm font-medium border-ink hover:bg-ink hover:text-paper"
+                >
+                  Buy Now (Direct Checkout) →
+                </button>
+              </div>
             </div>
 
             {/* Optional Ring Size Selector */}
