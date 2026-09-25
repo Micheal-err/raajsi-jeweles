@@ -95,10 +95,14 @@ export function useAddToCart() {
 
       if (existing) {
         const newQty = (existing.quantity || 1) + addQty;
+        await supabase
+          .from("cart_items")
+          .delete()
+          .eq("user_id", user!.id)
+          .eq("artwork_id", artworkId);
         const { error } = await supabase
           .from("cart_items")
-          .update({ quantity: newQty })
-          .eq("id", existing.id);
+          .insert({ artwork_id: artworkId, user_id: user!.id, quantity: newQty });
         if (error) throw error;
       } else {
         const { error } = await supabase
@@ -123,20 +127,18 @@ export function useUpdateCartQuantity() {
   return useMutation({
     mutationFn: async ({ artworkId, quantity }: { artworkId: string; quantity: number }) => {
       if (!user) return;
-      if (quantity <= 0) {
-        const { error } = await supabase
+      const { error: delError } = await supabase
+        .from("cart_items")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("artwork_id", artworkId);
+      if (delError) throw delError;
+
+      if (quantity > 0) {
+        const { error: insError } = await supabase
           .from("cart_items")
-          .delete()
-          .eq("user_id", user.id)
-          .eq("artwork_id", artworkId);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase
-          .from("cart_items")
-          .update({ quantity })
-          .eq("user_id", user.id)
-          .eq("artwork_id", artworkId);
-        if (error) throw error;
+          .insert({ user_id: user.id, artwork_id: artworkId, quantity });
+        if (insError) throw insError;
       }
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["cart"] }),

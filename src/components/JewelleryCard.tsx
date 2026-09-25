@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Heart, ShoppingBag, Gem } from "lucide-react";
 import { resolveImage } from "@/lib/images";
 import { useFormatPrice } from "@/lib/currency-format";
@@ -46,13 +46,18 @@ const SUBCATEGORY_COLORS: Record<string, string> = {
   bracelets: "bg-rose-50 text-rose-800",
   earrings: "bg-violet-50 text-violet-800",
   bangles: "bg-emerald-50 text-emerald-800",
+  necklaces: "bg-teal-50 text-teal-800",
   pendants: "bg-orange-50 text-orange-800",
   anklets: "bg-pink-50 text-pink-800",
+  anklet: "bg-pink-50 text-pink-800",
   "nose rings": "bg-indigo-50 text-indigo-800",
+  "nose ring": "bg-indigo-50 text-indigo-800",
+  "nose pin": "bg-indigo-50 text-indigo-800",
   kadas: "bg-yellow-50 text-yellow-800",
 };
 
 export function JewelleryCard({ product }: { product: JewelleryProduct }) {
+  const navigate = useNavigate();
   const productId = product.id ?? "";
   const inCart = useIsInCart(productId);
   const wishlisted = useIsWishlisted(productId);
@@ -71,8 +76,19 @@ export function JewelleryCard({ product }: { product: JewelleryProduct }) {
     (product.metadata?.gallery_images && product.metadata.gallery_images.find((u) => u && u !== primaryImg)) ||
     null;
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    // If clicked on an interactive control (button or link), let it handle its own event
+    if ((e.target as HTMLElement).closest("button") || (e.target as HTMLElement).closest("a")) {
+      return;
+    }
+    navigate({ to: "/artworks/$slug", params: { slug: product.slug } });
+  };
+
   return (
-    <article className="jewellery-card group relative flex flex-col bg-paper border border-hairline overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+    <article
+      onClick={handleCardClick}
+      className="jewellery-card group relative flex flex-col bg-paper border border-hairline overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 cursor-pointer"
+    >
       {/* Image Container with 2-Angle Hover Effect */}
       <div className="relative overflow-hidden bg-mist aspect-square">
         <Link to="/artworks/$slug" params={{ slug: product.slug }} className="block w-full h-full relative">

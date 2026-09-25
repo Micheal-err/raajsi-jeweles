@@ -154,8 +154,21 @@ function CollectionPage() {
         const matchMat = (p.medium || p.metadata?.material || "").toLowerCase().includes(q);
         if (!matchTitle && !matchDesc && !matchMat) return false;
       }
-      if (activeSubcategory !== "All" && sub !== activeSubcategory.toLowerCase()) {
-        return false;
+      if (activeSubcategory !== "All") {
+        const target = activeSubcategory.toLowerCase();
+        let matches = sub === target;
+        if (target === "nose rings") {
+          matches = matches || sub.includes("nose") || p.title.toLowerCase().includes("nose");
+        } else if (target === "anklets") {
+          matches = matches || sub.includes("anklet") || sub.includes("payal") || p.title.toLowerCase().includes("anklet");
+        } else if (target === "necklaces") {
+          matches = matches || sub.includes("necklace") || sub.includes("choker");
+        } else if (target === "bangles") {
+          matches = matches || sub.includes("bangle");
+        } else if (target === "kadas") {
+          matches = matches || sub.includes("kada");
+        }
+        if (!matches) return false;
       }
       return true;
     });
@@ -164,7 +177,19 @@ function CollectionPage() {
   const displayedSilver = useMemo(() => filterList(silverProducts), [silverProducts, searchQuery, activeSubcategory]);
   const displayedHandcrafted = useMemo(() => filterList(handcraftedProducts), [handcraftedProducts, searchQuery, activeSubcategory]);
 
-  const SUBCATS = ["All", "Rings", "Chains", "Bracelets", "Earrings", "Bangles", "Necklaces", "Pendants", "Kadas"];
+  const SUBCATS = [
+    "All",
+    "Rings",
+    "Chains",
+    "Bracelets",
+    "Earrings",
+    "Bangles",
+    "Necklaces",
+    "Pendants",
+    "Anklets",
+    "Nose Rings",
+    "Kadas",
+  ];
 
   return (
     <div className="bg-paper text-ink pb-24">

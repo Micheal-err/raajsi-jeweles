@@ -20,6 +20,8 @@ const SUBCATEGORIES = [
   { value: "chains", label: "Chains" },
   { value: "bracelets", label: "Bracelets & Cuffs" },
   { value: "pendants", label: "Pendants" },
+  { value: "anklets", label: "Anklets (Payal)" },
+  { value: "nose-rings", label: "Nose Rings & Pins" },
   { value: "mangalsutra", label: "Mangalsutra & Sets" },
 ] as const;
 

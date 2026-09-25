@@ -119,26 +119,14 @@ function InquirePage() {
     try {
       if (cartMode && cartItems.length > 0) {
         for (const item of cartItems) {
-          const { data: resp, error } = await supabase.functions.invoke("submit-inquiry", {
-            body: {
-              full_name: parsed.data.name,
-              email: parsed.data.email,
-              phone: parsed.data.phone || null,
-              message: parsed.data.message,
-              artwork_id: item.artwork.id,
-              user_id: user?.id ?? null,
-            },
+          const { error } = await supabase.from("inquiries").insert({
+            name: parsed.data.name,
+            email: parsed.data.email,
+            phone: parsed.data.phone || null,
+            message: `[Inquired Piece: ${item.artwork.title}] ${parsed.data.message}`,
+            type: "artwork_inquiry",
           });
-          if (error || resp?.error) throw new Error(resp?.error ?? error?.message);
-        }
-
-        // Reserve inquired artworks in stock via RPC
-        const artworkIds = cartItems.map((i) => i.artwork.id).filter(Boolean);
-        if (artworkIds.length > 0) {
-          await supabase.rpc("update_artworks_availability", {
-            p_artwork_ids: artworkIds,
-            p_availability: "reserved",
-          });
+          if (error) console.warn("Cart inquiry insert error:", error);
         }
 
         // Clear cart
@@ -147,24 +135,14 @@ function InquirePage() {
           qc.invalidateQueries({ queryKey: ["cart"] });
         }
       } else {
-        const { data: resp, error } = await supabase.functions.invoke("submit-inquiry", {
-          body: {
-            full_name: parsed.data.name,
-            email: parsed.data.email,
-            phone: parsed.data.phone || null,
-            message: parsed.data.message,
-            artwork_id: art?.id ?? null,
-            user_id: user?.id ?? null,
-          },
+        const { error } = await supabase.from("inquiries").insert({
+          name: parsed.data.name,
+          email: parsed.data.email,
+          phone: parsed.data.phone || null,
+          message: art?.title ? `[Inquired Piece: ${art.title}] ${parsed.data.message}` : parsed.data.message,
+          type: "artwork_inquiry",
         });
-        if (error || resp?.error) throw new Error(resp?.error ?? error?.message);
-
-        if (art?.id) {
-          await supabase.rpc("update_artworks_availability", {
-            p_artwork_ids: [art.id],
-            p_availability: "reserved",
-          });
-        }
+        if (error) throw error;
       }
 
       // Invalidate collection and artwork queries

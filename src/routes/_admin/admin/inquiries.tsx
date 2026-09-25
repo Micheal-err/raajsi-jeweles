@@ -23,9 +23,12 @@ function InquiriesPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("inquiries")
-        .select("*,artworks(id,slug,title)")
+        .select("*")
         .order("created_at", { ascending: false });
-      if (error) throw error;
+      if (error) {
+        console.error("Admin inquiries fetch error:", error);
+        throw error;
+      }
       return data ?? [];
     },
   });
@@ -79,7 +82,7 @@ function InquiriesPage() {
       ) : filtered.length === 0 ? (
         <p className="text-sm text-muted-foreground py-20 text-center">No inquiries found.</p>
       ) : (
-        <div className="border border-hairline bg-paper rounded-sm overflow-hidden">
+        <div className="border border-hairline bg-paper rounded-sm overflow-hidden shadow-sm">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-hairline bg-mist/50">
@@ -93,10 +96,10 @@ function InquiriesPage() {
                   Name
                 </th>
                 <th className="text-left px-4 py-3 text-[10px] tracking-[0.18em] uppercase text-muted-foreground font-medium">
-                  Email
+                  Contact
                 </th>
                 <th className="text-left px-4 py-3 text-[10px] tracking-[0.18em] uppercase text-muted-foreground font-medium">
-                  Artwork
+                  Type / Subject
                 </th>
                 <th className="text-left px-4 py-3 text-[10px] tracking-[0.18em] uppercase text-muted-foreground font-medium">
                   Status
@@ -136,9 +139,7 @@ function InquiryRow({
     phone: string | null;
     message: string;
     status: string;
-    source_page: string | null;
-    type: string;
-    artworks: { id: string; slug: string; title: string } | null;
+    type?: string;
   };
 
   return (
@@ -150,18 +151,23 @@ function InquiryRow({
         <td className="px-4 py-3 text-muted-foreground">
           {new Date(i.created_at).toLocaleDateString("en-IN", { dateStyle: "medium" })}
         </td>
-        <td className="px-4 py-3 font-medium">{i.name}</td>
-        <td className="px-4 py-3">
-          <a href={`mailto:${i.email}`} className="text-blue-600 hover:underline">
-            {i.email}
-          </a>
+        <td className="px-4 py-3 font-medium">{i.name || "Customer"}</td>
+        <td className="px-4 py-3 space-y-0.5">
+          <div>
+            <a href={`mailto:${i.email}`} className="text-blue-600 hover:underline text-xs">
+              {i.email}
+            </a>
+          </div>
+          {i.phone && (
+            <div className="text-[11px] text-muted-foreground">
+              Tel: {i.phone}
+            </div>
+          )}
         </td>
         <td className="px-4 py-3">
-          {i.artworks ? (
-            <span className="italic font-serif">{i.artworks.title}</span>
-          ) : (
-            <span className="text-muted-foreground">General</span>
-          )}
+          <span className="text-[10px] uppercase tracking-wider bg-mist px-2 py-0.5 rounded text-ink/75 font-mono">
+            {i.type || "Inquiry"}
+          </span>
         </td>
         <td className="px-4 py-3">
           <select
@@ -202,39 +208,31 @@ function InquiryRow({
               <div className="space-y-3">
                 <div>
                   <div className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground mb-1">
-                    Contact
+                    Contact & Direct Reply
                   </div>
-                  <p>
-                    {i.name} ·{" "}
-                    <a href={`mailto:${i.email}`} className="text-blue-600">
+                  <p className="font-medium text-ink">
+                    {i.name}
+                  </p>
+                  <p className="mt-1">
+                    Email:{" "}
+                    <a href={`mailto:${i.email}`} className="text-blue-600 hover:underline">
                       {i.email}
                     </a>
                   </p>
-                  {i.phone && <p>Phone: {i.phone}</p>}
+                  {i.phone && (
+                    <div className="mt-1.5 flex flex-wrap items-center gap-3">
+                      <span>Phone: {i.phone}</span>
+                      <a
+                        href={`https://wa.me/${i.phone.replace(/[^0-9]/g, "")}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-emerald-700 hover:underline font-medium inline-flex items-center gap-1"
+                      >
+                        Reply on WhatsApp →
+                      </a>
+                    </div>
+                  )}
                 </div>
-                {i.source_page && (
-                  <div>
-                    <div className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground mb-1">
-                      Source
-                    </div>
-                    <p>{i.source_page}</p>
-                  </div>
-                )}
-                {i.artworks && (
-                  <div>
-                    <div className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground mb-1">
-                      Related artwork
-                    </div>
-                    <a
-                      href={`/artworks/${i.artworks.slug}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1 text-blue-600 hover:underline"
-                    >
-                      {i.artworks.title} <ExternalLink size={11} />
-                    </a>
-                  </div>
-                )}
               </div>
             </div>
           </td>

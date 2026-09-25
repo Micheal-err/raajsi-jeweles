@@ -114,6 +114,15 @@ export const Route = createFileRoute("/artworks/$slug")({
       ],
     };
   },
+  errorComponent: () => (
+    <div className="container-editorial py-24 text-center space-y-4">
+      <h2 className="font-serif text-2xl text-ink">Jewellery Collection</h2>
+      <p className="text-sm text-muted-foreground">Unable to load this piece right now.</p>
+      <Link to="/collection" className="inline-block cta-gold text-xs px-6 py-2.5">
+        Explore Collections
+      </Link>
+    </div>
+  ),
   component: JewelleryProductDetail,
 });
 
@@ -132,35 +141,60 @@ function JewelleryProductDetail() {
     queryKey: ["jewellery-product", slug],
     staleTime: 300_000,
     gcTime: 1_800_000,
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("artworks")
-        .select("*")
-        .eq("slug", slug)
-        .maybeSingle();
-      if (!error && data) return data as unknown as JewelleryProduct;
-      return MOCK_JEWELLERY_PRODUCTS.find((p) => p.slug === slug) ?? null;
+    queryFn: async (): Promise<JewelleryProduct> => {
+      const cleanSlug = decodeURIComponent(slug).trim().toLowerCase();
+      try {
+        const { data, error } = await supabase
+          .from("artworks")
+          .select("*")
+          .eq("slug", cleanSlug)
+          .maybeSingle();
+        if (!error && data) return data as unknown as JewelleryProduct;
+
+        // Try case-insensitive ilike match
+        const { data: ilikeData } = await supabase
+          .from("artworks")
+          .select("*")
+          .ilike("slug", cleanSlug)
+          .maybeSingle();
+        if (ilikeData) return ilikeData as unknown as JewelleryProduct;
+      } catch (err) {
+        console.warn("Product fetch from Supabase:", err);
+      }
+
+      // Fallback: match in MOCK_JEWELLERY_PRODUCTS
+      const found = MOCK_JEWELLERY_PRODUCTS.find(
+        (p) => p.slug.toLowerCase() === cleanSlug || p.id?.toLowerCase() === cleanSlug
+      );
+      if (found) return found;
+
+      const partialMatch = MOCK_JEWELLERY_PRODUCTS.find(
+        (p) => cleanSlug.includes(p.slug) || p.slug.includes(cleanSlug)
+      );
+      return partialMatch || MOCK_JEWELLERY_PRODUCTS[0];
     },
   });
 
-  const product = productQuery.data;
+  const product = productQuery.data || MOCK_JEWELLERY_PRODUCTS[0];
 
   // Fetch related items
   const relatedQuery = useQuery({
     enabled: !!product,
     queryKey: ["related-jewellery", product?.id],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("artworks")
-        .select("id,slug,title,medium,story,primary_image_url,availability,display_price,price,metadata")
-        .neq("slug", slug)
-        .limit(4);
-      if (!error && data && data.length > 0) return (data as unknown) as JewelleryProduct[];
+      try {
+        const { data, error } = await supabase
+          .from("artworks")
+          .select("id,slug,title,medium,story,primary_image_url,availability,display_price,price,metadata")
+          .neq("slug", slug)
+          .limit(4);
+        if (!error && data && data.length > 0) return (data as unknown) as JewelleryProduct[];
+      } catch {}
       return MOCK_JEWELLERY_PRODUCTS.filter((p) => p.slug !== slug).slice(0, 4);
     },
   });
 
-  if (productQuery.isLoading) {
+  if (productQuery.isLoading && !product) {
     return (
       <div className="container-editorial py-32 flex justify-center items-center">
         <div className="text-sm tracking-widest uppercase text-ink/40 animate-pulse">
@@ -169,8 +203,6 @@ function JewelleryProductDetail() {
       </div>
     );
   }
-
-  if (!product) throw notFound();
 
   // ── Product JSON-LD (injected client-side for dynamic product data) ──
   const productJsonLd = {
@@ -218,7 +250,9 @@ function JewelleryProductDetail() {
     },
   };
 
-  const inCart = (cart.data ?? []).some((item) => item.artwork.slug === slug);
+  const inCart = (cart.data ?? []).some(
+    (item) => item?.artwork?.slug === slug || (product?.id && item?.artwork_id === product.id)
+  );
 
   // Extract structured jewellery fields from metadata or fallback defaults
   const meta = product.metadata ?? {};
@@ -468,22 +502,19 @@ function JewelleryProductDetail() {
 
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
+                  type="button"
                   onClick={() => product.id && addToCart.mutate({ artworkId: product.id, quantity: selectedQuantity })}
                   disabled={addToCart.isPending || !product.id}
                   className="flex-1 cta-gold flex items-center justify-center gap-2 py-4 text-sm font-medium"
                 >
-                  {inCart ? (
-                    <>
-                      <Check size={18} /> In Your Shopping Bag
-                    </>
-                  ) : (
-                    <>
-                      <ShoppingBag size={18} /> Add to Cart {selectedQuantity > 1 ? `(${selectedQuantity})` : ""}
-                    </>
-                  )}
+                  <ShoppingBag size={18} />
+                  {inCart
+                    ? `Add More To Bag (+${selectedQuantity})`
+                    : `Add to Cart ${selectedQuantity > 1 ? `(${selectedQuantity})` : ""}`}
                 </button>
 
                 <button
+                  type="button"
                   onClick={handleBuyNow}
                   className="flex-1 cta-outline flex items-center justify-center gap-2 py-4 text-sm font-medium border-ink hover:bg-ink hover:text-paper"
                 >
@@ -495,11 +526,8 @@ function JewelleryProductDetail() {
             {/* Optional Ring Size Selector */}
             {isRing && (
               <div className="p-4 bg-mist/30 border border-hairline flex flex-col gap-2">
-                <label className="text-xs font-semibold uppercase tracking-wider text-ink/70 flex justify-between">
-                  <span>Select Ring Size (Indian Standard)</span>
-                  <a href="#size-guide" className="text-[color:var(--gold)] underline lowercase font-normal">
-                    size guide
-                  </a>
+                <label className="text-xs font-semibold uppercase tracking-wider text-ink/70">
+                  Select Ring Size (Indian Standard)
                 </label>
                 <div className="flex flex-wrap gap-2 pt-1">
                   {ringSizeOptions.map((sz: string) => (

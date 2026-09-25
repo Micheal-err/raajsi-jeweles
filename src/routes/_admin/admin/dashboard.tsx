@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -48,7 +48,7 @@ function DashboardPage() {
           .order("created_at", { ascending: false }),
         supabase
           .from("inquiries")
-          .select("id,status,created_at")
+          .select("id,name,email,message,status,created_at")
           .order("created_at", { ascending: false }),
         supabase.from("artworks").select("id,availability,stock_quantity"),
         supabase
@@ -58,7 +58,14 @@ function DashboardPage() {
       ]);
       return {
         orders: (orders.data ?? []) as unknown as OrderRow[],
-        inquiries: inquiries.data ?? [],
+        inquiries: (inquiries.data ?? []) as unknown as {
+          id: string;
+          name: string;
+          email: string;
+          message: string;
+          status: string;
+          created_at: string;
+        }[],
         artworks: (artworks.data ?? []) as unknown as { id: string; availability: string }[],
         subscribers: (subscribers.data ?? []) as Subscriber[],
       };
@@ -151,7 +158,12 @@ function DashboardPage() {
         <div className="border border-hairline bg-paper rounded-sm">
           <div className="px-5 py-4 border-b border-hairline flex items-center justify-between">
             <h2 className="font-serif text-lg">Recent Inquiries</h2>
-            <span className="text-xs text-muted-foreground">{d?.inquiries.length ?? 0} total</span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-muted-foreground">{d?.inquiries.length ?? 0} total</span>
+              <Link to="/admin/inquiries" className="text-xs text-[color:var(--gold)] hover:underline font-medium">
+                View all →
+              </Link>
+            </div>
           </div>
           <div className="divide-y divide-hairline">
             {recentInquiries.length === 0 ? (
@@ -161,7 +173,18 @@ function DashboardPage() {
             ) : (
               recentInquiries.map((i) => (
                 <div key={i.id} className="px-5 py-3 flex items-center justify-between text-sm">
-                  <span className="font-mono text-xs">#{i.id.slice(0, 8).toUpperCase()}</span>
+                  <div className="min-w-0 pr-3">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-xs text-muted-foreground">#{i.id.slice(0, 8).toUpperCase()}</span>
+                      <span className="font-medium text-ink truncate">{i.name || "Customer"}</span>
+                      <span className="text-[11px] text-muted-foreground">
+                        {new Date(i.created_at).toLocaleDateString("en-IN", { dateStyle: "short" })}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground truncate mt-0.5 max-w-sm">
+                      {i.message || i.email || "Inquiry received"}
+                    </p>
+                  </div>
                   <StatusBadge status={i.status} />
                 </div>
               ))
