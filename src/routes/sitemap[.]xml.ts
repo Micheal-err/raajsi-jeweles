@@ -11,17 +11,15 @@ export const Route = createFileRoute("/sitemap.xml")({
         const now = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
         const entries: { path: string; changefreq?: string; priority?: string; lastmod?: string }[] = [
-          { path: "/", changefreq: "weekly", priority: "1.0", lastmod: now },
+          { path: "/", changefreq: "daily", priority: "1.0", lastmod: now },
           { path: "/collection", changefreq: "daily", priority: "0.9", lastmod: now },
-          { path: "/collection?category=sterling-silver", changefreq: "daily", priority: "0.85", lastmod: now },
-          { path: "/collection?category=handcrafted", changefreq: "daily", priority: "0.85", lastmod: now },
-          { path: "/about", changefreq: "monthly", priority: "0.7", lastmod: "2026-09-01" },
-          { path: "/contact", changefreq: "monthly", priority: "0.7", lastmod: "2026-09-01" },
-          { path: "/policies/terms", changefreq: "yearly", priority: "0.3", lastmod: "2026-09-01" },
-          { path: "/policies/privacy", changefreq: "yearly", priority: "0.3", lastmod: "2026-09-01" },
-          { path: "/policies/shipping", changefreq: "yearly", priority: "0.4", lastmod: "2026-09-01" },
-          { path: "/policies/returns", changefreq: "yearly", priority: "0.4", lastmod: "2026-09-01" },
-          { path: "/policies/faqs", changefreq: "monthly", priority: "0.5", lastmod: "2026-09-01" },
+          { path: "/about", changefreq: "monthly", priority: "0.7", lastmod: "2026-09-26" },
+          { path: "/contact", changefreq: "monthly", priority: "0.7", lastmod: "2026-09-26" },
+          { path: "/policies/shipping", changefreq: "monthly", priority: "0.6", lastmod: now },
+          { path: "/policies/returns", changefreq: "monthly", priority: "0.6", lastmod: "2026-09-26" },
+          { path: "/policies/faqs", changefreq: "weekly", priority: "0.6", lastmod: now },
+          { path: "/policies/privacy", changefreq: "yearly", priority: "0.4", lastmod: "2026-09-26" },
+          { path: "/policies/terms", changefreq: "yearly", priority: "0.4", lastmod: "2026-09-26" },
         ];
 
         try {

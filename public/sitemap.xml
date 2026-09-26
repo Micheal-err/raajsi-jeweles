@@ -2,69 +2,57 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.raajsijewels.com/</loc>
-    <lastmod>2026-09-25</lastmod>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.raajsijewels.com/collection</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/collection?category=sterling-silver</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/collection?category=handcrafted</loc>
-    <lastmod>2026-09-25</lastmod>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.raajsijewels.com/about</loc>
-    <lastmod>2026-09-23</lastmod>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.raajsijewels.com/contact</loc>
-    <lastmod>2026-09-23</lastmod>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.raajsijewels.com/policies/terms</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.4</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/policies/privacy</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.4</priority>
-  </url>
-  <url>
     <loc>https://www.raajsijewels.com/policies/shipping</loc>
-    <lastmod>2026-09-25</lastmod>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.raajsijewels.com/policies/returns</loc>
-    <lastmod>2026-09-23</lastmod>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.raajsijewels.com/policies/faqs</loc>
-    <lastmod>2026-09-25</lastmod>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.raajsijewels.com/policies/privacy</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.raajsijewels.com/policies/terms</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://www.raajsijewels.com/artworks/the-orbit-set</loc>
@@ -72,7 +60,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/img-0836-1790271397584.png</image:loc>
+      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/img-0836-1790271397584-1790316976312.webp</image:loc>
       <image:title>The Orbit Set</image:title>
     </image:image>
   </url>
@@ -82,7 +70,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/img-0824-1790270483001.png</image:loc>
+      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/img-0824-1790345701264.png</image:loc>
       <image:title>The Ribbon Bow Necklace</image:title>
     </image:image>
   </url>
@@ -92,7 +80,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/img-0820-1790269937934.png</image:loc>
+      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/img-0818-1790269943881-1790317950751.webp</image:loc>
       <image:title>The Antler Pendant Necklace</image:title>
     </image:image>
   </url>
@@ -111,6 +99,10 @@
     <lastmod>2026-09-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/blue-bracelet-3-1790268523209-1790318281979.webp</image:loc>
+      <image:title>The Blue Link Bracelet</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.raajsijewels.com/artworks/the-statement-stone-ring</loc>
@@ -118,7 +110,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/d43d2a4a-c98c-429b-8ba3-56056c-1790267688000.png</image:loc>
+      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/d43d2a4a-c98c-429b-8ba3-56056c-1790346046511.webp</image:loc>
       <image:title>The Statement Stone Ring</image:title>
     </image:image>
   </url>
@@ -128,7 +120,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/3b8db298-27b0-42f9-b6ce-65069d-1790266266795.png</image:loc>
+      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/3b8db298-27b0-42f9-b6ce-65069d-1790347962650.webp</image:loc>
       <image:title>The Leaf &amp; Wrap Ring</image:title>
     </image:image>
   </url>
@@ -138,7 +130,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/blue-stone-nose-ring-1790264631387.png</image:loc>
+      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/blue-stone-1790265075831-1790346185248.webp</image:loc>
       <image:title>Mini Bloom Nose Pin</image:title>
     </image:image>
   </url>
@@ -168,7 +160,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/8115323e-7f14-4456-b567-053382-1790261900243.png</image:loc>
+      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/8115323e-7f14-4456-b567-053382-1790345624276.webp</image:loc>
       <image:title>The Ivy Bracelet | Deep Purple</image:title>
     </image:image>
   </url>
@@ -178,7 +170,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/7aa48582-d108-438d-b719-dffdc1-1790259558027.png</image:loc>
+      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/2b1c17e1-b48a-4fe1-a8f4-ef0538-1790345840472.webp</image:loc>
       <image:title>The Ivy bracelet | Red</image:title>
     </image:image>
   </url>
@@ -188,170 +180,8 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/1b1b43b0-18a4-4606-a0ca-5d2aaa-1790258061090.png</image:loc>
+      <image:loc>https://hchtqjxuqdcnwyacqlph.supabase.co/storage/v1/object/public/product-images/products/98b6e812-411c-42cf-ab28-c521d8-1790346491665.webp</image:loc>
       <image:title>The Ivy Bracelet | Green</image:title>
     </image:image>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/royal-solitaire-kundan-ring</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/mens-regal-gold-signet-ring</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/unisex-hammered-silver-band</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/heritage-gold-rope-chain</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/mens-heavy-box-silver-chain</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/womens-delicate-pearl-gold-chain</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/kundan-filigree-cuff-bracelet</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/mens-braided-leather-gold-clasp-bracelet</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/unisex-silver-curb-link-bracelet</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/jaipur-kundan-jhumka-earrings</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/polki-chandbali-royal-earrings</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/unisex-diamond-solitaire-studs</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/meenakari-enamel-gold-bangle-set</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/silver-filigree-chudi-bangles</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/unisex-solid-silver-gokharu-bangle</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/emerald-cut-kundan-gold-pendant</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/mens-gold-om-swastik-pendant</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/unisex-silver-yantra-locket-pendant</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/traditional-silver-ghungroo-payal</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/delicate-gold-chain-anklet</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/unisex-black-thread-silver-anklet</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/bridal-pearl-kundan-nath</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/minimal-gold-septum-ring</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/unisex-silver-clip-on-nose-pin</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/mens-heavy-22k-gold-rajputi-kada</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/mens-solid-silver-faceted-kada</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.raajsijewels.com/artworks/unisex-copper-silver-dual-tone-kada</loc>
-    <lastmod>2026-09-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
 </urlset>
