@@ -59,7 +59,7 @@ export async function uploadProductImage(file: File): Promise<UploadResult> {
   let { data, error } = await defaultClient.storage
     .from(BUCKET_NAME)
     .upload(filePath, file, {
-      cacheControl: "3600",
+      cacheControl: "31536000",
       upsert: true,
       contentType: file.type,
     });
@@ -72,7 +72,7 @@ export async function uploadProductImage(file: File): Promise<UploadResult> {
       const adminResult = await admin.storage
         .from(BUCKET_NAME)
         .upload(filePath, file, {
-          cacheControl: "3600",
+          cacheControl: "31536000",
           upsert: true,
           contentType: file.type,
         });

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Heart, ShoppingBag, Gem } from "lucide-react";
-import { resolveImage } from "@/lib/images";
+import { resolveImage, getOptimizedImageUrl, getImageSrcSet } from "@/lib/images";
 import { useFormatPrice } from "@/lib/currency-format";
 import { useAddToCart, useIsInCart, useIsWishlisted, useToggleWishlist } from "@/hooks/useCommerce";
 
@@ -93,19 +93,29 @@ export function JewelleryCard({ product }: { product: JewelleryProduct }) {
       <div className="relative overflow-hidden bg-mist aspect-square">
         <Link to="/artworks/$slug" params={{ slug: product.slug }} className="block w-full h-full relative">
           <img
-            src={resolveImage(primaryImg)}
+            src={getOptimizedImageUrl(primaryImg, 640)}
+            srcSet={getImageSrcSet(primaryImg) || undefined}
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            width={640}
+            height={640}
             alt={product.title}
             className={`w-full h-full object-cover object-center transition-all duration-700 ease-out ${
               secondaryImg ? "group-hover:opacity-0 group-hover:scale-105" : "group-hover:scale-105"
             }`}
             loading="lazy"
+            decoding="async"
           />
           {secondaryImg && (
             <img
-              src={resolveImage(secondaryImg)}
+              src={getOptimizedImageUrl(secondaryImg, 640)}
+              srcSet={getImageSrcSet(secondaryImg) || undefined}
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              width={640}
+              height={640}
               alt={`${product.title} alternate angle`}
               className="absolute inset-0 w-full h-full object-cover object-center opacity-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
               loading="lazy"
+              decoding="async"
             />
           )}
         </Link>

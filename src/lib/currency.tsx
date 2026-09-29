@@ -76,13 +76,49 @@ type Ctx = {
 const CurrencyContext = createContext<Ctx | null>(null);
 
 const STORAGE_KEY = "kalaneri.currency";
+const RATES_CACHE_KEY = "raajsi.exchange_rates_cache";
+const CACHE_TTL_MS = 12 * 60 * 60 * 1000; // 12 hours
+
+function getCachedRates(): { rates: Record<Currency, number>; isFresh: boolean } | null {
+  try {
+    const raw = localStorage.getItem(RATES_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (parsed && parsed.rates && typeof parsed.timestamp === "number") {
+      const isFresh = Date.now() - parsed.timestamp < CACHE_TTL_MS;
+      return { rates: parsed.rates, isFresh };
+    }
+  } catch {}
+  return null;
+}
+
+function saveCachedRates(rates: Record<Currency, number>) {
+  try {
+    localStorage.setItem(
+      RATES_CACHE_KEY,
+      JSON.stringify({ rates, timestamp: Date.now() })
+    );
+  } catch {}
+}
 
 export function CurrencyProvider({ children }: { children: ReactNode }) {
   const [currency, setCurrencyState] = useState<Currency>("INR");
-  const [rates, setRates] = useState<Record<Currency, number>>(DEFAULT_RATES);
+  const [rates, setRates] = useState<Record<Currency, number>>(() => {
+    const cached = getCachedRates();
+    if (cached) {
+      liveRates = cached.rates;
+      return cached.rates;
+    }
+    return DEFAULT_RATES;
+  });
 
-  // Fetch real-time exchange rates on app load
+  // Fetch real-time exchange rates on app load only when cache is stale or missing
   useEffect(() => {
+    const cached = getCachedRates();
+    if (cached && cached.isFresh) {
+      return;
+    }
+
     async function fetchRealtimeRates() {
       try {
         const res = await fetch("https://open.er-api.com/v6/latest/INR");
@@ -100,6 +136,7 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
           };
           liveRates = updated;
           setRates(updated);
+          saveCachedRates(updated);
         }
       } catch (e) {
         console.warn("Using fallback exchange rates:", e);

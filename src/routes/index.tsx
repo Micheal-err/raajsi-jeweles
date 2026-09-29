@@ -304,6 +304,8 @@ function Home() {
                   src={resolveImage(slide.image)}
                   alt={slide.titlePrefix}
                   loading={idx === 0 ? "eager" : "lazy"}
+                  fetchPriority={idx === 0 ? "high" : "auto"}
+                  decoding="async"
                   className={`w-full h-full object-cover object-center ${
                     isActive ? "scale-105" : "scale-100"
                   } transition-transform duration-[8000ms]`}
@@ -415,7 +417,7 @@ function Home() {
                       key={slide.id}
                       onClick={() => setSlideIndex(i)}
                       aria-label={`Slide ${i + 1}`}
-                      className="group relative py-2 focus:outline-none"
+                      className="group relative py-2 focus:outline-none before:absolute before:-inset-3 before:content-['']"
                     >
                       <div
                         className={`h-1.5 rounded-full transition-all duration-300 relative overflow-hidden ${
@@ -981,6 +983,7 @@ function Home() {
                   href="https://instagram.com/raajsi_official"
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="Raajsi Jewels on Instagram (@raajsi_official)"
                   className="p-3 border border-hairline hover:bg-mist text-ink text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 transition-colors rounded-xs"
                 >
                   <Instagram size={14} className="text-pink-600" />

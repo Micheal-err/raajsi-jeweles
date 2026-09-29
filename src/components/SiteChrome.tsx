@@ -313,7 +313,7 @@ export function SiteHeader() {
           >
             <Search size={18} />
           </button>
-          <Link to="/cart" className="relative p-1">
+          <Link to="/cart" aria-label="Cart" className="relative p-1">
             <ShoppingBag size={18} />
             {cartCount > 0 && <Badge n={cartCount} />}
           </Link>
@@ -588,7 +588,8 @@ export function SiteFooter() {
                   href="https://www.instagram.com/jewels_raajsi?stkn=NDZnM3dzeW13NXUz"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-ink transition-colors flex items-center gap-2 group"
+                  aria-label="Raajsi Jewels on Instagram (@jewels_raajsi)"
+                  className="text-muted-foreground hover:text-ink transition-colors flex items-center gap-2 group py-1"
                 >
                   <Instagram size={15} className="group-hover:text-[color:var(--gold)] transition-colors text-pink-600" />
                   <span>Instagram</span>
@@ -619,7 +620,7 @@ export function SiteFooter() {
                     href="https://wa.me/919829145129"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-ink hover:text-[color:var(--gold)] font-medium flex items-center gap-1.5 transition-colors text-xs"
+                    className="text-ink hover:text-[color:var(--gold)] font-medium inline-flex items-center gap-1.5 transition-colors text-xs py-1"
                   >
                     <MessageCircle size={14} className="text-emerald-600 shrink-0" />
                     <span>+91 98291 45129</span>
@@ -628,7 +629,7 @@ export function SiteFooter() {
                     href="https://wa.me/917014938562"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-ink hover:text-[color:var(--gold)] font-medium flex items-center gap-1.5 transition-colors text-xs"
+                    className="text-ink hover:text-[color:var(--gold)] font-medium inline-flex items-center gap-1.5 transition-colors text-xs py-1"
                   >
                     <Phone size={13} className="text-emerald-600 shrink-0" />
                     <span>+91 70149 38562</span>
