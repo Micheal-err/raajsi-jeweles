@@ -251,6 +251,7 @@ export const Route = createFileRoute("/policies/$doc")({
         { name: "twitter:title", content: title },
         { name: "twitter:description", content: description },
         { name: "twitter:image", content: defaultOgImage() },
+        { name: "twitter:site", content: "@jewels_raajsi" },
       ],
       links: [{ rel: "canonical", href: url }],
       scripts,

@@ -32,8 +32,7 @@ export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       {
-        title:
-          "About Raajsi Jewels — Handcrafted Jewellery Brand from Jaipur, India | Our Story",
+        title: "About Raajsi Jewels — Jaipur Jewellery Brand, Our Story",
       },
       {
         name: "description",
@@ -70,6 +69,7 @@ export const Route = createFileRoute("/about")({
           "Handcrafted jewellery inspired by Indian craftsmanship & modern elegance. Since 2009.",
       },
       { name: "twitter:image", content: defaultOgImage() },
+      { name: "twitter:site", content: "@jewels_raajsi" },
     ],
     links: [{ rel: "canonical", href: canonical("/about") }],
     scripts: [

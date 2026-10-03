@@ -67,6 +67,7 @@ export const Route = createFileRoute("/contact")({
           "Call, WhatsApp, or email us. Visit our Jaipur atelier.",
       },
       { name: "twitter:image", content: defaultOgImage() },
+      { name: "twitter:site", content: "@jewels_raajsi" },
     ],
     links: [{ rel: "canonical", href: canonical("/contact") }],
     scripts: [

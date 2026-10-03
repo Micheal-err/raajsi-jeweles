@@ -92,58 +92,25 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       meta: [
         { charSet: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
+        // Default title — overridden by each child route's head()
         {
-          title:
-            "Raajsi Jewels — Buy 925 Sterling Silver & Handcrafted Jewellery Online | Jaipur, India",
+          title: "925 Silver Jewellery Online, Made in Jaipur | Raajsi Jewels",
         },
         {
           name: "description",
           content:
-            "Shop exquisite 925 Sterling Silver & Handcrafted Jewellery online from Raajsi Jewels, Jaipur. BIS Hallmark certified. Free delivery on all orders. 7 days exchange. Kundan, Polki, Meenakari & more.",
+            "Shop handcrafted 925 sterling silver jewellery from Jaipur. Kundan, Meenakari & more. Free delivery above Rs 999, 7-day exchange.",
         },
         { name: "author", content: SITE_NAME },
-        {
-          name: "keywords",
-          content:
-            "raajsi jewels, 925 sterling silver jewellery, handcrafted jewellery jaipur, buy silver jewellery online india, fine jewellery jaipur, kundan jewellery, polki jewellery, meenakari jewellery, BIS hallmark jewellery, silver bracelet online, handcrafted earrings india",
-        },
         {
           name: "robots",
           content:
             "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
         },
-        {
-          property: "og:title",
-          content:
-            "Raajsi Jewels — Buy 925 Sterling Silver & Handcrafted Jewellery Online | Jaipur",
-        },
-        {
-          property: "og:description",
-          content:
-            "Shop exquisite 925 Sterling Silver & Handcrafted Jewellery from Jaipur. BIS Hallmark certified. Free delivery on all orders.",
-        },
-        { property: "og:type", content: "website" },
-        { property: "og:url", content: SITE_URL },
-        { property: "og:image", content: defaultOgImage() },
-        { property: "og:image:width", content: "1200" },
-        { property: "og:image:height", content: "630" },
-        {
-          property: "og:image:alt",
-          content: "Raajsi Jewels — Timeless Luxury Jewellery from Jaipur",
-        },
         { property: "og:site_name", content: SITE_NAME },
         { property: "og:locale", content: SITE_LOCALE },
         { name: "twitter:card", content: "summary_large_image" },
-        {
-          name: "twitter:title",
-          content: "Raajsi Jewels — Fine Jewellery from Jaipur, India",
-        },
-        {
-          name: "twitter:description",
-          content:
-            "925 Sterling Silver & Handcrafted Jewellery. BIS Hallmark certified. Free delivery on all orders.",
-        },
-        { name: "twitter:image", content: defaultOgImage() },
+        { name: "twitter:site", content: "@jewels_raajsi" },
         { name: "theme-color", content: "#fdfaf5" },
         { name: "apple-mobile-web-app-capable", content: "yes" },
         {
@@ -151,12 +118,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           content: "default",
         },
         { name: "apple-mobile-web-app-title", content: SITE_NAME },
+        // Google Search Console ownership verification
+        { name: "google-site-verification", content: "google2313616d507f1207" },
       ],
       links: [
         { rel: "stylesheet", href: appCss },
         { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
         { rel: "apple-touch-icon", href: "/logo.png" },
-        { rel: "canonical", href: SITE_URL },
+        // NOTE: canonical is NOT set here — each route sets its own per-page canonical.
         {
           rel: "preconnect",
           href: "https://ldkrcpdsutebayruhrjg.supabase.co",

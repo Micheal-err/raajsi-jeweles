@@ -44,45 +44,50 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title:
-          "Raajsi Jewels — Buy 925 Sterling Silver & Handcrafted Jewellery Online | Jaipur, India",
+        title: "925 Silver Jewellery Online, Made in Jaipur | Raajsi Jewels",
       },
       {
         name: "description",
         content:
-          "Shop 925 Sterling Silver & Handcrafted Jewellery online from Raajsi Jewels, Jaipur. BIS Hallmark certified. Free delivery above ₹999. 7 days exchange. We make customized jewellery with reference too.",
+          "Shop handcrafted 925 sterling silver jewellery from Jaipur. Kundan, Meenakari & more. Free delivery above Rs 999, 7-day exchange.",
       },
       {
         name: "keywords",
         content:
-          "raajsi jewels, buy 925 sterling silver jewellery online, handcrafted jewellery jaipur, customized jewellery jaipur, fine jewellery india, BIS hallmark silver jewellery, kundan polki meenakari",
+          "raajsi jewels, buy 925 sterling silver jewellery online, handcrafted jewellery jaipur, kundan jewellery, meenakari jewellery, silver jewellery india",
       },
       {
         property: "og:title",
-        content:
-          "Raajsi Jewels — Buy 925 Sterling Silver & Handcrafted Jewellery | Jaipur",
+        content: "925 Silver Jewellery Online, Made in Jaipur | Raajsi Jewels",
       },
       {
         property: "og:description",
         content:
-          "Two distinctive collections: refined Sterling Silver 925 and artistic Handcrafted Jewels. Free delivery above ₹999. We make customized jewellery with reference too.",
+          "Shop handcrafted 925 sterling silver jewellery from Jaipur. Kundan, Meenakari & more. Free delivery above Rs 999, 7-day exchange.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: canonical("/") },
       { property: "og:image", content: defaultOgImage() },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
       { property: "og:site_name", content: SITE_NAME },
       { property: "og:locale", content: SITE_LOCALE },
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "twitter:title",
-        content: "Raajsi Jewels — 925 Silver & Handcrafted Jewellery | Jaipur",
+        content: "925 Silver Jewellery Online, Made in Jaipur | Raajsi Jewels",
       },
       {
         name: "twitter:description",
         content:
-          "Shop BIS Hallmark certified jewellery. Free delivery above ₹999. 7 days exchange. We make customized jewellery with reference too.",
+          "Shop handcrafted 925 sterling silver jewellery from Jaipur. Kundan, Meenakari & more. Free delivery above Rs 999, 7-day exchange.",
       },
       { name: "twitter:image", content: defaultOgImage() },
+      { name: "twitter:site", content: "@jewels_raajsi" },
+      {
+        name: "robots",
+        content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      },
     ],
     links: [{ rel: "canonical", href: canonical("/") }],
     scripts: [

@@ -90,6 +90,7 @@ export const Route = createFileRoute("/artworks/$slug")({
           content: `Buy ${formattedTitle}. BIS Hallmark certified. Free delivery on all orders.`,
         },
         { name: "twitter:image", content: defaultOgImage() },
+        { name: "twitter:site", content: "@jewels_raajsi" },
       ],
       links: [
         {

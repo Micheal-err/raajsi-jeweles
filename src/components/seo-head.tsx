@@ -1,5 +1,10 @@
 /**
- * SEO Structured Data (JSON-LD) helpers for Raajsi Jewels.
+ * SEO helpers for Raajsi Jewels.
+ *
+ * – canonical()   : returns absolute, www-host, tracking-param-free URL
+ * – pageMeta()    : returns a consistent { title, description, og, twitter } head object
+ * – JSON-LD generators: organizationSchema, webSiteSchema, localBusinessSchema,
+ *   productSchema, breadcrumbSchema, faqSchema, itemListSchema
  *
  * Generates schema.org JSON-LD markup consumed by Google, Bing, and
  * social crawlers for rich-snippet rendering in search results.
@@ -38,6 +43,9 @@ export const BUSINESS_INFO = {
   foundingDate: "2009",
   priceRange: "₹₹",
   sameAs: [
+    // TODO(human): Confirm the canonical Instagram handle.
+    // Footer uses @jewels_raajsi; task spec says https://www.instagram.com/raajsijewels/
+    // Using the handle confirmed in the codebase footer until human verifies.
     "https://www.instagram.com/jewels_raajsi",
     "https://www.facebook.com/share/1QEN2B3By5/",
   ],
@@ -45,14 +53,81 @@ export const BUSINESS_INFO = {
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
-/** Returns the canonical absolute URL for a given path */
-export function canonical(path: string): string {
-  return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
+/**
+ * Returns the canonical absolute URL for a given path.
+ * Always uses the www host and strips known tracking parameters.
+ */
+export function canonical(path: string, searchParams?: URLSearchParams): string {
+  const TRACKING_PARAMS = new Set([
+    "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
+    "ref", "fbclid", "gclid", "gad_source", "msclkid",
+  ]);
+  let cleanPath = path.startsWith("/") ? path : `/${path}`;
+
+  if (searchParams) {
+    const clean = new URLSearchParams();
+    searchParams.forEach((value, key) => {
+      if (!TRACKING_PARAMS.has(key)) clean.set(key, value);
+    });
+    const qs = clean.toString();
+    if (qs) cleanPath = `${cleanPath}?${qs}`;
+  }
+
+  return `${SITE_URL}${cleanPath}`;
 }
 
 /** Returns the default OG image URL (brand banner) */
 export function defaultOgImage(): string {
   return `${SITE_URL}/og-image.png`;
+}
+
+/**
+ * Generates a complete, consistent head meta block for a page.
+ * Use this instead of hand-writing title/description/og/twitter on every route.
+ *
+ * @param opts.title        Page title (≤60 chars recommended)
+ * @param opts.description  Page description (150-160 chars recommended)
+ * @param opts.path         Canonical URL path (e.g. "/collection")
+ * @param opts.ogType       OG type — default "website"
+ * @param opts.ogImage      OG image URL — defaults to defaultOgImage()
+ * @param opts.noIndex      Set to true to add noindex (e.g., 404 pages)
+ */
+export function pageMeta(opts: {
+  title: string;
+  description: string;
+  path: string;
+  ogType?: string;
+  ogImage?: string;
+  noIndex?: boolean;
+}) {
+  const url = canonical(opts.path);
+  const image = opts.ogImage ?? defaultOgImage();
+  const robotsContent = opts.noIndex
+    ? "noindex, nofollow"
+    : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
+
+  return {
+    meta: [
+      { title: opts.title },
+      { name: "description", content: opts.description },
+      { name: "robots", content: robotsContent },
+      { property: "og:title", content: opts.title },
+      { property: "og:description", content: opts.description },
+      { property: "og:type", content: opts.ogType ?? "website" },
+      { property: "og:url", content: url },
+      { property: "og:image", content: image },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:site_name", content: SITE_NAME },
+      { property: "og:locale", content: SITE_LOCALE },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: opts.title },
+      { name: "twitter:description", content: opts.description },
+      { name: "twitter:image", content: image },
+      { name: "twitter:site", content: "@jewels_raajsi" },
+    ],
+    links: [{ rel: "canonical", href: url }],
+  };
 }
 
 // ── Schema Generators ────────────────────────────────────────────────

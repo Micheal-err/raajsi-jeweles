@@ -8,6 +8,8 @@ Allow: /about
 Allow: /contact
 Allow: /artworks/
 Allow: /policies/
+Allow: /jewellery/
+Allow: /blog/
 
 # Disallow private/authenticated paths
 Disallow: /admin/
@@ -19,6 +21,15 @@ Disallow: /orders
 Disallow: /wishlist
 Disallow: /inquire
 Disallow: /api/
+Disallow: /museum
+
+# Disallow URL parameter pollution
+Disallow: /*?q=*
+Disallow: /*?sort=*
+Disallow: /*?filter=*
+Disallow: /*?page=*
+Disallow: /*?ref=*
+Disallow: /*?utm_*
 
 # Sitemap
 Sitemap: https://www.raajsijewels.com/sitemap.xml
