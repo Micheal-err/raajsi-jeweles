@@ -30,6 +30,26 @@ async function generate() {
     { path: '/policies/faqs', changefreq: 'weekly', priority: '0.6', lastmod: today },
     { path: '/policies/privacy', changefreq: 'yearly', priority: '0.4', lastmod: '2026-09-26' },
     { path: '/policies/terms', changefreq: 'yearly', priority: '0.4', lastmod: '2026-09-26' },
+
+    // Category pages (task5)
+    { path: '/jewellery/silver-earrings', changefreq: 'weekly', priority: '0.85', lastmod: today },
+    { path: '/jewellery/necklace-sets', changefreq: 'weekly', priority: '0.85', lastmod: today },
+    { path: '/jewellery/bracelets-bangles', changefreq: 'weekly', priority: '0.85', lastmod: today },
+    { path: '/jewellery/anklets', changefreq: 'weekly', priority: '0.85', lastmod: today },
+    { path: '/jewellery/rings', changefreq: 'weekly', priority: '0.85', lastmod: today },
+    { path: '/jewellery/nose-pins', changefreq: 'weekly', priority: '0.85', lastmod: today },
+    { path: '/jewellery/mangalsutra', changefreq: 'weekly', priority: '0.85', lastmod: today },
+    { path: '/jewellery/jaipur-handmade-silver', changefreq: 'weekly', priority: '0.85', lastmod: today },
+    { path: '/jewellery/meenakari', changefreq: 'weekly', priority: '0.85', lastmod: today },
+    { path: '/jewellery/kundan', changefreq: 'weekly', priority: '0.85', lastmod: today },
+
+    // Blog pages (task11)
+    { path: '/blog', changefreq: 'weekly', priority: '0.7', lastmod: today },
+    { path: '/blog/how-to-check-if-silver-is-real-925', changefreq: 'monthly', priority: '0.6', lastmod: today },
+    { path: '/blog/925-silver-vs-pure-silver', changefreq: 'monthly', priority: '0.6', lastmod: today },
+    { path: '/blog/does-sterling-silver-tarnish-and-how-to-clean-it', changefreq: 'monthly', priority: '0.6', lastmod: today },
+    { path: '/blog/is-silver-jewellery-safe-for-daily-wear', changefreq: 'monthly', priority: '0.6', lastmod: today },
+    { path: '/blog/meenakari-vs-kundan-vs-polki-explained', changefreq: 'monthly', priority: '0.6', lastmod: today },
   ];
 
   const products = [];

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <!-- Core pages -->
   <url>
     <loc>https://www.raajsijewels.com/</loc>
     <lastmod>2026-10-03</lastmod>
@@ -55,8 +54,6 @@
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
-
-  <!-- Category pages (task5) -->
   <url>
     <loc>https://www.raajsijewels.com/jewellery/silver-earrings</loc>
     <lastmod>2026-10-03</lastmod>
@@ -117,8 +114,6 @@
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
-
-  <!-- Blog pages (task11) -->
   <url>
     <loc>https://www.raajsijewels.com/blog</loc>
     <lastmod>2026-10-03</lastmod>
@@ -133,30 +128,28 @@
   </url>
   <url>
     <loc>https://www.raajsijewels.com/blog/925-silver-vs-pure-silver</loc>
-    <lastmod>2026-10-05</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.raajsijewels.com/blog/does-sterling-silver-tarnish-and-how-to-clean-it</loc>
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.raajsijewels.com/blog/is-silver-jewellery-safe-for-daily-wear</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.raajsijewels.com/blog/meenakari-vs-kundan-vs-polki-explained</loc>
-    <lastmod>2026-10-20</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-
-  <!-- Product pages (from Supabase — regenerated at build time) -->
   <url>
     <loc>https://www.raajsijewels.com/artworks/green-sunburst-stone-earrings</loc>
     <lastmod>2026-09-28</lastmod>

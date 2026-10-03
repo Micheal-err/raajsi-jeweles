@@ -289,8 +289,8 @@ function CategoryPage() {
         .order("created_at", { ascending: false })
         .limit(48);
       if (!error && data && data.length > 0) {
-        const kws = meta.keywords.map((k) => k.toLowerCase());
-        const filtered = (data as unknown as JewelleryProduct[]).filter((p) => {
+        const kws = meta.keywords.map((k: string) => k.toLowerCase());
+        const filtered = (data as unknown as JewelleryProduct[]).filter((p: JewelleryProduct) => {
           const fields = [
             p.title,
             p.medium,
@@ -300,17 +300,17 @@ function CategoryPage() {
           ]
             .join(" ")
             .toLowerCase();
-          return kws.some((kw) => fields.includes(kw));
+          return kws.some((kw: string) => fields.includes(kw));
         });
         return filtered.length > 0 ? filtered : (data as unknown as JewelleryProduct[]);
       }
       // Fallback: filter mock data
-      const kws = meta.keywords.map((k) => k.toLowerCase());
-      return MOCK_JEWELLERY_PRODUCTS.filter((p) => {
+      const kws = meta.keywords.map((k: string) => k.toLowerCase());
+      return MOCK_JEWELLERY_PRODUCTS.filter((p: JewelleryProduct) => {
         const fields = [p.title, p.medium, p.metadata?.subcategory ?? ""]
           .join(" ")
           .toLowerCase();
-        return kws.some((kw) => fields.includes(kw));
+        return kws.some((kw: string) => fields.includes(kw));
       });
     },
   });
@@ -413,11 +413,12 @@ function CategoryPage() {
         <h2 className="font-serif text-xl text-ink mb-6">Browse Other Categories</h2>
         <div className="flex flex-wrap gap-2">
           {Object.values(CATEGORIES)
-            .filter((c) => c.slug !== meta.slug)
-            .map((c) => (
+            .filter((c: CategoryMeta) => c.slug !== meta.slug)
+            .map((c: CategoryMeta) => (
               <Link
                 key={c.slug}
-                to="/jewellery/$category"
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                to={("/jewellery/$category") as any}
                 params={{ category: c.slug }}
                 className="text-xs px-4 py-2 border border-hairline hover:border-[color:var(--gold)] hover:text-[color:var(--gold)] transition-colors rounded-xs"
               >

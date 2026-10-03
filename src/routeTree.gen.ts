@@ -36,7 +36,10 @@ import { Route as AuthenticatedWishlistRouteImport } from './routes/_authenticat
 import { Route as ArtistsIndexRouteImport } from './routes/artists.index'
 import { Route as ArtistsSlugRouteImport } from './routes/artists.$slug'
 import { Route as ArtworksSlugRouteImport } from './routes/artworks.$slug'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ExhibitionsSlugRouteImport } from './routes/exhibitions.$slug'
+import { Route as JewelleryCategoryRouteImport } from './routes/jewellery.$category'
 import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
 import { Route as PoliciesDocRouteImport } from './routes/policies.$doc'
 import { Route as AdminAdminAcquisitionsRouteImport } from './routes/_admin/admin/acquisitions'
@@ -181,10 +184,25 @@ const ArtworksSlugRoute = ArtworksSlugRouteImport.update({
   path: '/artworks/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExhibitionsSlugRoute = ExhibitionsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => ExhibitionsRoute,
+} as any)
+const JewelleryCategoryRoute = JewelleryCategoryRouteImport.update({
+  id: '/jewellery/$category',
+  path: '/jewellery/$category',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const JournalSlugRoute = JournalSlugRouteImport.update({
   id: '/$slug',
@@ -262,10 +280,13 @@ export interface FileRoutesByFullPath {
   '/wishlist': typeof AuthenticatedWishlistRoute
   '/artists/$slug': typeof ArtistsSlugRoute
   '/artworks/$slug': typeof ArtworksSlugRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/exhibitions/$slug': typeof ExhibitionsSlugRoute
+  '/jewellery/$category': typeof JewelleryCategoryRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/policies/$doc': typeof PoliciesDocRoute
   '/artists/': typeof ArtistsIndexRoute
+  '/blog/': typeof BlogIndexRoute
   '/admin/acquisitions': typeof AdminAdminAcquisitionsRoute
   '/admin/appointments': typeof AdminAdminAppointmentsRoute
   '/admin/artists': typeof AdminAdminArtistsRoute
@@ -300,10 +321,13 @@ export interface FileRoutesByTo {
   '/wishlist': typeof AuthenticatedWishlistRoute
   '/artists/$slug': typeof ArtistsSlugRoute
   '/artworks/$slug': typeof ArtworksSlugRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/exhibitions/$slug': typeof ExhibitionsSlugRoute
+  '/jewellery/$category': typeof JewelleryCategoryRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/policies/$doc': typeof PoliciesDocRoute
   '/artists': typeof ArtistsIndexRoute
+  '/blog': typeof BlogIndexRoute
   '/admin/acquisitions': typeof AdminAdminAcquisitionsRoute
   '/admin/appointments': typeof AdminAdminAppointmentsRoute
   '/admin/artists': typeof AdminAdminArtistsRoute
@@ -341,10 +365,13 @@ export interface FileRoutesById {
   '/_authenticated/wishlist': typeof AuthenticatedWishlistRoute
   '/artists/$slug': typeof ArtistsSlugRoute
   '/artworks/$slug': typeof ArtworksSlugRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/exhibitions/$slug': typeof ExhibitionsSlugRoute
+  '/jewellery/$category': typeof JewelleryCategoryRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/policies/$doc': typeof PoliciesDocRoute
   '/artists/': typeof ArtistsIndexRoute
+  '/blog/': typeof BlogIndexRoute
   '/_admin/admin/acquisitions': typeof AdminAdminAcquisitionsRoute
   '/_admin/admin/appointments': typeof AdminAdminAppointmentsRoute
   '/_admin/admin/artists': typeof AdminAdminArtistsRoute
@@ -381,10 +408,13 @@ export interface FileRouteTypes {
     | '/wishlist'
     | '/artists/$slug'
     | '/artworks/$slug'
+    | '/blog/$slug'
     | '/exhibitions/$slug'
+    | '/jewellery/$category'
     | '/journal/$slug'
     | '/policies/$doc'
     | '/artists/'
+    | '/blog/'
     | '/admin/acquisitions'
     | '/admin/appointments'
     | '/admin/artists'
@@ -419,10 +449,13 @@ export interface FileRouteTypes {
     | '/wishlist'
     | '/artists/$slug'
     | '/artworks/$slug'
+    | '/blog/$slug'
     | '/exhibitions/$slug'
+    | '/jewellery/$category'
     | '/journal/$slug'
     | '/policies/$doc'
     | '/artists'
+    | '/blog'
     | '/admin/acquisitions'
     | '/admin/appointments'
     | '/admin/artists'
@@ -459,10 +492,13 @@ export interface FileRouteTypes {
     | '/_authenticated/wishlist'
     | '/artists/$slug'
     | '/artworks/$slug'
+    | '/blog/$slug'
     | '/exhibitions/$slug'
+    | '/jewellery/$category'
     | '/journal/$slug'
     | '/policies/$doc'
     | '/artists/'
+    | '/blog/'
     | '/_admin/admin/acquisitions'
     | '/_admin/admin/appointments'
     | '/_admin/admin/artists'
@@ -495,8 +531,11 @@ export interface RootRouteChildren {
   VisitRoute: typeof VisitRoute
   ArtistsSlugRoute: typeof ArtistsSlugRoute
   ArtworksSlugRoute: typeof ArtworksSlugRoute
+  BlogSlugRoute: typeof BlogSlugRoute
+  JewelleryCategoryRoute: typeof JewelleryCategoryRoute
   PoliciesDocRoute: typeof PoliciesDocRoute
   ArtistsIndexRoute: typeof ArtistsIndexRoute
+  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -690,12 +729,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArtworksSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/exhibitions/$slug': {
       id: '/exhibitions/$slug'
       path: '/$slug'
       fullPath: '/exhibitions/$slug'
       preLoaderRoute: typeof ExhibitionsSlugRouteImport
       parentRoute: typeof ExhibitionsRoute
+    }
+    '/jewellery/$category': {
+      id: '/jewellery/$category'
+      path: '/jewellery/$category'
+      fullPath: '/jewellery/$category'
+      preLoaderRoute: typeof JewelleryCategoryRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/journal/$slug': {
       id: '/journal/$slug'
@@ -860,8 +920,11 @@ const rootRouteChildren: RootRouteChildren = {
   VisitRoute: VisitRoute,
   ArtistsSlugRoute: ArtistsSlugRoute,
   ArtworksSlugRoute: ArtworksSlugRoute,
+  BlogSlugRoute: BlogSlugRoute,
+  JewelleryCategoryRoute: JewelleryCategoryRoute,
   PoliciesDocRoute: PoliciesDocRoute,
   ArtistsIndexRoute: ArtistsIndexRoute,
+  BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
