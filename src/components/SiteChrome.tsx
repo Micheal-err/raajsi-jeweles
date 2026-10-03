@@ -449,7 +449,7 @@ export function SiteFooter() {
     <>
       <TrustStrip />
       <footer className="border-t border-hairline bg-paper text-ink">
-        <div className="container-editorial py-16 grid gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="container-editorial py-16 grid gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {/* 1. Brand Info: RAAJSI, Timeless Luxury, Jaipur, Rajasthan, India */}
           <div className="space-y-3 sm:col-span-2 lg:col-span-1">
             <Link to="/" className="inline-block">
@@ -493,7 +493,7 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link to="/collection" className="text-muted-foreground hover:text-ink transition-colors">
-                  Collections
+                  All Collections
                 </Link>
               </li>
               <li>
@@ -515,8 +515,60 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link to="/blog" className="text-muted-foreground hover:text-ink transition-colors">
+                  Jewellery Blog
+                </Link>
+              </li>
+              <li>
                 <Link to="/contact" className="text-muted-foreground hover:text-ink transition-colors">
                   Contact Us
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* 2b. Category Links (crawlable <a href>) */}
+          <div>
+            <div className="eyebrow mb-3 text-ink font-semibold">Shop by Category</div>
+            <ul className="space-y-2.5 text-sm">
+              <li>
+                <Link to="/jewellery/$category" params={{ category: "silver-earrings" }} className="text-muted-foreground hover:text-ink transition-colors">
+                  Silver Earrings
+                </Link>
+              </li>
+              <li>
+                <Link to="/jewellery/$category" params={{ category: "necklace-sets" }} className="text-muted-foreground hover:text-ink transition-colors">
+                  Necklace Sets
+                </Link>
+              </li>
+              <li>
+                <Link to="/jewellery/$category" params={{ category: "bracelets-bangles" }} className="text-muted-foreground hover:text-ink transition-colors">
+                  Bracelets & Bangles
+                </Link>
+              </li>
+              <li>
+                <Link to="/jewellery/$category" params={{ category: "rings" }} className="text-muted-foreground hover:text-ink transition-colors">
+                  Rings
+                </Link>
+              </li>
+              <li>
+                <Link to="/jewellery/$category" params={{ category: "anklets" }} className="text-muted-foreground hover:text-ink transition-colors">
+                  Anklets (Payal)
+                </Link>
+              </li>
+              <li>
+                <Link to="/jewellery/$category" params={{ category: "nose-pins" }} className="text-muted-foreground hover:text-ink transition-colors">
+                  Nose Pins
+                </Link>
+              </li>
+              <li>
+                <Link to="/jewellery/$category" params={{ category: "kundan" }} className="text-muted-foreground hover:text-ink transition-colors">
+                  Kundan Jewellery
+                </Link>
+              </li>
+              <li>
+                <Link to="/jewellery/$category" params={{ category: "meenakari" }} className="text-muted-foreground hover:text-ink transition-colors">
+                  Meenakari Jewellery
                 </Link>
               </li>
             </ul>

@@ -14,8 +14,9 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/logo.png" />
     <link rel="apple-touch-icon" href="/logo.png" />
-    <!-- Preload LCP hero image -->
-    <link rel="preload" as="image" href="/src/assets/slider-5.webp" type="image/webp" fetchpriority="high" />
+    <!-- LCP image: hero image preload is handled inline in component via
+         loading="eager" fetchpriority="high" — no static preload link needed
+         because Vite hashes the filename at build time. -->
 
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://open.er-api.com" />
