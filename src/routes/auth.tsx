@@ -17,6 +17,7 @@ export const Route = createFileRoute("/auth")({
         content:
           "Sign in to view your orders, save items to your wishlist, and manage your Raajsi Jewels profile.",
       },
+      { name: "robots", content: "noindex, nofollow" },
       { property: "og:title", content: "Sign In & Account — Raajsi Jewels" },
       {
         property: "og:description",

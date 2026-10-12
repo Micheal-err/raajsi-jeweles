@@ -29,6 +29,7 @@ export const Route = createFileRoute("/_authenticated/checkout")({
         content:
           "Complete your jewellery purchase securely with insured delivery and BIS Hallmark Certificate on every piece.",
       },
+      { name: "robots", content: "noindex, nofollow" },
       { property: "og:title", content: "Checkout — Raajsi Jewels" },
       { property: "og:description", content: "Complete your jewellery purchase." },
     ],

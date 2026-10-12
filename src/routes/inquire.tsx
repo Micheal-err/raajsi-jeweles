@@ -27,7 +27,7 @@ export const Route = createFileRoute("/inquire")({
         content:
           "Inquire about acquiring jewellery from Raajsi Jewels, Jaipur. Personal response within one business day.",
       },
-      { name: "robots", content: "noindex, follow" },
+      { name: "robots", content: "noindex, nofollow" },
       { property: "og:title", content: "Inquire — Raajsi Jewels" },
       {
         property: "og:description",
@@ -35,7 +35,6 @@ export const Route = createFileRoute("/inquire")({
       },
       { property: "og:image", content: defaultOgImage() },
     ],
-    links: [{ rel: "canonical", href: canonical("/inquire") }],
   }),
   component: InquirePage,
 });

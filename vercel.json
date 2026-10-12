@@ -12,6 +12,11 @@
       "source": "/:path+/",
       "destination": "/:path+",
       "permanent": true
+    },
+    {
+      "source": "/(artists|exhibitions|journal|book-visit|commissions|resources|services|press|visit|compare|museum)(.*)",
+      "destination": "/collection",
+      "permanent": true
     }
   ],
   "headers": [
@@ -39,6 +44,12 @@
       "source": "/index.html",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/(auth|cart|checkout|profile|orders|wishlist|inquire|admin)(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
       ]
     }
   ],

@@ -10,6 +10,7 @@ export const Route = createFileRoute("/_authenticated/cart")({
     meta: [
       { title: "Your Cart — Raajsi Jewels" },
       { name: "description", content: "Review your selected jewellery pieces and proceed to secure checkout." },
+      { name: "robots", content: "noindex, nofollow" },
       { property: "og:title", content: "Your Cart — Raajsi Jewels" },
       { property: "og:description", content: "Review your jewellery shopping bag." },
     ],

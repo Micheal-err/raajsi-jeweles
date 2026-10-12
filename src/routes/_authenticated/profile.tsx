@@ -26,6 +26,7 @@ export const Route = createFileRoute("/_authenticated/profile")({
         name: "description",
         content: "Manage your collector profile, account preferences, and password.",
       },
+      { name: "robots", content: "noindex, nofollow" },
     ],
   }),
   component: ProfilePage,

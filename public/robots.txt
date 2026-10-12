@@ -1,18 +1,14 @@
-# Raajsi Jewels - Robots.txt
+# Raajsi Jewels — Robots.txt
 # https://www.raajsijewels.com
 
 User-agent: *
-Allow: /
-Allow: /collection
-Allow: /about
-Allow: /contact
-Allow: /artworks/
-Allow: /policies/
-Allow: /jewellery/
-Allow: /blog/
 
-# Disallow private/authenticated paths
-Disallow: /admin/
+# ── Crawlable public sections ─────────────────────────────────────────
+Allow: /
+Allow: /sitemap.xml
+Allow: /robots.txt
+
+# ── Private / user-specific paths ─────────────────────────────────────
 Disallow: /auth
 Disallow: /cart
 Disallow: /checkout
@@ -20,16 +16,34 @@ Disallow: /profile
 Disallow: /orders
 Disallow: /wishlist
 Disallow: /inquire
-Disallow: /api/
+Disallow: /admin/
 Disallow: /museum
+Disallow: /compare
+Disallow: /book-visit
+Disallow: /commissions
+Disallow: /resources
+Disallow: /services
+Disallow: /press
+Disallow: /visit
+Disallow: /api/
+Disallow: /artists
+Disallow: /exhibitions
+Disallow: /journal
 
-# Disallow URL parameter pollution
+# ── URL parameter pollution ────────────────────────────────────────────
+# Block category/filter query params on /collection to prevent duplicate indexing
+Disallow: /collection?*
+# Block internal search / filter query strings
 Disallow: /*?q=*
 Disallow: /*?sort=*
 Disallow: /*?filter=*
 Disallow: /*?page=*
 Disallow: /*?ref=*
-Disallow: /*?utm_*
+Disallow: /*?utm_source=*
+Disallow: /*?utm_medium=*
+Disallow: /*?utm_campaign=*
+Disallow: /*?fbclid=*
+Disallow: /*?gclid=*
 
-# Sitemap
+# ── Sitemap ──────────────────────────────────────────────────────────
 Sitemap: https://www.raajsijewels.com/sitemap.xml

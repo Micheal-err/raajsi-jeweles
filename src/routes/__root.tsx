@@ -174,6 +174,7 @@ function RootComponent() {
   }, [router, queryClient]);
   return (
     <QueryClientProvider client={queryClient}>
+      <HeadContent />
       <I18nProvider>
         <CurrencyProvider>
           <CompareProvider>

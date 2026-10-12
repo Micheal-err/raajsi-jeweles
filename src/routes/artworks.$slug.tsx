@@ -61,6 +61,10 @@ export const Route = createFileRoute("/artworks/$slug")({
           content: `${formattedTitle.toLowerCase()}, buy ${formattedTitle.toLowerCase()} online, raajsi jewels ${formattedTitle.toLowerCase()}, silver jewellery jaipur, handcrafted jewellery india`,
         },
         {
+          name: "robots",
+          content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+        },
+        {
           property: "og:title",
           content: `${formattedTitle} — Raajsi Jewels`,
         },

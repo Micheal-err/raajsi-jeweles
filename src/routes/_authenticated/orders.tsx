@@ -25,12 +25,13 @@ import randomImg1 from "@/assets/random-img-1.webp";
 export const Route = createFileRoute("/_authenticated/orders")({
   head: () => ({
     meta: [
-      { title: "My orders — Raajsi Jewels" },
+      { title: "My Orders — Raajsi Jewels" },
       {
         name: "description",
         content: "Order history and tracking for your Raajsi Jewels acquisitions.",
       },
-      { property: "og:title", content: "My orders" },
+      { name: "robots", content: "noindex, nofollow" },
+      { property: "og:title", content: "My Orders" },
       { property: "og:description", content: "Order history and tracking." },
     ],
   }),

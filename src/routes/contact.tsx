@@ -54,6 +54,8 @@ export const Route = createFileRoute("/contact")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: canonical("/contact") },
       { property: "og:image", content: defaultOgImage() },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
       { property: "og:site_name", content: SITE_NAME },
       { property: "og:locale", content: SITE_LOCALE },
       { name: "twitter:card", content: "summary_large_image" },
@@ -68,6 +70,10 @@ export const Route = createFileRoute("/contact")({
       },
       { name: "twitter:image", content: defaultOgImage() },
       { name: "twitter:site", content: "@jewels_raajsi" },
+      {
+        name: "robots",
+        content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      },
     ],
     links: [{ rel: "canonical", href: canonical("/contact") }],
     scripts: [
