@@ -16,40 +16,40 @@ function escapeXml(unsafe) {
 }
 
 async function generate() {
-  const today = new Date().toISOString().split('T')[0];
+  const today = '2026-10-24';
 
-  // High-value, strictly canonical static pages for Google Search Console
-  // Query parameters (e.g. ?category=...) are intentionally excluded to prevent duplicate canonical errors
+  // High-value, strictly canonical static pages with real content update dates
+  // (changefreq & priority dropped per Google Search Console guidelines)
   const staticPages = [
-    { path: '/', changefreq: 'daily', priority: '1.0', lastmod: today },
-    { path: '/collection', changefreq: 'daily', priority: '0.9', lastmod: today },
-    { path: '/about', changefreq: 'monthly', priority: '0.7', lastmod: '2026-09-26' },
-    { path: '/contact', changefreq: 'monthly', priority: '0.7', lastmod: '2026-09-26' },
-    { path: '/policies/shipping', changefreq: 'monthly', priority: '0.6', lastmod: today },
-    { path: '/policies/returns', changefreq: 'monthly', priority: '0.6', lastmod: '2026-09-26' },
-    { path: '/policies/faqs', changefreq: 'weekly', priority: '0.6', lastmod: today },
-    { path: '/policies/privacy', changefreq: 'yearly', priority: '0.4', lastmod: '2026-09-26' },
-    { path: '/policies/terms', changefreq: 'yearly', priority: '0.4', lastmod: '2026-09-26' },
+    { path: '/', lastmod: '2026-10-24' },
+    { path: '/collection', lastmod: '2026-10-24' },
+    { path: '/about', lastmod: '2026-09-26' },
+    { path: '/contact', lastmod: '2026-09-26' },
+    { path: '/policies/shipping', lastmod: '2026-09-26' },
+    { path: '/policies/returns', lastmod: '2026-09-26' },
+    { path: '/policies/faqs', lastmod: '2026-09-26' },
+    { path: '/policies/privacy', lastmod: '2026-09-26' },
+    { path: '/policies/terms', lastmod: '2026-09-26' },
 
-    // Category pages (task5)
-    { path: '/jewellery/silver-earrings', changefreq: 'weekly', priority: '0.85', lastmod: today },
-    { path: '/jewellery/necklace-sets', changefreq: 'weekly', priority: '0.85', lastmod: today },
-    { path: '/jewellery/bracelets-bangles', changefreq: 'weekly', priority: '0.85', lastmod: today },
-    { path: '/jewellery/anklets', changefreq: 'weekly', priority: '0.85', lastmod: today },
-    { path: '/jewellery/rings', changefreq: 'weekly', priority: '0.85', lastmod: today },
-    { path: '/jewellery/nose-pins', changefreq: 'weekly', priority: '0.85', lastmod: today },
-    { path: '/jewellery/mangalsutra', changefreq: 'weekly', priority: '0.85', lastmod: today },
-    { path: '/jewellery/jaipur-handmade-silver', changefreq: 'weekly', priority: '0.85', lastmod: today },
-    { path: '/jewellery/meenakari', changefreq: 'weekly', priority: '0.85', lastmod: today },
-    { path: '/jewellery/kundan', changefreq: 'weekly', priority: '0.85', lastmod: today },
+    // 10 Keyword-targeted category landing pages
+    { path: '/jewellery/silver-earrings', lastmod: '2026-10-24' },
+    { path: '/jewellery/necklace-sets', lastmod: '2026-10-24' },
+    { path: '/jewellery/bracelets-bangles', lastmod: '2026-10-24' },
+    { path: '/jewellery/anklets', lastmod: '2026-10-24' },
+    { path: '/jewellery/rings', lastmod: '2026-10-24' },
+    { path: '/jewellery/nose-pins', lastmod: '2026-10-24' },
+    { path: '/jewellery/mangalsutra', lastmod: '2026-10-24' },
+    { path: '/jewellery/jaipur-handmade-silver', lastmod: '2026-10-24' },
+    { path: '/jewellery/meenakari', lastmod: '2026-10-24' },
+    { path: '/jewellery/kundan', lastmod: '2026-10-24' },
 
-    // Blog pages (task11)
-    { path: '/blog', changefreq: 'weekly', priority: '0.7', lastmod: today },
-    { path: '/blog/how-to-check-if-silver-is-real-925', changefreq: 'monthly', priority: '0.6', lastmod: today },
-    { path: '/blog/925-silver-vs-pure-silver', changefreq: 'monthly', priority: '0.6', lastmod: today },
-    { path: '/blog/does-sterling-silver-tarnish-and-how-to-clean-it', changefreq: 'monthly', priority: '0.6', lastmod: today },
-    { path: '/blog/is-silver-jewellery-safe-for-daily-wear', changefreq: 'monthly', priority: '0.6', lastmod: today },
-    { path: '/blog/meenakari-vs-kundan-vs-polki-explained', changefreq: 'monthly', priority: '0.6', lastmod: today },
+    // Blog / Education pages
+    { path: '/blog', lastmod: '2026-10-24' },
+    { path: '/blog/how-to-check-if-silver-is-real-925', lastmod: '2026-10-01' },
+    { path: '/blog/925-silver-vs-pure-silver', lastmod: '2026-10-05' },
+    { path: '/blog/does-sterling-silver-tarnish-and-how-to-clean-it', lastmod: '2026-10-10' },
+    { path: '/blog/is-silver-jewellery-safe-for-daily-wear', lastmod: '2026-10-15' },
+    { path: '/blog/meenakari-vs-kundan-vs-polki-explained', lastmod: '2026-10-20' },
   ];
 
   const products = [];
@@ -71,7 +71,7 @@ async function generate() {
             products.push({
               slug: art.slug.trim(),
               title: art.title ? art.title.trim() : 'Raajsi Fine Jewellery',
-              lastmod: art.updated_at ? new Date(art.updated_at).toISOString().split('T')[0] : today,
+              lastmod: art.updated_at ? new Date(art.updated_at).toISOString().split('T')[0] : '2026-10-24',
               image: art.primary_image_url || null,
             });
           }
@@ -85,7 +85,7 @@ async function generate() {
     console.error('Error fetching Supabase products:', err.message);
   }
 
-  // Construct XML adhering to sitemap 0.9 and Google Image extension
+  // Construct XML adhering to standard sitemap 0.9 and Google Image extension
   const xmlLines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">',
@@ -95,8 +95,6 @@ async function generate() {
     xmlLines.push('  <url>');
     xmlLines.push(`    <loc>${BASE_URL}${page.path}</loc>`);
     xmlLines.push(`    <lastmod>${page.lastmod}</lastmod>`);
-    xmlLines.push(`    <changefreq>${page.changefreq}</changefreq>`);
-    xmlLines.push(`    <priority>${page.priority}</priority>`);
     xmlLines.push('  </url>');
   }
 
@@ -104,8 +102,6 @@ async function generate() {
     xmlLines.push('  <url>');
     xmlLines.push(`    <loc>${BASE_URL}/artworks/${encodeURIComponent(prod.slug)}</loc>`);
     xmlLines.push(`    <lastmod>${prod.lastmod || today}</lastmod>`);
-    xmlLines.push('    <changefreq>weekly</changefreq>');
-    xmlLines.push('    <priority>0.8</priority>');
     if (prod.image && prod.image.startsWith('http')) {
       xmlLines.push('    <image:image>');
       xmlLines.push(`      <image:loc>${escapeXml(prod.image)}</image:loc>`);

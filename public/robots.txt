@@ -5,10 +5,18 @@ User-agent: *
 
 # ── Crawlable public sections ─────────────────────────────────────────
 Allow: /
+Allow: /collection
+Allow: /jewellery/
+Allow: /artworks/
+Allow: /blog/
+Allow: /about
+Allow: /contact
+Allow: /policies/
 Allow: /sitemap.xml
 Allow: /robots.txt
 
-# ── Private / user-specific paths ─────────────────────────────────────
+# ── Private & user-specific paths ─────────────────────────────────────
+Disallow: /admin/
 Disallow: /auth
 Disallow: /cart
 Disallow: /checkout
@@ -16,34 +24,7 @@ Disallow: /profile
 Disallow: /orders
 Disallow: /wishlist
 Disallow: /inquire
-Disallow: /admin/
-Disallow: /museum
-Disallow: /compare
-Disallow: /book-visit
-Disallow: /commissions
-Disallow: /resources
-Disallow: /services
-Disallow: /press
-Disallow: /visit
 Disallow: /api/
-Disallow: /artists
-Disallow: /exhibitions
-Disallow: /journal
-
-# ── URL parameter pollution ────────────────────────────────────────────
-# Block category/filter query params on /collection to prevent duplicate indexing
-Disallow: /collection?*
-# Block internal search / filter query strings
-Disallow: /*?q=*
-Disallow: /*?sort=*
-Disallow: /*?filter=*
-Disallow: /*?page=*
-Disallow: /*?ref=*
-Disallow: /*?utm_source=*
-Disallow: /*?utm_medium=*
-Disallow: /*?utm_campaign=*
-Disallow: /*?fbclid=*
-Disallow: /*?gclid=*
 
 # ── Sitemap ──────────────────────────────────────────────────────────
 Sitemap: https://www.raajsijewels.com/sitemap.xml

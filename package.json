@@ -7,7 +7,7 @@
     "dev": "vite dev",
     "sitemap": "node scripts/generate-sitemap.cjs",
     "prebuild": "node scripts/generate-sitemap.cjs",
-    "build": "vite build",
+    "build": "vite build && node scripts/prerender.cjs && node scripts/generate-google-shopping-feed.cjs && node scripts/generate-sitemap.cjs",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
