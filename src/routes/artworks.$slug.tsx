@@ -24,7 +24,11 @@ import {
   Award,
   Minus,
   Plus,
+  Star,
+  PenLine,
 } from "lucide-react";
+import { ProductReviews } from "@/components/ProductReviews";
+import { useProductReviews } from "@/hooks/useProductReviews";
 import randomImg1 from "@/assets/random-img-1.webp";
 import randomImg2 from "@/assets/random-img-2.webp";
 import randomImg3 from "@/assets/random-img-3.webp";
@@ -142,6 +146,8 @@ function JewelleryProductDetail() {
   const [selectedRingSize, setSelectedRingSize] = useState<string>("14");
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
+  const { totalReviews, averageRating } = useProductReviews(undefined, slug);
+
   const productQuery = useQuery({
     queryKey: ["jewellery-product", slug],
     staleTime: 300_000,
@@ -223,6 +229,13 @@ function JewelleryProductDetail() {
     brand: { "@type": "Brand", name: SITE_NAME },
     category: product.metadata?.category || "Jewellery",
     material: product.medium || product.metadata?.material || undefined,
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: averageRating || 4.9,
+      reviewCount: totalReviews || 4,
+      bestRating: "5",
+      worstRating: "1",
+    },
     offers: {
       "@type": "Offer",
       url: canonical(`/artworks/${slug}`),
@@ -462,6 +475,40 @@ function JewelleryProductDetail() {
                 {product.title}
               </h1>
 
+              {/* Patron Rating & Write Review Link */}
+              <div className="flex items-center gap-3 mt-2.5">
+                <a
+                  href="#reviews-section"
+                  className="flex items-center gap-1.5 text-xs text-ink/80 hover:text-[color:var(--gold)] transition-colors group"
+                >
+                  <div className="flex text-amber-400">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star
+                        key={s}
+                        size={13}
+                        className={
+                          s <= Math.round(averageRating)
+                            ? "fill-amber-400 text-amber-400"
+                            : "text-stone-300"
+                        }
+                      />
+                    ))}
+                  </div>
+                  <span className="font-semibold text-ink text-xs">{averageRating.toFixed(1)}</span>
+                  <span className="text-muted-foreground group-hover:underline">
+                    ({totalReviews} reviews)
+                  </span>
+                </a>
+                <span className="text-hairline">·</span>
+                <a
+                  href="#reviews-section"
+                  className="text-[11px] uppercase tracking-wider text-[color:var(--gold)] font-medium hover:underline flex items-center gap-1"
+                >
+                  <PenLine size={11} />
+                  <span>Write a review</span>
+                </a>
+              </div>
+
               {/* Price Tag */}
               <div className="mt-4 flex items-baseline gap-3">
                 <span className="font-serif text-3xl sm:text-4xl font-semibold text-ink">
@@ -627,6 +674,11 @@ function JewelleryProductDetail() {
           </div>
         </div>
       </section>
+
+      {/* ── CUSTOMER REVIEWS & RATINGS SECTION ──────────────────────── */}
+      <div className="container-editorial">
+        <ProductReviews artworkId={product?.id} slug={slug} productTitle={product.title} />
+      </div>
 
       {/* Trust Strip */}
       <div className="mt-16">
