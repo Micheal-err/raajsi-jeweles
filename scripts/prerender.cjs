@@ -268,7 +268,9 @@ function buildHtmlPage(template, pageConfig) {
     </footer>
   `;
 
-  html = html.replace('<div id="root"></div>', `<div id="root">${rootContent}</div>`);
+  // Keep <div id="root"></div> completely empty so React mounts immediately (src/main.tsx checks if (!rootElement.innerHTML))
+  // Put semantic crawler fallback inside <noscript> so crawlers without JS still see full HTML
+  html = html.replace('<div id="root"></div>', `<div id="root"></div>\n    <noscript>${rootContent}</noscript>`);
   return html;
 }
 
