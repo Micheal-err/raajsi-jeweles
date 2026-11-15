@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Star,
   CheckCircle2,
@@ -68,7 +68,10 @@ export function ProductReviews({ artworkId, slug, productTitle }: ProductReviews
     setFormOpen(false);
   };
 
-  const authRedirectUrl = `/auth?next=${encodeURIComponent(path)}`;
+  const navigate = useNavigate();
+  const handleAuthRedirect = () => {
+    navigate({ to: "/auth", search: { next: path } });
+  };
 
   return (
     <section id="reviews-section" className="border-t border-hairline pt-16 mt-16 scroll-mt-24">
@@ -96,14 +99,14 @@ export function ProductReviews({ artworkId, slug, productTitle }: ProductReviews
                 <span>Write a Review</span>
               </button>
             ) : (
-              <Link
-                to="/auth"
-                search={{ next: path }}
+              <button
+                type="button"
+                onClick={handleAuthRedirect}
                 className="cta-gold text-xs px-6 py-3 inline-flex items-center gap-2 shadow-sm"
               >
                 <Lock size={14} />
                 <span>Sign In to Review</span>
-              </Link>
+              </button>
             )}
           </div>
         </div>
@@ -309,13 +312,13 @@ export function ProductReviews({ artworkId, slug, productTitle }: ProductReviews
               </div>
             </div>
           </div>
-          <Link
-            to="/auth"
-            search={{ next: path }}
+          <button
+            type="button"
+            onClick={handleAuthRedirect}
             className="cta-outline text-xs px-5 py-2.5 shrink-0"
           >
             Sign In to Review
-          </Link>
+          </button>
         </div>
       )}
 
@@ -338,14 +341,14 @@ export function ProductReviews({ artworkId, slug, productTitle }: ProductReviews
                 <span>Write the First Review</span>
               </button>
             ) : (
-              <Link
-                to="/auth"
-                search={{ next: path }}
+              <button
+                type="button"
+                onClick={handleAuthRedirect}
                 className="cta-gold text-xs px-6 py-2.5 inline-flex items-center gap-1.5"
               >
                 <Lock size={13} />
                 <span>Sign In &amp; Write Review</span>
-              </Link>
+              </button>
             )}
           </div>
         ) : (
