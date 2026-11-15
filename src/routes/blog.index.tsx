@@ -241,27 +241,33 @@ export const BLOG_POSTS = [
 export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: [
-      { title: "Jewellery Blog — Silver Care, Craft & Buying Guides | Raajsi" },
+      { title: "Jewellery Blog: Silver Guides & Care | Raajsi Jewels" },
       {
         name: "description",
         content:
-          "Learn about 925 sterling silver, Meenakari, Kundan jewellery, care tips and buying guides from Raajsi Jewels — Jaipur's handcrafted jewellery brand.",
+          "Learn about 925 sterling silver, Meenakari, Kundan jewellery, care tips and buying guides from Raajsi Jewels, Jaipur.",
       },
       {
         name: "robots",
         content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
       },
-      { property: "og:title", content: "Jewellery Blog | Raajsi Jewels, Jaipur" },
+      { property: "og:title", content: "Jewellery Blog: Silver Guides & Care | Raajsi Jewels" },
       {
         property: "og:description",
         content:
-          "Silver care guides, craft explainers and jewellery buying tips from Raajsi Jewels.",
+          "Learn about 925 sterling silver, Meenakari, Kundan jewellery, care tips and buying guides from Raajsi Jewels, Jaipur.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: canonical("/blog") },
       { property: "og:image", content: defaultOgImage() },
       { property: "og:site_name", content: SITE_NAME },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Jewellery Blog: Silver Guides & Care | Raajsi Jewels" },
+      {
+        name: "twitter:description",
+        content:
+          "Learn about 925 sterling silver, Meenakari, Kundan jewellery, care tips and buying guides from Raajsi Jewels, Jaipur.",
+      },
       { name: "twitter:site", content: "@jewels_raajsi" },
     ],
     links: [{ rel: "canonical", href: canonical("/blog") }],

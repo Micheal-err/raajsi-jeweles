@@ -21,62 +21,62 @@ function escapeHtml(str) {
 const CATEGORIES = {
   'silver-earrings': {
     h1: '925 Silver Earrings — Handcrafted in Jaipur',
-    title: '925 Silver Earrings | Raajsi Jewels, Jaipur',
-    desc: 'Buy 925 sterling silver earrings handcrafted in Jaipur. Studs, hoops, dangles & more. Free delivery above ₹999. 7-day exchange.',
+    title: 'Silver Earrings Online: Studs, Hoops & Jhumkas | Raajsi',
+    desc: 'Buy 925 sterling silver earrings handcrafted in Jaipur. Studs, hoops, jhumkas & drops for daily and festive wear. Free delivery above ₹999.',
     intro: 'Our 925 sterling silver earring collection brings together the best of Jaipur craftsmanship and contemporary design. Each pair is crafted from genuine 925 sterling silver — a standard that guarantees 92.5% pure silver content, providing lasting shine and durability for daily wear.',
   },
   'necklace-sets': {
-    h1: 'Silver Necklaces & Sets — Pure 925 Silver',
-    title: 'Silver Necklaces & Sets | Raajsi Jewels',
-    desc: 'Shop handcrafted 925 sterling silver necklaces, chokers & pendant sets from Jaipur. Authentic craftsmanship, free delivery above ₹999.',
+    h1: '925 Silver Necklace Sets — Handcrafted Jaipur Jewellery',
+    title: 'Silver Necklace Sets Online, Jaipur Made | Raajsi Jewels',
+    desc: 'Explore 925 silver necklace sets and pendants handcrafted in Jaipur. Elegant sets with matching earrings for gifting and festive wear.',
     intro: 'A necklace is the centrepiece of any jewellery ensemble. Our handcrafted silver necklace collection spans minimal everyday chains to statement collar pieces rooted in royal Rajasthani heritage.',
   },
   'bracelets-bangles': {
-    h1: '925 Silver Bracelets & Bangles',
-    title: '925 Silver Bracelets & Bangles | Raajsi Jewels',
-    desc: 'Explore handcrafted silver bracelets, cuffs and bangles for women. Genuine 925 sterling silver made in Jaipur. 7-day exchange.',
+    h1: '925 Silver Bracelets & Bangles — Made in Jaipur',
+    title: '925 Silver Bracelets & Bangles for Women | Raajsi Jewels',
+    desc: 'Shop 925 sterling silver bracelets and bangles handcrafted in Jaipur. Delicate chains to statement cuffs. Free delivery above ₹999.',
     intro: 'Adorn your wrists with handcrafted 925 sterling silver bracelets and bangles created in Jaipur. From delicate chain bracelets with gemstone charms to solid silver cuffs with intricate filigree.',
   },
   'anklets': {
-    h1: 'Silver Anklets (Payal) — 925 Sterling Silver',
-    title: '925 Silver Anklets (Payal) | Raajsi Jewels',
-    desc: 'Buy 925 sterling silver payal & anklets online. Delicate daily wear and bridal designs handcrafted in Jaipur. Free shipping above ₹999.',
+    h1: '925 Silver Anklets (Payal) — Handcrafted in Jaipur',
+    title: '925 Silver Anklets (Payal) for Women | Raajsi Jewels',
+    desc: 'Shop 925 sterling silver anklets and payal handcrafted in Jaipur. Dainty everyday and festive designs. Free delivery above ₹999.',
     intro: 'Anklets hold a cherished place in Indian jewellery tradition. At Raajsi Jewels, we reimagine the classic payal for the modern woman using 925 sterling silver.',
   },
   'rings': {
-    h1: 'Sterling Silver Rings — Handcrafted in Jaipur',
-    title: '925 Sterling Silver Rings | Raajsi Jewels',
-    desc: 'Handcrafted 925 sterling silver rings for women. Minimalist bands, gemstone rings & statement designs. Free shipping above ₹999.',
+    h1: '925 Silver Rings — Handcrafted Statement Rings from Jaipur',
+    title: '925 Silver Rings for Women Online | Raajsi Jewels',
+    desc: 'Shop 925 sterling silver rings for women: statement, stackable & adjustable designs handcrafted in Jaipur. Free delivery above ₹999.',
     intro: 'From minimalist stackable bands to bold cocktail rings featuring natural semi-precious gemstones, our 925 silver rings celebrate the art of Jaipur silversmithing.',
   },
   'nose-pins': {
-    h1: '925 Silver Nose Pins & Studs',
-    title: 'Silver Nose Pins & Studs | Raajsi Jewels',
-    desc: 'Shop genuine 925 silver nose pins, clips & studs. Non-allergic, skin-safe silver jewellery handcrafted by Jaipur artisans.',
+    h1: '925 Silver Nose Pins & Nose Rings — Raajsi Jewels',
+    title: 'Silver Nose Pins & Studs Online | Raajsi Jewels',
+    desc: 'Buy 925 sterling silver nose pins and studs handcrafted in Jaipur. Dainty floral and gemstone designs. Free delivery above ₹999.',
     intro: 'Our collection of 925 silver nose pins and studs offers versatile options for every preference — both pierced studs and clip-on styles.',
   },
   'mangalsutra': {
-    h1: 'Silver Mangalsutra — Contemporary & Traditional',
-    title: '925 Silver Mangalsutra Designs | Raajsi Jewels',
-    desc: 'Contemporary 925 sterling silver mangalsutra designs with auspicious black beads. BIS hallmark certified silver from Jaipur.',
+    h1: '925 Silver Mangalsutra — Modern & Traditional Designs',
+    title: 'Silver Mangalsutra Designs Online | Raajsi Jewels',
+    desc: 'Discover silver mangalsutra designs handcrafted in Jaipur. Traditional and modern styles in 925 sterling silver. Free delivery above ₹999.',
     intro: 'The mangalsutra is an eternal symbol of love and commitment. Our collection brings a modern silver perspective to this sacred ornament.',
   },
   'jaipur-handmade-silver': {
-    h1: 'Jaipur Handmade Silver Jewellery — Heritage Craft',
-    title: 'Jaipur Handmade Silver Jewellery | Raajsi Jewels',
-    desc: 'Authentic handmade 925 silver jewellery from Jaipur master karigars. Centuries of Rajasthani craft tradition in every piece.',
+    h1: 'Jaipur Handmade Silver Jewellery — Raajsi Jewels',
+    title: 'Handmade Silver Jewellery from Jaipur | Raajsi Jewels',
+    desc: 'Handmade 925 silver jewellery from Jaipur artisans. Traditional craft, modern designs, delivered across India. Free delivery above ₹999.',
     intro: 'Jaipur is globally celebrated as the jewel of India — home to generations of silversmiths who transform raw silver into wearable art.',
   },
   'meenakari': {
-    h1: 'Meenakari Silver Jewellery — Royal Enamel Art',
-    title: 'Meenakari Silver Jewellery | Raajsi Jewels Jaipur',
-    desc: 'Vibrant hand-enamelled Meenakari silver jewellery from Jaipur. Traditional Rajasthani artistry with genuine 925 sterling silver.',
+    h1: 'Meenakari Jewellery — Traditional Enamel Work from Jaipur',
+    title: 'Meenakari Silver Jewellery from Jaipur | Raajsi Jewels',
+    desc: 'Shop Meenakari jewellery handcrafted by Jaipur artisans. Colourful enamel work on 925 silver earrings, pendants and sets.',
     intro: 'Meenakari — the exquisite art of colouring and ornamenting the surface of metals by fusing brilliant mineral colours over intricate engravings.',
   },
   'kundan': {
-    h1: 'Kundan & Jadau Jewellery — Jaipur Heritage',
-    title: 'Kundan Jewellery Online | Raajsi Jewels Jaipur',
-    desc: 'Exquisite Kundan and Jadau style jewellery handcrafted in Jaipur. Regal heritage designs for weddings and festive occasions.',
+    h1: 'Kundan Jewellery — Handcrafted in Jaipur by Artisans',
+    title: 'Kundan Jewellery Online from Jaipur | Raajsi Jewels',
+    desc: 'Shop authentic Kundan jewellery from Jaipur. Bridal and festive sets, earrings and maang tikka with regal heritage designs.',
     intro: 'Kundan is one of the oldest forms of jewellery making in India, flourishing under royal Mughal and Rajput patronage in Rajasthan.',
   },
 };
@@ -92,7 +92,7 @@ const BLOGS = {
     content: 'Learn how to verify real 925 sterling silver at home with simple tests including the magnet test, hallmark stamp verification, ice melting test, and tarnish inspection.',
   },
   '925-silver-vs-pure-silver': {
-    title: '925 Silver vs Pure Silver: Differences Explained | Raajsi Jewels',
+    title: '925 Silver vs Pure Silver: Differences Explained | Raajsi',
     h1: '925 Sterling Silver vs Pure Silver (999): What Is the Difference?',
     desc: 'Learn the differences between 925 sterling silver and 999 pure silver. Understand why 925 silver is superior for wearable jewellery.',
     date: '2026-10-05',
@@ -100,7 +100,7 @@ const BLOGS = {
     content: 'Pure silver (999) is too soft for everyday wearable jewellery. Learn why 925 sterling silver (92.5% silver and 7.5% copper/alloys) gives the ideal strength and longevity.',
   },
   'does-sterling-silver-tarnish-and-how-to-clean-it': {
-    title: 'Does Sterling Silver Tarnish? How to Clean Silver | Raajsi Jewels',
+    title: 'Does Sterling Silver Tarnish? How to Clean Silver | Raajsi',
     h1: 'Does Sterling Silver Tarnish? Complete Guide to Cleaning Silver at Home',
     desc: 'Why genuine 925 silver tarnishes over time and how to restore its brilliant shine using simple household methods and silver polishing cloths.',
     date: '2026-10-10',
@@ -116,7 +116,7 @@ const BLOGS = {
     content: '925 sterling silver is hypoallergenic and skin-friendly. With proper care and avoidance of harsh chlorine or perfumes, it lasts for generations.',
   },
   'meenakari-vs-kundan-vs-polki-explained': {
-    title: 'Meenakari vs Kundan vs Polki: Differences Explained | Raajsi Jewels',
+    title: 'Meenakari vs Kundan vs Polki Explained | Raajsi Jewels',
     h1: 'Meenakari vs Kundan vs Polki: Understanding Jaipur Heritage Crafts',
     desc: 'Explore the key distinctions between Rajasthani Meenakari (enamelling), Kundan (glass stone setting), and Polki (uncut diamonds).',
     date: '2026-10-20',
@@ -128,63 +128,63 @@ const BLOGS = {
 // ── 3. STATIC CORE PAGES DEFINITIONS ────────────────────────────────────
 const CORE_PAGES = {
   '/': {
-    title: 'Raajsi Jewels — Buy 925 Sterling Silver & Handcrafted Jewellery Online | Jaipur, India',
+    title: '925 Silver Jewellery Online, Made in Jaipur | Raajsi Jewels',
     h1: '925 Sterling Silver & Handcrafted Fine Jewellery from Jaipur',
-    desc: 'Shop genuine 925 Sterling Silver & Handcrafted Fine Jewellery from Jaipur. BIS Hallmark certified, free delivery across India on orders above ₹999.',
+    desc: 'Shop genuine 925 sterling silver jewellery handcrafted in Jaipur. Earrings, rings, necklace sets & more. BIS hallmarked. Free delivery above ₹999.',
     intro: 'Welcome to Raajsi Jewels, where the royal silversmithing traditions of Jaipur meet contemporary elegance. Explore our collection of 925 sterling silver earrings, necklaces, bangles, rings, and anklets.',
   },
   '/collection': {
-    title: 'All Jewellery Collections — Handcrafted 925 Silver | Raajsi Jewels',
+    title: 'Shop 925 Silver Jewellery Collection | Raajsi Jewels',
     h1: 'Handcrafted 925 Sterling Silver & Fine Jewellery Collections',
-    desc: 'Explore handcrafted 925 sterling silver earrings, necklaces, bracelets, rings & anklets from Jaipur. Certified authenticity & premium craftsmanship.',
+    desc: 'Explore handcrafted 925 sterling silver earrings, necklaces, bracelets, rings & anklets from Jaipur. Certified purity, premium craftsmanship.',
     intro: 'Browse the full collection of artisanal silver jewellery from Raajsi Jewels Jaipur. Filter by category, metal, and style.',
   },
   '/about': {
-    title: 'Our Heritage & Craftsmanship | Raajsi Jewels Jaipur',
+    title: 'About Raajsi Jewels — Jaipur Jewellery Brand, Our Story',
     h1: 'Heritage, Artistry & Craftsmanship of Jaipur',
-    desc: 'Discover the story behind Raajsi Jewels. Handcrafted 925 sterling silver jewellery inspired by Jaipur royal heritage and timeless artisanship.',
+    desc: 'Discover Raajsi Jewels: handcrafted 925 sterling silver and artisanal jewellery from Jaipur since 2009. BIS hallmarked purity and royal heritage.',
     intro: 'Born in the royal city of Jaipur, Raajsi Jewels is dedicated to keeping alive the traditional techniques of hand-carving, filigree, Meenakari, and Kundan craft.',
   },
   '/contact': {
-    title: 'Contact Us & Studio Location | Raajsi Jewels Jaipur',
+    title: 'Contact Raajsi Jewels: Phone & WhatsApp | Jaipur',
     h1: 'Contact Raajsi Jewels — We Are Here to Assist You',
-    desc: 'Get in touch with Raajsi Jewels Jaipur. Inquire about custom orders, silver jewellery styling, shipping, and assistance.',
+    desc: 'Get in touch with Raajsi Jewels in Jaipur. Call +91 98291 45129, WhatsApp, or email for inquiries about our 925 sterling silver jewellery.',
     intro: 'Have questions regarding sizing, custom jewellery, or an existing order? Reach out to our Jaipur studio team.',
   },
   '/policies/shipping': {
     title: 'Shipping & Delivery Policy | Raajsi Jewels',
     h1: 'Shipping & Delivery Policy',
-    desc: 'Learn about our domestic & international shipping timelines, free shipping above ₹999, and secure insured transit.',
+    desc: 'Free delivery on orders above ₹999 across India. Flat ₹99 below ₹999. Learn about Raajsi Jewels shipping times, delivery areas and order tracking.',
     intro: 'We provide insured, safe delivery across all PIN codes in India. Orders above ₹999 qualify for complimentary free shipping.',
   },
   '/policies/returns': {
     title: 'Returns & Exchange Policy | Raajsi Jewels',
     h1: '7-Day Return & Exchange Policy',
-    desc: 'Read our 7-day hassle-free return and exchange policy for handcrafted jewellery at Raajsi Jewels.',
+    desc: 'Easy 7-day exchange policy at Raajsi Jewels. Learn about our returns process, eligibility, and refund timelines.',
     intro: 'Your satisfaction is our priority. We offer a simple 7-day return and exchange policy on all unworn items in original packaging.',
   },
   '/policies/faqs': {
     title: 'Frequently Asked Questions (FAQs) | Raajsi Jewels',
     h1: 'Frequently Asked Questions (FAQs)',
-    desc: 'Find answers to common questions regarding 925 silver certification, care guides, ring sizing, payments, and shipping.',
+    desc: 'Frequently asked questions about Raajsi Jewels collections, 925 Sterling Silver, shipping, exchanges, and contacting us.',
     intro: 'Answers to the most frequent inquiries about our silver jewellery purity, care guidelines, order tracking, and returns.',
   },
   '/policies/privacy': {
-    title: 'Privacy Policy | Raajsi Jewels',
+    title: 'Privacy Policy — Raajsi Jewels | Data Protection',
     h1: 'Privacy Policy',
-    desc: 'Raajsi Jewels privacy policy. How we safeguard your personal information, payments, and data.',
+    desc: 'Raajsi Jewels privacy policy. How we collect, use, and protect your personal data when you shop with us.',
     intro: 'We are committed to respecting your privacy and securing all personal and transaction data collected on raajsijewels.com.',
   },
   '/policies/terms': {
     title: 'Terms & Conditions | Raajsi Jewels',
     h1: 'Terms of Service & Purchase Conditions',
-    desc: 'Terms of service and purchase conditions for Raajsi Jewels handcrafted silver jewellery.',
+    desc: 'Read the Terms & Conditions for shopping at Raajsi Jewels. Policies on orders, payments, pricing, and more.',
     intro: 'Review our terms governing the use of raajsijewels.com, orders, warranties, and intellectual property.',
   },
   '/blog': {
-    title: 'Jewellery Journal & Silver Care Guides | Raajsi Jewels',
+    title: 'Jewellery Blog: Silver Guides & Care | Raajsi Jewels',
     h1: 'The Raajsi Journal — Silver Care, Purity & Styling',
-    desc: 'Expert advice on 925 silver purity testing, tarnish prevention, gemstone styling, and Jaipur jewellery heritage.',
+    desc: 'Learn about 925 sterling silver, Meenakari, Kundan jewellery, care tips and buying guides from Raajsi Jewels, Jaipur.',
     intro: 'Educational guides, silversmith heritage stories, and expert jewellery maintenance tips from our Jaipur workshop.',
   },
 };
@@ -205,16 +205,7 @@ function buildHtmlPage(template, pageConfig) {
 
   let html = template;
 
-  // Replace Title
-  html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(title)}</title>`);
-
-  // Replace Meta Description
-  html = html.replace(
-    /<meta\s+name=["']description["'][\s\S]*?>/i,
-    `<meta name="description" content="${escapeHtml(desc)}" />`
-  );
-
-  // Injected Head Tags (Canonical, OpenGraph, Twitter, Schema)
+  // Injected Head Tags (Title, Meta Description, Canonical, OpenGraph, Twitter, Schema)
   const headAdditions = [
     `  <link rel="canonical" href="${url}" />`,
     `  <meta property="og:title" content="${escapeHtml(title)}" />`,
@@ -230,6 +221,23 @@ function buildHtmlPage(template, pageConfig) {
     `  <meta name="twitter:image" content="${ogImage}" />`,
     `  <meta name="twitter:site" content="@jewels_raajsi" />`,
   ];
+
+  // Set Title
+  if (/<title>[\s\S]*?<\/title>/i.test(html)) {
+    html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(title)}</title>`);
+  } else {
+    headAdditions.unshift(`  <title>${escapeHtml(title)}</title>`);
+  }
+
+  // Set Meta Description
+  if (/<meta\s+name=["']description["'][\s\S]*?>/i.test(html)) {
+    html = html.replace(
+      /<meta\s+name=["']description["'][\s\S]*?>/i,
+      `<meta name="description" content="${escapeHtml(desc)}" />`
+    );
+  } else {
+    headAdditions.splice(1, 0, `  <meta name="description" content="${escapeHtml(desc)}" />`);
+  }
 
   if (schemaJson) {
     headAdditions.push(`  <script type="application/ld+json">${JSON.stringify(schemaJson)}</script>`);
@@ -517,13 +525,22 @@ async function prerender() {
     const isSilver = (p.medium || '').toLowerCase().includes('silver') || (p.metadata?.category || '').toLowerCase() === 'silver';
     const material = isSilver ? '925 Sterling Silver' : (p.medium || 'Handcrafted Metal');
 
-    let pageTitle = `${p.title} — ${isSilver ? '925 Sterling Silver' : 'Handcrafted Jewellery'} | Raajsi Jewels`;
+    let pageTitle = `${p.title} | Raajsi Jewels`;
     if (pageTitle.length > 60) {
-      pageTitle = `${p.title} | Raajsi Jewels Jaipur`;
+      pageTitle = `${p.title} | Raajsi`;
+    }
+    if (pageTitle.length > 60) {
+      pageTitle = `${p.title.slice(0, 50).trim()}… | Raajsi`;
     }
 
     const price = Number(p.price || 999);
-    const desc = p.story || p.description || `Buy ${p.title} online. Handcrafted ${material} jewellery from Jaipur, India. BIS Hallmark certified, free delivery above ₹999.`;
+    let desc = `Shop ${p.title} handcrafted in Jaipur. Pure 925 sterling silver with authentic artisan finish. BIS hallmarked. Free delivery above ₹999.`;
+    if (desc.length > 155) {
+      desc = `Buy ${p.title} handcrafted in Jaipur. 925 sterling silver, BIS hallmarked. Free delivery above ₹999.`;
+    }
+    if (desc.length > 155) {
+      desc = `${desc.slice(0, 151).trim()}...`;
+    }
     const image = p.primary_image_url || `${BASE_URL}/logo.png`;
 
     const breadcrumbs = [
@@ -549,17 +566,48 @@ async function prerender() {
         url,
         priceCurrency: 'INR',
         price: price.toFixed(2),
+        priceValidUntil: '2027-12-31',
         availability: 'https://schema.org/InStock',
         itemCondition: 'https://schema.org/NewCondition',
         seller: {
           '@type': 'Organization',
           name: 'Raajsi Jewels',
         },
-      },
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: '4.9',
-        reviewCount: '18',
+        shippingDetails: {
+          '@type': 'OfferShippingDetails',
+          shippingRate: {
+            '@type': 'MonetaryAmount',
+            value: price >= 999 ? '0' : '99',
+            currency: 'INR',
+          },
+          shippingDestination: {
+            '@type': 'DefinedRegion',
+            addressCountry: 'IN',
+          },
+          deliveryTime: {
+            '@type': 'ShippingDeliveryTime',
+            handlingTime: {
+              '@type': 'QuantitativeValue',
+              minValue: 1,
+              maxValue: 3,
+              unitCode: 'DAY',
+            },
+            transitTime: {
+              '@type': 'QuantitativeValue',
+              minValue: 3,
+              maxValue: 7,
+              unitCode: 'DAY',
+            },
+          },
+        },
+        hasMerchantReturnPolicy: {
+          '@type': 'MerchantReturnPolicy',
+          applicableCountry: 'IN',
+          returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+          merchantReturnDays: 7,
+          returnMethod: 'https://schema.org/ReturnByMail',
+          returnFees: 'https://schema.org/FreeReturn',
+        },
       },
     };
 

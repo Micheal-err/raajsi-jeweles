@@ -29,13 +29,12 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       {
-        title:
-          "Contact Raajsi Jewels — Phone, WhatsApp, Email | Jaipur, Rajasthan",
+        title: "Contact Raajsi Jewels: Phone & WhatsApp | Jaipur",
       },
       {
         name: "description",
         content:
-          "Contact Raajsi Jewels in Jaipur, Rajasthan. Call +91 98291 45129, WhatsApp, or email raajsiforms@gmail.com. Visit our atelier for 925 Sterling Silver & Handcrafted Jewellery.",
+          "Get in touch with Raajsi Jewels in Jaipur. Call +91 98291 45129, WhatsApp, or email for inquiries about our 925 sterling silver jewellery.",
       },
       {
         name: "keywords",
@@ -44,12 +43,12 @@ export const Route = createFileRoute("/contact")({
       },
       {
         property: "og:title",
-        content: "Contact Raajsi Jewels — Jaipur, Rajasthan",
+        content: "Contact Raajsi Jewels: Phone & WhatsApp | Jaipur",
       },
       {
         property: "og:description",
         content:
-          "Reach out via Phone, WhatsApp, Email, or visit us in Jaipur. Our team is happy to help.",
+          "Get in touch with Raajsi Jewels in Jaipur. Call +91 98291 45129, WhatsApp, or email for inquiries about our 925 sterling silver jewellery.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: canonical("/contact") },
@@ -61,12 +60,12 @@ export const Route = createFileRoute("/contact")({
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "twitter:title",
-        content: "Contact Raajsi Jewels | Jaipur",
+        content: "Contact Raajsi Jewels: Phone & WhatsApp | Jaipur",
       },
       {
         name: "twitter:description",
         content:
-          "Call, WhatsApp, or email us. Visit our Jaipur atelier.",
+          "Get in touch with Raajsi Jewels in Jaipur. Call +91 98291 45129, WhatsApp, or email for inquiries about our 925 sterling silver jewellery.",
       },
       { name: "twitter:image", content: defaultOgImage() },
       { name: "twitter:site", content: "@jewels_raajsi" },

@@ -13,7 +13,7 @@ import {
 // ── Per-doc SEO titles and descriptions ──────────────────────────────
 const DOC_SEO: Record<string, { seoTitle: string; seoDesc: string }> = {
   terms: {
-    seoTitle: "Terms & Conditions — Raajsi Jewels | Jaipur Jewellery Store",
+    seoTitle: "Terms & Conditions | Raajsi Jewels",
     seoDesc:
       "Read the Terms & Conditions for shopping at Raajsi Jewels. Policies on orders, payments, pricing, and more.",
   },
@@ -23,19 +23,17 @@ const DOC_SEO: Record<string, { seoTitle: string; seoDesc: string }> = {
       "Raajsi Jewels privacy policy. How we collect, use, and protect your personal data when you shop with us.",
   },
   shipping: {
-    seoTitle:
-      "Shipping & Delivery Policy — Raajsi Jewels | Free Delivery Above ₹999",
+    seoTitle: "Shipping & Delivery Policy | Raajsi Jewels",
     seoDesc:
-      "Free delivery on orders above ₹999 across India (₹99 standard shipping below ₹999). Learn about Raajsi Jewels shipping timelines, tracking, and delivery policy.",
+      "Free delivery on orders above ₹999 across India. Flat ₹99 below ₹999. Learn about Raajsi Jewels shipping times, delivery areas and order tracking.",
   },
   returns: {
-    seoTitle: "Returns & Exchange Policy — Raajsi Jewels | 7 Days Exchange",
+    seoTitle: "Returns & Exchange Policy | Raajsi Jewels",
     seoDesc:
       "Easy 7-day exchange policy at Raajsi Jewels. Learn about our returns process, eligibility, and refund timelines.",
   },
   faqs: {
-    seoTitle:
-      "FAQs — Raajsi Jewels | Sterling Silver & Handcrafted Jewellery Questions",
+    seoTitle: "Frequently Asked Questions (FAQs) | Raajsi Jewels",
     seoDesc:
       "Frequently asked questions about Raajsi Jewels collections, 925 Sterling Silver, shipping, exchanges, and contacting us.",
   },

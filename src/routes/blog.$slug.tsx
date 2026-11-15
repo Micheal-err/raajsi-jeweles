@@ -66,12 +66,23 @@ export const Route = createFileRoute("/blog/$slug")({
             "@type": "Article",
             headline: loaderData.title,
             description: loaderData.seoDesc,
+            image: [defaultOgImage()],
             datePublished: loaderData.publishDate,
+            dateModified: loaderData.publishDate,
+            author: {
+              "@type": "Person",
+              name: "Raajsi Editorial Team",
+            },
             publisher: {
               "@type": "Organization",
               name: SITE_NAME,
               url: "https://www.raajsijewels.com",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://www.raajsijewels.com/logo.png",
+              },
             },
+            mainEntityOfPage: url,
             url,
           }),
         },

@@ -38,6 +38,8 @@ import {
   defaultOgImage,
   localBusinessSchema,
   breadcrumbSchema,
+  organizationSchema,
+  webSiteSchema,
 } from "@/components/seo-head";
 
 export const Route = createFileRoute("/")({
@@ -49,7 +51,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Shop handcrafted 925 sterling silver jewellery from Jaipur. Kundan, Meenakari & more. Free delivery above Rs 999, 7-day exchange.",
+          "Shop genuine 925 sterling silver jewellery handcrafted in Jaipur. Earrings, rings, necklace sets & more. BIS hallmarked. Free delivery above ₹999.",
       },
       {
         name: "keywords",
@@ -63,7 +65,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Shop handcrafted 925 sterling silver jewellery from Jaipur. Kundan, Meenakari & more. Free delivery above Rs 999, 7-day exchange.",
+          "Shop genuine 925 sterling silver jewellery handcrafted in Jaipur. Earrings, rings, necklace sets & more. BIS hallmarked. Free delivery above ₹999.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: canonical("/") },
@@ -80,7 +82,7 @@ export const Route = createFileRoute("/")({
       {
         name: "twitter:description",
         content:
-          "Shop handcrafted 925 sterling silver jewellery from Jaipur. Kundan, Meenakari & more. Free delivery above Rs 999, 7-day exchange.",
+          "Shop genuine 925 sterling silver jewellery handcrafted in Jaipur. Earrings, rings, necklace sets & more. BIS hallmarked. Free delivery above ₹999.",
       },
       { name: "twitter:image", content: defaultOgImage() },
       { name: "twitter:site", content: "@jewels_raajsi" },
@@ -91,6 +93,14 @@ export const Route = createFileRoute("/")({
     ],
     links: [{ rel: "canonical", href: canonical("/") }],
     scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(organizationSchema()),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(webSiteSchema()),
+      },
       {
         type: "application/ld+json",
         children: JSON.stringify(localBusinessSchema()),

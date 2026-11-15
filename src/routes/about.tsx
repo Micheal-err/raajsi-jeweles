@@ -37,7 +37,7 @@ export const Route = createFileRoute("/about")({
       {
         name: "description",
         content:
-          "Learn about Raajsi Jewels — a Jaipur-based jewellery brand crafting 925 Sterling Silver and Handcrafted Jewellery since 2009. Inspired by timeless design, Indian craftsmanship, and modern elegance.",
+          "Discover Raajsi Jewels: handcrafted 925 sterling silver and artisanal jewellery from Jaipur since 2009. BIS hallmarked purity and royal heritage.",
       },
       {
         name: "keywords",
@@ -51,7 +51,7 @@ export const Route = createFileRoute("/about")({
       {
         property: "og:description",
         content:
-          "Discover the philosophy, craftsmanship, and distinctive collections of Raajsi — Timeless Luxury, Crafted for You.",
+          "Discover Raajsi Jewels: handcrafted 925 sterling silver and artisanal jewellery from Jaipur since 2009. BIS hallmarked purity and royal heritage.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: canonical("/about") },
@@ -68,7 +68,7 @@ export const Route = createFileRoute("/about")({
       {
         name: "twitter:description",
         content:
-          "Handcrafted jewellery inspired by Indian craftsmanship & modern elegance. Since 2009.",
+          "Discover Raajsi Jewels: handcrafted 925 sterling silver and artisanal jewellery from Jaipur since 2009. BIS hallmarked purity and royal heritage.",
       },
       { name: "twitter:image", content: defaultOgImage() },
       { name: "twitter:site", content: "@jewels_raajsi" },

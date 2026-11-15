@@ -260,6 +260,8 @@ export function productSchema(product: {
       url: `${SITE_URL}/artworks/${product.slug}`,
       priceCurrency: product.currency || SITE_CURRENCY,
       price: product.price,
+      priceValidUntil: "2027-12-31",
+      itemCondition: "https://schema.org/NewCondition",
       availability:
         product.availability === "sold"
           ? "https://schema.org/SoldOut"
@@ -274,7 +276,7 @@ export function productSchema(product: {
         "@type": "OfferShippingDetails",
         shippingRate: {
           "@type": "MonetaryAmount",
-          value: "0",
+          value: (product.price ?? 0) >= 999 ? "0" : "99",
           currency: SITE_CURRENCY,
         },
         shippingDestination: {

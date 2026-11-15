@@ -28,8 +28,6 @@ import {
   SITE_URL,
   SITE_NAME,
   SITE_LOCALE,
-  organizationSchema,
-  webSiteSchema,
   defaultOgImage,
 } from "@/components/seo-head";
 
@@ -99,7 +97,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         {
           name: "description",
           content:
-            "Shop handcrafted 925 sterling silver jewellery from Jaipur. Kundan, Meenakari & more. Free delivery above Rs 999, 7-day exchange.",
+            "Shop genuine 925 sterling silver jewellery handcrafted in Jaipur. Earrings, rings, necklace sets & more. BIS hallmarked. Free delivery above ₹999.",
         },
         { name: "author", content: SITE_NAME },
         {
@@ -136,21 +134,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           href: "https://fonts.gstatic.com",
           crossOrigin: "anonymous",
         },
-        {
-          rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap",
-        },
       ],
-      scripts: [
-        {
-          type: "application/ld+json",
-          children: JSON.stringify(organizationSchema()),
-        },
-        {
-          type: "application/ld+json",
-          children: JSON.stringify(webSiteSchema()),
-        },
-      ],
+      scripts: [],
     }),
     component: RootComponent,
     notFoundComponent: NotFoundComponent,

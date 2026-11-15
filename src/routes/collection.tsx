@@ -24,13 +24,12 @@ export const Route = createFileRoute("/collection")({
   head: () => ({
     meta: [
       {
-        title:
-          "Shop 925 Sterling Silver & Handcrafted Jewellery Collection | Raajsi Jewels, Jaipur",
+        title: "Shop 925 Silver Jewellery Collection | Raajsi Jewels",
       },
       {
         name: "description",
         content:
-          "Browse our curated collections of 925 Sterling Silver and Handcrafted Jewellery. BIS Hallmark certified. Free delivery on all orders. Shop rings, earrings, bracelets, necklaces & more from Jaipur.",
+          "Explore handcrafted 925 sterling silver earrings, necklaces, bracelets, rings & anklets from Jaipur. Certified purity, premium craftsmanship.",
       },
       {
         name: "keywords",
@@ -39,13 +38,12 @@ export const Route = createFileRoute("/collection")({
       },
       {
         property: "og:title",
-        content:
-          "Shop Sterling Silver 925 & Handcrafted Jewellery | Raajsi Jewels",
+        content: "Shop 925 Silver Jewellery Collection | Raajsi Jewels",
       },
       {
         property: "og:description",
         content:
-          "Two distinctive collections: Modern Sterling Silver 925 and Artistic Handcrafted Jewels. Free delivery on all orders.",
+          "Explore handcrafted 925 sterling silver earrings, necklaces, bracelets, rings & anklets from Jaipur. Certified purity, premium craftsmanship.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: canonical("/collection") },
@@ -57,12 +55,12 @@ export const Route = createFileRoute("/collection")({
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "twitter:title",
-        content: "Jewellery Collection | Raajsi Jewels, Jaipur",
+        content: "Shop 925 Silver Jewellery Collection | Raajsi Jewels",
       },
       {
         name: "twitter:description",
         content:
-          "925 Sterling Silver & Handcrafted Jewellery. BIS Hallmark certified. Free delivery on all orders.",
+          "Explore handcrafted 925 sterling silver earrings, necklaces, bracelets, rings & anklets from Jaipur. Certified purity, premium craftsmanship.",
       },
       { name: "twitter:image", content: defaultOgImage() },
       { name: "twitter:site", content: "@jewels_raajsi" },
@@ -81,6 +79,22 @@ export const Route = createFileRoute("/collection")({
             { name: "Collections", url: canonical("/collection") },
           ]),
         ),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "925 Silver Jewellery Collection",
+          description:
+            "Explore handcrafted 925 sterling silver earrings, necklaces, bracelets, rings & anklets from Jaipur. Certified purity, premium craftsmanship.",
+          url: canonical("/collection"),
+          isPartOf: {
+            "@type": "WebSite",
+            name: SITE_NAME,
+            url: canonical("/"),
+          },
+        }),
       },
     ],
   }),

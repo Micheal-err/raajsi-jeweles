@@ -48,9 +48,9 @@ const CATEGORIES: Record<string, CategoryMeta> = {
   "silver-earrings": {
     slug: "silver-earrings",
     h1: "925 Silver Earrings — Handcrafted in Jaipur",
-    seoTitle: "925 Silver Earrings | Raajsi Jewels, Jaipur",
+    seoTitle: "Silver Earrings Online: Studs, Hoops & Jhumkas | Raajsi",
     seoDesc:
-      "Buy 925 sterling silver earrings handcrafted in Jaipur. Studs, hoops, dangles & more. Free delivery above ₹999. 7-day exchange.",
+      "Buy 925 sterling silver earrings handcrafted in Jaipur. Studs, hoops, jhumkas & drops for daily and festive wear. Free delivery above ₹999.",
     // TODO(human): Review and edit intro before publishing
     intro: `Our 925 sterling silver earring collection brings together the best of Jaipur craftsmanship and contemporary design. Each pair is crafted from genuine 925 sterling silver — a standard that guarantees 92.5% pure silver content, providing lasting shine and durability for daily wear.
 
@@ -65,9 +65,9 @@ All Raajsi silver earrings are shipped with care across India. Free delivery on 
   "necklace-sets": {
     slug: "necklace-sets",
     h1: "925 Silver Necklace Sets — Handcrafted Jaipur Jewellery",
-    seoTitle: "Silver Necklace Sets | Raajsi Jewels Jaipur",
+    seoTitle: "Silver Necklace Sets Online, Jaipur Made | Raajsi Jewels",
     seoDesc:
-      "Shop 925 silver necklace sets from Jaipur. Layered chains, pendant sets & bridal necklaces. Free delivery above ₹999. 7-day exchange.",
+      "Explore 925 silver necklace sets and pendants handcrafted in Jaipur. Elegant sets with matching earrings for gifting and festive wear.",
     // TODO(human): Review and edit intro before publishing
     intro: `A statement necklace can transform an entire outfit, and at Raajsi Jewels, we believe it should also tell a story. Our 925 sterling silver necklace collection brings together bold pendant sets, delicate layered chains, and intricately crafted bridal necklaces — all made by hand in Jaipur, Rajasthan.
 
@@ -82,9 +82,9 @@ Browse our full range of silver necklaces online and enjoy free delivery across 
   "bracelets-bangles": {
     slug: "bracelets-bangles",
     h1: "925 Silver Bracelets & Bangles — Made in Jaipur",
-    seoTitle: "Silver Bracelets & Bangles | Raajsi Jewels",
+    seoTitle: "925 Silver Bracelets & Bangles for Women | Raajsi Jewels",
     seoDesc:
-      "Shop 925 sterling silver bracelets & bangles from Jaipur. Cuffs, charm bracelets & kadas. Free delivery above ₹999. 7-day exchange.",
+      "Shop 925 sterling silver bracelets and bangles handcrafted in Jaipur. Delicate chains to statement cuffs. Free delivery above ₹999.",
     // TODO(human): Review and edit intro before publishing
     intro: `Raajsi Jewels offers a curated range of 925 sterling silver bracelets and bangles — from sleek cuffs for minimalists to intricately worked kadas for festive occasions. Every piece is handcrafted by Jaipur artisans who understand both the technical demands of silverwork and the nuances of modern style.
 
@@ -99,9 +99,9 @@ All products ship across India with free delivery on orders above ₹999. We off
   "anklets": {
     slug: "anklets",
     h1: "925 Silver Anklets (Payal) — Handcrafted in Jaipur",
-    seoTitle: "Silver Anklets (Payal) | Raajsi Jewels Jaipur",
+    seoTitle: "925 Silver Anklets (Payal) for Women | Raajsi Jewels",
     seoDesc:
-      "Buy 925 sterling silver anklets (payal) handcrafted in Jaipur. Delicate chains, charm payals & more. Free delivery above ₹999.",
+      "Shop 925 sterling silver anklets and payal handcrafted in Jaipur. Dainty everyday and festive designs. Free delivery above ₹999.",
     // TODO(human): Review and edit intro before publishing
     intro: `Anklets have been an intrinsic part of Indian jewellery tradition for centuries, and at Raajsi Jewels, we have reimagined them for the contemporary wardrobe. Our 925 sterling silver anklet (payal) collection spans delicate single-chain designs to layered charm anklets and intricately beaded payals.
 
@@ -116,9 +116,9 @@ Shop the full Raajsi anklet range online and enjoy free delivery across India on
   "rings": {
     slug: "rings",
     h1: "925 Silver Rings — Handcrafted Statement Rings from Jaipur",
-    seoTitle: "925 Silver Rings | Raajsi Jewels, Jaipur India",
+    seoTitle: "925 Silver Rings for Women Online | Raajsi Jewels",
     seoDesc:
-      "Shop 925 sterling silver rings from Jaipur — statement, stacking, gemstone & plain bands. Free delivery above ₹999. 7-day exchange.",
+      "Shop 925 sterling silver rings for women: statement, stackable & adjustable designs handcrafted in Jaipur. Free delivery above ₹999.",
     // TODO(human): Review and edit intro before publishing
     intro: `Rings are perhaps the most personal piece of jewellery — they are worn every day, chosen deliberately, and often carried with deep meaning. Raajsi Jewels' 925 sterling silver ring collection is designed with exactly that reverence.
 
@@ -133,9 +133,9 @@ Silver rings are hypoallergenic and ideal for sensitive skin. Shop our full rang
   "nose-pins": {
     slug: "nose-pins",
     h1: "925 Silver Nose Pins & Nose Rings — Raajsi Jewels",
-    seoTitle: "925 Silver Nose Pins | Raajsi Jewels Jaipur",
+    seoTitle: "Silver Nose Pins & Studs Online | Raajsi Jewels",
     seoDesc:
-      "Buy 925 sterling silver nose pins & nose rings from Jaipur. Screw, stud & ring styles. Free delivery above ₹999. 7-day exchange.",
+      "Buy 925 sterling silver nose pins and studs handcrafted in Jaipur. Dainty floral and gemstone designs. Free delivery above ₹999.",
     // TODO(human): Review and edit intro before publishing
     intro: `A nose pin is often the smallest jewellery piece worn, yet it can completely transform a look. At Raajsi Jewels, we offer a thoughtfully curated range of 925 sterling silver nose pins and nose rings crafted for comfort, purity, and style.
 
@@ -150,9 +150,9 @@ All nose pins ship securely across India. Free delivery on orders above ₹999. 
   "mangalsutra": {
     slug: "mangalsutra",
     h1: "925 Silver Mangalsutra — Modern & Traditional Designs",
-    seoTitle: "925 Silver Mangalsutra | Raajsi Jewels Jaipur",
+    seoTitle: "Silver Mangalsutra Designs Online | Raajsi Jewels",
     seoDesc:
-      "Buy 925 sterling silver mangalsutra from Jaipur. Modern & traditional designs with black beads. Free delivery above ₹999.",
+      "Discover silver mangalsutra designs handcrafted in Jaipur. Traditional and modern styles in 925 sterling silver. Free delivery above ₹999.",
     // TODO(human): Review and edit intro before publishing
     intro: `The mangalsutra is one of the most sacred pieces of jewellery in the Indian tradition, and at Raajsi Jewels we craft each one with the reverence it deserves. Our 925 sterling silver mangalsutra collection brings together traditional design vocabulary — black beads, pendant elements, and symbolic motifs — with a modern, wearable sensibility.
 
@@ -167,9 +167,9 @@ Shop our mangalsutra collection online with free delivery across India on orders
   "jaipur-handmade-silver": {
     slug: "jaipur-handmade-silver",
     h1: "Jaipur Handmade Silver Jewellery — Raajsi Jewels",
-    seoTitle: "Jaipur Handmade Silver Jewellery | Raajsi Jewels",
+    seoTitle: "Handmade Silver Jewellery from Jaipur | Raajsi Jewels",
     seoDesc:
-      "Shop authentic Jaipur handmade 925 silver jewellery online. Artisan-crafted earrings, necklaces & rings. Free delivery above ₹999.",
+      "Handmade 925 silver jewellery from Jaipur artisans. Traditional craft, modern designs, delivered across India. Free delivery above ₹999.",
     // TODO(human): Review and edit intro before publishing
     intro: `Jaipur has been the jewellery capital of India for centuries. The city's artisans possess an inherited mastery of silverwork, gemstone setting, and traditional crafting techniques that continue to be passed down through generations of skilled craftspeople.
 
@@ -184,9 +184,9 @@ Whether you are looking for a single statement piece or a full jewellery set roo
   "meenakari": {
     slug: "meenakari",
     h1: "Meenakari Jewellery — Traditional Enamel Work from Jaipur",
-    seoTitle: "Meenakari Jewellery | Raajsi Jewels, Jaipur",
+    seoTitle: "Meenakari Silver Jewellery from Jaipur | Raajsi Jewels",
     seoDesc:
-      "Buy authentic Meenakari jewellery from Jaipur. Hand-painted enamel earrings, pendants & sets. Free delivery above ₹999. 7-day exchange.",
+      "Shop Meenakari jewellery handcrafted by Jaipur artisans. Colourful enamel work on 925 silver earrings, pendants and sets.",
     // TODO(human): Review and edit intro before publishing
     intro: `Meenakari is one of Jaipur's most celebrated jewellery arts — the ancient craft of decorating metal surfaces with vibrant enamel colours using heat-fused mineral pigments. The result is jewellery that is as much painted art as wearable adornment.
 
@@ -201,9 +201,9 @@ Meenakari pieces from Raajsi make exceptional gifts and prized additions to any 
   "kundan": {
     slug: "kundan",
     h1: "Kundan Jewellery — Handcrafted in Jaipur by Artisans",
-    seoTitle: "Kundan Jewellery | Raajsi Jewels, Jaipur India",
+    seoTitle: "Kundan Jewellery Online from Jaipur | Raajsi Jewels",
     seoDesc:
-      "Shop authentic Kundan jewellery from Jaipur. Bridal & festive sets, earrings & maang tikka. Free delivery above ₹999. 7-day exchange.",
+      "Shop authentic Kundan jewellery from Jaipur. Bridal and festive sets, earrings and maang tikka with regal heritage designs.",
     // TODO(human): Review and edit intro before publishing
     intro: `Kundan jewellery is the pinnacle of traditional Indian gem-setting craft. Originating in the royal courts of Rajasthan and Mughal India, Kundan work involves setting polished, uncut gemstones into a framework of refined gold foil (known as Kundan), creating jewellery of extraordinary brilliance and intricacy.
 
@@ -257,6 +257,21 @@ export const Route = createFileRoute("/jewellery/$category")({
               { name: loaderData.h1, url },
             ]),
           ),
+        },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: loaderData.h1,
+            description: loaderData.seoDesc,
+            url,
+            isPartOf: {
+              "@type": "WebSite",
+              name: SITE_NAME,
+              url: canonical("/"),
+            },
+          }),
         },
       ],
     };
