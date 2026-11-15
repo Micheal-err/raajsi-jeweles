@@ -92,3 +92,4 @@ The website automatically generates product feeds during the build step:
    - [x] Return policy configured
    - [x] Product feed uploaded without critical errors
 4. Monitor **Products > Diagnostics** weekly for any item disapproved warnings.
+
