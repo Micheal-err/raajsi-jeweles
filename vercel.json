@@ -4,12 +4,12 @@
   "redirects": [
     {
       "source": "/journal",
-      "destination": "/blog",
+      "destination": "https://www.raajsijewels.com/blog",
       "permanent": true
     },
     {
       "source": "/journal/:slug",
-      "destination": "/blog/:slug",
+      "destination": "https://www.raajsijewels.com/blog/:slug",
       "permanent": true
     },
     {
