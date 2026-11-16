@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,7 +10,6 @@ import { JewelleryCard, type JewelleryProduct } from "@/components/JewelleryCard
 import { TrustStrip } from "@/components/TrustStrip";
 import {
   ShoppingBag,
-  Check,
   ShieldCheck,
   Truck,
   RotateCcw,
@@ -20,7 +19,6 @@ import {
   Maximize2,
   X,
   Gem,
-  Award,
   Minus,
   Plus,
   Star,
@@ -32,7 +30,6 @@ import { useProductReviews } from "@/hooks/useProductReviews";
 import {
   SITE_NAME,
   SITE_LOCALE,
-  SITE_URL,
   canonical,
   defaultOgImage,
   breadcrumbSchema,
@@ -53,12 +50,9 @@ export const Route = createFileRoute("/artworks/$slug")({
       seoTitle = `${formattedTitle.slice(0, 50).trim()}… | Raajsi`;
     }
 
-    let seoDesc = `Shop ${formattedTitle} handcrafted in Jaipur. Pure 925 sterling silver with authentic artisan finish. BIS hallmarked. Free delivery above ₹999.`;
+    let seoDesc = `Explore ${formattedTitle} from Raajsi Jewels. View product details, materials, availability and pricing.`;
     if (seoDesc.length > 155) {
-      seoDesc = `Buy ${formattedTitle} handcrafted in Jaipur. 925 sterling silver, BIS hallmarked. Free delivery above ₹999.`;
-    }
-    if (seoDesc.length > 155) {
-      seoDesc = `${seoDesc.slice(0, 151).trim()}...`;
+      seoDesc = `Explore ${formattedTitle} at Raajsi Jewels. View product details and availability.`;
     }
 
     return {
@@ -450,9 +444,11 @@ function JewelleryProductDetail() {
                 <span className="text-[10px] tracking-[0.2em] uppercase font-semibold text-[color:var(--gold)] px-2 py-0.5 bg-[color:var(--gold)]/10">
                   {category ? `${category} Jewellery` : "Jewellery"}
                 </span>
-                <span className="text-[10px] tracking-[0.2em] uppercase text-ink/50">
-                  {subcategory && <span className="text-[10px] tracking-[0.2em] uppercase text-ink/50">{subcategory}</span>}
-                </span>
+                {subcategory && (
+                  <span className="text-[10px] tracking-[0.2em] uppercase text-ink/50">
+                    {subcategory}
+                  </span>
+                )}
               </div>
 
               <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight">
@@ -591,56 +587,55 @@ function JewelleryProductDetail() {
               </div>
 
               <div className="divide-y divide-hairline text-xs">
-                {/* Material */}
-                <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
-                  <span className="font-medium text-ink/60 uppercase tracking-wider">Material / Metal</span>
-                  <span className="col-span-2 text-ink font-semibold">{material}</span>
-                </div>
-
-                {/* Finishing */}
-                <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
-                  <span className="font-medium text-ink/60 uppercase tracking-wider">Finishing</span>
-                  <span className="col-span-2 text-ink">{finishing}</span>
-                </div>
-
-                {/* Gemstone */}
-                <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
-                  <span className="font-medium text-ink/60 uppercase tracking-wider flex items-center gap-1">
-                    <Gem size={12} className="text-[color:var(--gold)]" /> Gemstone
-                  </span>
-                  <span className="col-span-2 text-ink">{gemstone}</span>
-                </div>
-
-                {/* Length */}
-                <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
-                  <span className="font-medium text-ink/60 uppercase tracking-wider">Length</span>
-                  <span className="col-span-2 text-ink">{length}</span>
-                </div>
-
-                {/* Width */}
-                <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
-                  <span className="font-medium text-ink/60 uppercase tracking-wider">Width</span>
-                  <span className="col-span-2 text-ink">{width}</span>
-                </div>
-
-                {/* Thickness */}
-                <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
-                  <span className="font-medium text-ink/60 uppercase tracking-wider">Thickness</span>
-                  <span className="col-span-2 text-ink">{thickness}</span>
-                </div>
-
-                {/* Category & Subcategory */}
-                <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
-                  <span className="font-medium text-ink/60 uppercase tracking-wider">Category</span>
-                  <span className="col-span-2 text-ink">
-                    {category} · {subcategory}
-                  </span>
-                </div>
-
-                {/* Stock */}
+                {material && (
+                  <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
+                    <span className="font-medium text-ink/60 uppercase tracking-wider">Material / Metal</span>
+                    <span className="col-span-2 text-ink font-semibold">{material}</span>
+                  </div>
+                )}
+                {finishing && (
+                  <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
+                    <span className="font-medium text-ink/60 uppercase tracking-wider">Finishing</span>
+                    <span className="col-span-2 text-ink">{finishing}</span>
+                  </div>
+                )}
+                {gemstone && (
+                  <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
+                    <span className="font-medium text-ink/60 uppercase tracking-wider flex items-center gap-1">
+                      <Gem size={12} className="text-[color:var(--gold)]" /> Gemstone
+                    </span>
+                    <span className="col-span-2 text-ink">{gemstone}</span>
+                  </div>
+                )}
+                {length && (
+                  <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
+                    <span className="font-medium text-ink/60 uppercase tracking-wider">Length</span>
+                    <span className="col-span-2 text-ink">{length}</span>
+                  </div>
+                )}
+                {width && (
+                  <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
+                    <span className="font-medium text-ink/60 uppercase tracking-wider">Width</span>
+                    <span className="col-span-2 text-ink">{width}</span>
+                  </div>
+                )}
+                {thickness && (
+                  <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
+                    <span className="font-medium text-ink/60 uppercase tracking-wider">Thickness</span>
+                    <span className="col-span-2 text-ink">{thickness}</span>
+                  </div>
+                )}
+                {(category || subcategory) && (
+                  <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
+                    <span className="font-medium text-ink/60 uppercase tracking-wider">Category</span>
+                    <span className="col-span-2 text-ink">
+                      {[category, subcategory].filter(Boolean).join(" · ")}
+                    </span>
+                  </div>
+                )}
                 <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
                   <span className="font-medium text-ink/60 uppercase tracking-wider">Stock Status</span>
-                  <span className="col-span-2 text-emerald-700 font-semibold">{stock}</span>
+                  <span className="col-span-2 text-ink font-semibold">{stock}</span>
                 </div>
               </div>
             </div>
