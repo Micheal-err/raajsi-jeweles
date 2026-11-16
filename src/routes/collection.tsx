@@ -131,7 +131,7 @@ function CollectionPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("artworks")
-        .select("id,slug,title,medium,story,primary_image_url,gallery_image_urls,availability,display_price,price,metadata")
+        .select("id,slug,title,medium,category,story,primary_image_url,gallery_image_urls,availability,display_price,price,metadata")
         .order("created_at", { ascending: false });
       if (error) throw error;
       return (data ?? []) as unknown as JewelleryProduct[];
@@ -144,16 +144,12 @@ function CollectionPage() {
   // Sterling Silver 925: metal/medium/material contains "silver"
   // Handcrafted Jewels: non-sterling-silver pieces (Kundan, Polki, Gold, Jadau, etc.)
   const isSilverPiece = (p: JewelleryProduct) => {
+    const category = (p.category || p.metadata?.category || "").toLowerCase();
+    if (category) return category.includes("silver");
     const medium = (p.medium || "").toLowerCase();
     const material = (p.metadata?.material || "").toLowerCase();
     const title = (p.title || "").toLowerCase();
-    const category = (p.metadata?.category || "").toLowerCase();
-    return (
-      medium.includes("silver") ||
-      material.includes("silver") ||
-      title.includes("silver") ||
-      category.includes("silver")
-    );
+    return medium.includes("silver") || material.includes("silver") || title.includes("silver");
   };
 
   const silverProducts = useMemo(() => {
