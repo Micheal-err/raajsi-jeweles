@@ -552,7 +552,7 @@ async function prerender() {
     const isPriceRange = p.price_display === 'range' &&
       Number.isFinite(minPrice) && minPrice > 0 &&
       Number.isFinite(maxPrice) && maxPrice >= minPrice;
-    const hasFixedPrice = p.price_display !== 'on_request' &&
+    const hasFixedPrice = p.price_display !== 'on_request' && p.price_display !== 'range' &&
       rawMinPrice !== null && rawMinPrice !== '' &&
       Number.isFinite(minPrice) && minPrice > 0 && !isPriceRange;
     const hasPrice = isPriceRange || hasFixedPrice;
