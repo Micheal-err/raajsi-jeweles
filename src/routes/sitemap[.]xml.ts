@@ -81,7 +81,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             const { data: arts } = await sb
               .from("artworks")
               .select("slug")
-              .order("updated_at", { ascending: false });
+              .order("created_at", { ascending: false });
 
             (arts ?? []).forEach((r) => {
               const path = `/artworks/${r.slug}`;
