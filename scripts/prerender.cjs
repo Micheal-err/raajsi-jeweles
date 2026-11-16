@@ -310,8 +310,8 @@ async function prerender() {
   // Product pages must use real database records. Never fabricate catalogue data.
   let products = [];
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/artworks?select=id,slug,title,medium,story,description,primary_image_url,gallery_image_urls,availability,display_price,price,price_min,price_max,price_display,metadata,updated_at&order=updated_at.desc`, {
-      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/artworks?select=id,slug,title,medium,story,primary_image_url,gallery_image_urls,availability,display_price,price,price_min,price_max,price_display,metadata&order=created_at.desc`, {
+      headers: supabaseHeaders(),
     });
     if (!res.ok) throw new Error(`Supabase returned HTTP ${res.status}.`);
     const records = await res.json();
