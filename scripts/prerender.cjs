@@ -7,6 +7,13 @@ const SUPABASE_KEY = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_PUB
 
 const DIST_DIR = path.join(__dirname, '..', 'dist');
 
+function supabaseHeaders() {
+  const headers = { apikey: SUPABASE_KEY };
+  // Supabase sb_publishable_* keys are not JWTs; do not send them as Bearer tokens.
+  if (!SUPABASE_KEY.startsWith('sb_')) headers.Authorization = 'Bearer ' + SUPABASE_KEY;
+  return headers;
+}
+
 function escapeHtml(str) {
   if (!str) return '';
   return String(str)
@@ -201,6 +208,7 @@ function buildHtmlPage(template, pageConfig) {
     ogType = 'website',
     schemaJson = null,
     bodyHtml = '',
+    noIndex = false,
   } = pageConfig;
 
   let html = template;
@@ -266,7 +274,7 @@ function buildHtmlPage(template, pageConfig) {
       ${bodyHtml}
     </main>
     <footer style="border-top: 1px solid #f1f5f9; padding: 3rem 1rem; text-align: center; color: #64748b; font-size: 0.875rem;">
-      <p>&copy; 2026 Raajsi Jewels. All rights reserved. Handcrafted 925 Sterling Silver Jewellery from Jaipur, India.</p>
+      <p>&copy; 2026 Raajsi Jewels. All rights reserved. Handcrafted jewellery from Jaipur, India.</p>
       <div style="margin-top: 0.5rem; display: flex; justify-content: center; gap: 1rem;">
         <a href="/policies/shipping" style="color: #64748b; text-decoration: none;">Shipping</a>
         <a href="/policies/returns" style="color: #64748b; text-decoration: none;">Returns</a>
@@ -510,6 +518,7 @@ async function prerender() {
       ogType: 'article',
       schemaJson,
       bodyHtml,
+      noIndex: true,
     });
 
     const outDir = path.join(DIST_DIR, 'blog', blogSlug);
@@ -525,7 +534,7 @@ async function prerender() {
     const url = `${BASE_URL}${route}`;
 
     const material = p.medium || p.metadata?.material || undefined;
-    const availabilityMap = { available: 'https://schema.org/InStock', sold: 'https://schema.org/SoldOut', reserved: 'https://schema.org/LimitedAvailability', unavailable: 'https://schema.org/OutOfStock' };
+    const availabilityMap = { available: 'https://schema.org/InStock', sold: 'https://schema.org/SoldOut', reserved: 'https://schema.org/LimitedAvailability', unavailable: 'https://schema.org/OutOfStock', out_of_stock: 'https://schema.org/OutOfStock' };
     const offerAvailability = availabilityMap[String(p.availability || '').toLowerCase()];
 
     let pageTitle = `${p.title} | Raajsi Jewels`;
@@ -571,41 +580,7 @@ async function prerender() {
         availability: offerAvailability,
         itemCondition: 'https://schema.org/NewCondition',
         seller: { '@type': 'Organization', name: 'Raajsi Jewels' },
-        shippingDetails: {
-          '@type': 'OfferShippingDetails',
-          shippingRate: {
-            '@type': 'MonetaryAmount',
-            value: price >= 999 ? '0' : '99',
-            currency: 'INR',
-          },
-          shippingDestination: {
-            '@type': 'DefinedRegion',
-            addressCountry: 'IN',
-          },
-          deliveryTime: {
-            '@type': 'ShippingDeliveryTime',
-            handlingTime: {
-              '@type': 'QuantitativeValue',
-              minValue: 1,
-              maxValue: 3,
-              unitCode: 'DAY',
-            },
-            transitTime: {
-              '@type': 'QuantitativeValue',
-              minValue: 3,
-              maxValue: 7,
-              unitCode: 'DAY',
-            },
-          },
-        },
-        hasMerchantReturnPolicy: {
-          '@type': 'MerchantReturnPolicy',
-          applicableCountry: 'IN',
-          returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
-          merchantReturnDays: 7,
-          returnMethod: 'https://schema.org/ReturnByMail',
-          returnFees: 'https://schema.org/FreeReturn',
-        },
+
       } } : {}),
     };
 
