@@ -217,9 +217,15 @@ function JewelleryProductDetail() {
   }
 
   // ── Product JSON-LD (injected client-side for dynamic product data) ──
-  const rawPrice = product.price ?? product.display_price ?? product.price_min ?? null;
-  const numericPrice = rawPrice === null || rawPrice === "" ? null : Number(rawPrice);
-  const hasValidPrice = numericPrice !== null && Number.isFinite(numericPrice) && numericPrice >= 0;
+  const rawMinPrice = product.price_min ?? product.price ?? product.display_price ?? null;
+  const rawMaxPrice = product.price_max ?? rawMinPrice;
+  const numericPrice = rawMinPrice === null || rawMinPrice === "" ? null : Number(rawMinPrice);
+  const numericMaxPrice = rawMaxPrice === null || rawMaxPrice === "" ? null : Number(rawMaxPrice);
+  const isPriceRange = product.price_display === "range" &&
+    numericPrice !== null && Number.isFinite(numericPrice) && numericPrice > 0 &&
+    numericMaxPrice !== null && Number.isFinite(numericMaxPrice) && numericMaxPrice >= numericPrice;
+  const hasValidPrice = product.price_display !== "on_request" && numericPrice !== null &&
+    Number.isFinite(numericPrice) && numericPrice > 0 && (isPriceRange || product.price_display !== "range");
   const schemaAvailability: Record<string, string> = {
     available: "https://schema.org/InStock",
     reserved: "https://schema.org/LimitedAvailability",
@@ -252,10 +258,12 @@ function JewelleryProductDetail() {
     ...(hasValidPrice && schemaAvailability[product.availability]
       ? {
           offers: {
-            "@type": "Offer",
+            "@type": isPriceRange ? "AggregateOffer" : "Offer",
             url: canonical(`/artworks/${slug}`),
             priceCurrency: "INR",
-            price: numericPrice,
+            ...(isPriceRange
+              ? { lowPrice: numericPrice, highPrice: numericMaxPrice, offerCount: 1 }
+              : { price: numericPrice }),
             itemCondition: "https://schema.org/NewCondition",
             availability: schemaAvailability[product.availability],
             seller: { "@type": "Organization", name: SITE_NAME },
