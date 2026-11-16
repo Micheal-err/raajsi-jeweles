@@ -298,21 +298,24 @@ function CategoryPage() {
       const { data, error } = await supabase
         .from("artworks")
         .select(
-          "id,slug,title,medium,story,primary_image_url,gallery_image_urls,availability,display_price,price,metadata",
+          "id,slug,title,medium,category,story,primary_image_url,gallery_image_urls,availability,display_price,price,metadata",
         )
         .order("created_at", { ascending: false })
         .limit(48);
       if (error) throw error;
 
       const kws = meta.keywords.map((k: string) => k.toLowerCase());
-      return ((data ?? []) as unknown as JewelleryProduct[]).filter((p) => {
-        const fields = [
-          p.title,
-          p.medium,
-          p.metadata?.subcategory,
-          p.metadata?.material,
-          p.metadata?.category,
-        ]
+      const catalogue = (data ?? []) as unknown as JewelleryProduct[];
+      const scopedCatalogue = meta.collectionFilter === "sterling-silver"
+        ? catalogue.filter((p) => {
+            const explicitCategory = (p.category || p.metadata?.category || "").toLowerCase();
+            if (explicitCategory) return explicitCategory.includes("silver");
+            return `${p.medium || ""} ${p.metadata?.material || ""}`.toLowerCase().includes("silver");
+          })
+        : catalogue;
+
+      return scopedCatalogue.filter((p) => {
+        const fields = [p.title, p.medium, p.metadata?.subcategory, p.metadata?.material, p.category, p.metadata?.category]
           .filter(Boolean)
           .join(" ")
           .toLowerCase();
