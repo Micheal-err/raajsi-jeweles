@@ -84,7 +84,7 @@ export const Route = createFileRoute("/sitemap.xml")({
               .order("created_at", { ascending: false });
 
             (arts ?? []).forEach((r) => {
-              const path = `/artworks/${r.slug}`;
+              const path = `/artworks/${encodeURIComponent(r.slug)}`;
               // Never include excluded paths
               if (EXCLUDED_PATHS.has(path)) return;
               entries.push({
