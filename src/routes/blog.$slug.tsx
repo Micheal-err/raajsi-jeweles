@@ -31,8 +31,7 @@ export const Route = createFileRoute("/blog/$slug")({
         { name: "description", content: loaderData.seoDesc },
         {
           name: "robots",
-          content:
-            "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+          content: "noindex, follow",
         },
         { property: "og:title", content: loaderData.seoTitle },
         { property: "og:description", content: loaderData.seoDesc },
