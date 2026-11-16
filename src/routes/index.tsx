@@ -6,7 +6,6 @@ import { resolveImage } from "@/lib/images";
 import { Reveal } from "@/components/Reveal";
 import { JewelleryCard, type JewelleryProduct } from "@/components/JewelleryCard";
 import { TrustStrip } from "@/components/TrustStrip";
-import { MOCK_JEWELLERY_PRODUCTS } from "@/lib/jewellery-data";
 import { Parallax, ParallaxImage } from "@/components/Parallax";
 import { getLenis } from "@/components/SmoothScroll";
 import {
@@ -261,11 +260,11 @@ function Home() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("artworks")
-        .select("id,slug,title,medium,story,primary_image_url,gallery_image_urls,availability,display_price,price,metadata")
+        .select("id,slug,title,medium,category,story,primary_image_url,gallery_image_urls,availability,display_price,price,metadata")
         .order("created_at", { ascending: false })
         .limit(48);
-      if (!error && data && data.length > 0) return (data as unknown) as JewelleryProduct[];
-      return MOCK_JEWELLERY_PRODUCTS;
+      if (error) throw error;
+      return (data ?? []) as unknown as JewelleryProduct[];
     },
   });
 
@@ -273,16 +272,16 @@ function Home() {
 
   // STAGE STRICT SEPARATION (PDF Section 6: "The two collections should not be mixed on the homepage or collection pages")
   const isSilver = (p: JewelleryProduct) => {
+    const metadataCategory = (p.metadata?.category || "").toLowerCase();
+    if (metadataCategory.includes("handicraft")) return false;
+    if (metadataCategory.includes("silver")) return true;
     const medium = (p.medium || "").toLowerCase();
     const material = (p.metadata?.material || "").toLowerCase();
-    const title = (p.title || "").toLowerCase();
-    const category = (p.metadata?.category || "").toLowerCase();
-    return (
-      medium.includes("silver") ||
-      material.includes("silver") ||
-      title.includes("silver") ||
-      category.includes("silver")
-    );
+    if (medium.includes("silver") || material.includes("silver")) return true;
+    if (medium.includes("gold") || material.includes("gold")) return false;
+    const category = (p.category || "").toLowerCase();
+    if (category) return category.includes("silver");
+    return (p.title || "").toLowerCase().includes("silver");
   };
 
   const silverItems = useMemo(() => allItems.filter(isSilver), [allItems]);

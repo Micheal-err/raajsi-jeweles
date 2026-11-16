@@ -2,12 +2,43 @@ const fs = require('fs');
 const path = require('path');
 
 const BASE_URL = 'https://www.raajsijewels.com';
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://hchtqjxuqdcnwyacqlph.supabase.co';
-const SUPABASE_KEY = process.env.VITE_SUPABASE_KEY || 'sb_publishable_vA7Syx8z5fZckmPLYA2Wvg_XyFtfF3g';
+const SUPABASE_URL =
+  process.env.VITE_SUPABASE_URL ||
+  process.env.SUPABASE_URL ||
+  'https://ldkrcpdsutebayruhrjg.supabase.co';
+const SUPABASE_KEY =
+  process.env.SUPABASE_SECRET_KEY ||
+  process.env.SUPABASE_PUBLISHABLE_KEY ||
+  process.env.VITE_SUPABASE_KEY ||
+  process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  process.env.VITE_SUPABASE_ANON_KEY ||
+  'sb_publishable_vA7Syx8z5fZckmPLYA2Wvg_XyFtfF3g';
 
-function escapeXml(unsafe) {
-  if (!unsafe) return '';
-  return String(unsafe)
+const STATIC_PATHS = [
+  '/',
+  '/collection',
+  '/about',
+  '/contact',
+  '/policies/shipping',
+  '/policies/returns',
+  '/policies/faqs',
+  '/policies/privacy',
+  '/policies/terms',
+  '/jewellery/silver-earrings',
+  '/jewellery/necklace-sets',
+  '/jewellery/bracelets-bangles',
+  '/jewellery/anklets',
+  '/jewellery/rings',
+  '/jewellery/nose-pins',
+  '/jewellery/mangalsutra',
+  '/jewellery/jaipur-handmade-silver',
+  '/jewellery/meenakari',
+  '/jewellery/kundan',
+  '/blog',
+];
+
+function escapeXml(value) {
+  return String(value ?? '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -15,120 +46,122 @@ function escapeXml(unsafe) {
     .replace(/'/g, '&apos;');
 }
 
-async function generate() {
-  const today = '2026-10-24';
+function supabaseHeaders() {
+  const headers = { apikey: SUPABASE_KEY };
 
-  // High-value, strictly canonical static pages with real content update dates
-  // (changefreq & priority dropped per Google Search Console guidelines)
-  const staticPages = [
-    { path: '/', lastmod: '2026-10-24' },
-    { path: '/collection', lastmod: '2026-10-24' },
-    { path: '/about', lastmod: '2026-09-26' },
-    { path: '/contact', lastmod: '2026-09-26' },
-    { path: '/policies/shipping', lastmod: '2026-09-26' },
-    { path: '/policies/returns', lastmod: '2026-09-26' },
-    { path: '/policies/faqs', lastmod: '2026-09-26' },
-    { path: '/policies/privacy', lastmod: '2026-09-26' },
-    { path: '/policies/terms', lastmod: '2026-09-26' },
-
-    // 10 Keyword-targeted category landing pages
-    { path: '/jewellery/silver-earrings', lastmod: '2026-10-24' },
-    { path: '/jewellery/necklace-sets', lastmod: '2026-10-24' },
-    { path: '/jewellery/bracelets-bangles', lastmod: '2026-10-24' },
-    { path: '/jewellery/anklets', lastmod: '2026-10-24' },
-    { path: '/jewellery/rings', lastmod: '2026-10-24' },
-    { path: '/jewellery/nose-pins', lastmod: '2026-10-24' },
-    { path: '/jewellery/mangalsutra', lastmod: '2026-10-24' },
-    { path: '/jewellery/jaipur-handmade-silver', lastmod: '2026-10-24' },
-    { path: '/jewellery/meenakari', lastmod: '2026-10-24' },
-    { path: '/jewellery/kundan', lastmod: '2026-10-24' },
-
-    // Blog / Education pages
-    { path: '/blog', lastmod: '2026-10-24' },
-    { path: '/blog/how-to-check-if-silver-is-real-925', lastmod: '2026-10-01' },
-    { path: '/blog/925-silver-vs-pure-silver', lastmod: '2026-10-05' },
-    { path: '/blog/does-sterling-silver-tarnish-and-how-to-clean-it', lastmod: '2026-10-10' },
-    { path: '/blog/is-silver-jewellery-safe-for-daily-wear', lastmod: '2026-10-15' },
-    { path: '/blog/meenakari-vs-kundan-vs-polki-explained', lastmod: '2026-10-20' },
-  ];
-
-  const products = [];
-
-  // Fetch only active, real products from Supabase
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/artworks?select=slug,title,updated_at,primary_image_url&order=updated_at.desc`, {
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`,
-      },
-    });
-
-    if (res.ok) {
-      const dbArtworks = await res.json();
-      if (Array.isArray(dbArtworks)) {
-        for (const art of dbArtworks) {
-          if (art.slug && typeof art.slug === 'string' && art.slug.trim()) {
-            products.push({
-              slug: art.slug.trim(),
-              title: art.title ? art.title.trim() : 'Raajsi Fine Jewellery',
-              lastmod: art.updated_at ? new Date(art.updated_at).toISOString().split('T')[0] : '2026-10-24',
-              image: art.primary_image_url || null,
-            });
-          }
-        }
-        console.log(`✓ Fetched ${products.length} live products directly from Supabase.`);
-      }
-    } else {
-      console.warn(`Supabase query returned status ${res.status}`);
-    }
-  } catch (err) {
-    console.error('Error fetching Supabase products:', err.message);
+  // New Supabase publishable keys are not JWTs and must not be sent as
+  // Authorization: Bearer tokens. Legacy anon/service JWTs still need it.
+  if (!SUPABASE_KEY.startsWith('sb_')) {
+    headers.Authorization = `Bearer ${SUPABASE_KEY}`;
   }
 
-  // Construct XML adhering to standard sitemap 0.9 and Google Image extension
-  const xmlLines = [
+  return headers;
+}
+
+
+async function fetchProducts() {
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    throw new Error('Supabase URL or API key is not configured.');
+  }
+
+  const endpoint = new URL('/rest/v1/artworks', SUPABASE_URL);
+  endpoint.searchParams.set('select', 'slug,title,primary_image_url');
+  endpoint.searchParams.set('order', 'created_at.desc');
+
+  const response = await fetch(endpoint, {
+    headers: supabaseHeaders(),
+    signal: AbortSignal.timeout(20000),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Supabase returned HTTP ${response.status} while generating sitemap.`);
+  }
+
+  const rows = await response.json();
+  if (!Array.isArray(rows)) {
+    throw new Error('Supabase returned an invalid artworks response.');
+  }
+
+  const seen = new Set();
+  return rows.filter((product) => {
+    const slug = typeof product?.slug === 'string' ? product.slug.trim() : '';
+    if (!slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/i.test(slug) || seen.has(slug)) {
+      return false;
+    }
+    seen.add(slug);
+    return true;
+  }).map((product) => ({
+    slug: product.slug.trim(),
+    title: product.title || 'Raajsi Jewels product',
+    lastmod: null,
+    image: typeof product.primary_image_url === 'string' ? product.primary_image_url : null,
+  }));
+}
+
+function buildSitemap(products) {
+  const entries = [];
+  const seenUrls = new Set();
+
+  function addEntry(url, lastmod, image, imageTitle) {
+    if (seenUrls.has(url)) return;
+    seenUrls.add(url);
+
+    entries.push('  <url>');
+    entries.push(`    <loc>${escapeXml(url)}</loc>`);
+    // lastmod is omitted unless it comes from a real content update timestamp.
+    if (lastmod) entries.push(`    <lastmod>${lastmod}</lastmod>`);
+
+    if (image && /^https?:\/\//i.test(image)) {
+      entries.push('    <image:image>');
+      entries.push(`      <image:loc>${escapeXml(image)}</image:loc>`);
+      entries.push(`      <image:title>${escapeXml(imageTitle)}</image:title>`);
+      entries.push('    </image:image>');
+    }
+
+    entries.push('  </url>');
+  }
+
+  for (const route of STATIC_PATHS) {
+    addEntry(`${BASE_URL}${route === '/' ? '/' : route}`);
+  }
+
+  for (const product of products) {
+    addEntry(
+      `${BASE_URL}/artworks/${encodeURIComponent(product.slug)}`,
+      product.lastmod,
+      product.image,
+      product.title,
+    );
+  }
+
+  return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">',
-  ];
+    ...entries,
+    '</urlset>',
+  ].join('\n');
+}
 
-  for (const page of staticPages) {
-    xmlLines.push('  <url>');
-    xmlLines.push(`    <loc>${BASE_URL}${page.path}</loc>`);
-    xmlLines.push(`    <lastmod>${page.lastmod}</lastmod>`);
-    xmlLines.push('  </url>');
-  }
-
-  for (const prod of products) {
-    xmlLines.push('  <url>');
-    xmlLines.push(`    <loc>${BASE_URL}/artworks/${encodeURIComponent(prod.slug)}</loc>`);
-    xmlLines.push(`    <lastmod>${prod.lastmod || today}</lastmod>`);
-    if (prod.image && prod.image.startsWith('http')) {
-      xmlLines.push('    <image:image>');
-      xmlLines.push(`      <image:loc>${escapeXml(prod.image)}</image:loc>`);
-      xmlLines.push(`      <image:title>${escapeXml(prod.title)}</image:title>`);
-      xmlLines.push('    </image:image>');
-    }
-    xmlLines.push('  </url>');
-  }
-
-  xmlLines.push('</urlset>');
-  const xmlContent = xmlLines.join('\n');
-
-  // Write to public/sitemap.xml
-  const publicDir = path.join(__dirname, '..', 'public');
-  if (!fs.existsSync(publicDir)) {
+async function generate() {
+  try {
+    const products = await fetchProducts();
+    const xml = buildSitemap(products);
+    const publicDir = path.join(__dirname, '..', 'public');
     fs.mkdirSync(publicDir, { recursive: true });
-  }
-  const publicPath = path.join(publicDir, 'sitemap.xml');
-  fs.writeFileSync(publicPath, xmlContent, 'utf8');
-  console.log(`✓ Generated clean sitemap at: ${publicPath} (${staticPages.length + products.length} total URLs)`);
 
-  // Mirror to dist/sitemap.xml if dist exists
-  const distDir = path.join(__dirname, '..', 'dist');
-  if (fs.existsSync(distDir)) {
-    const distPath = path.join(distDir, 'sitemap.xml');
-    fs.writeFileSync(distPath, xmlContent, 'utf8');
-    console.log(`✓ Mirrored sitemap to: ${distPath}`);
+    const publicPath = path.join(publicDir, 'sitemap.xml');
+    fs.writeFileSync(publicPath, xml, 'utf8');
+
+    const distDir = path.join(__dirname, '..', 'dist');
+    if (fs.existsSync(distDir)) {
+      fs.writeFileSync(path.join(distDir, 'sitemap.xml'), xml, 'utf8');
+    }
+
+    console.log(`✓ Generated sitemap with ${STATIC_PATHS.length} public pages and ${products.length} product URLs.`);
+    console.log('  Outline-only blog articles are intentionally omitted until their content is complete.');
+  } catch (error) {
+    console.error(`Sitemap generation failed: ${error.message}`);
+    process.exitCode = 1;
   }
 }
 

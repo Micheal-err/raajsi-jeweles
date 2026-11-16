@@ -21,7 +21,6 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { JewelleryCard, type JewelleryProduct } from "@/components/JewelleryCard";
-import { MOCK_JEWELLERY_PRODUCTS } from "@/lib/jewellery-data";
 import { Reveal } from "@/components/Reveal";
 import {
   SITE_NAME,
@@ -299,30 +298,28 @@ function CategoryPage() {
       const { data, error } = await supabase
         .from("artworks")
         .select(
-          "id,slug,title,medium,story,primary_image_url,gallery_image_urls,availability,display_price,price,metadata",
+          "id,slug,title,medium,category,story,primary_image_url,gallery_image_urls,availability,display_price,price,metadata",
         )
-        .order("created_at", { ascending: false })
-        .limit(48);
-      if (!error && data && data.length > 0) {
-        const kws = meta.keywords.map((k: string) => k.toLowerCase());
-        const filtered = (data as unknown as JewelleryProduct[]).filter((p: JewelleryProduct) => {
-          const fields = [
-            p.title,
-            p.medium,
-            p.metadata?.subcategory,
-            p.metadata?.material,
-            p.metadata?.category,
-          ]
-            .join(" ")
-            .toLowerCase();
-          return kws.some((kw: string) => fields.includes(kw));
-        });
-        return filtered.length > 0 ? filtered : (data as unknown as JewelleryProduct[]);
-      }
-      // Fallback: filter mock data
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+
       const kws = meta.keywords.map((k: string) => k.toLowerCase());
-      return MOCK_JEWELLERY_PRODUCTS.filter((p: JewelleryProduct) => {
-        const fields = [p.title, p.medium, p.metadata?.subcategory ?? ""]
+      const catalogue = (data ?? []) as unknown as JewelleryProduct[];
+      const scopedCatalogue = meta.collectionFilter === "sterling-silver"
+        ? catalogue.filter((p) => {
+            const metadataCategory = (p.metadata?.category || "").toLowerCase();
+            if (metadataCategory.includes("handicraft")) return false;
+            if (metadataCategory.includes("silver")) return true;
+            const materialText = `${p.medium || ""} ${p.metadata?.material || ""}`.toLowerCase();
+            if (materialText.includes("silver")) return true;
+            if (materialText.includes("gold")) return false;
+            return (p.category || "").toLowerCase().includes("silver");
+          })
+        : catalogue;
+
+      return scopedCatalogue.filter((p) => {
+        const fields = [p.title, p.medium, p.metadata?.subcategory, p.metadata?.material, p.category, p.metadata?.category]
+          .filter(Boolean)
           .join(" ")
           .toLowerCase();
         return kws.some((kw: string) => fields.includes(kw));

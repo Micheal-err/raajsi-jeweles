@@ -18,14 +18,6 @@ const CATEGORY_SLUGS = [
   "kundan",
 ];
 
-// Blog post slugs from task11
-const BLOG_SLUGS = [
-  "how-to-check-if-silver-is-real-925",
-  "925-silver-vs-pure-silver",
-  "does-sterling-silver-tarnish-and-how-to-clean-it",
-  "is-silver-jewellery-safe-for-daily-wear",
-  "meenakari-vs-kundan-vs-polki-explained",
-];
 
 // Paths that must NEVER appear in the sitemap
 const EXCLUDED_PATHS = new Set([
@@ -51,8 +43,6 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        const now = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-
         const entries: {
           path: string;
           changefreq?: string;
@@ -60,32 +50,24 @@ export const Route = createFileRoute("/sitemap.xml")({
           lastmod?: string;
         }[] = [
           // Core pages
-          { path: "/", changefreq: "daily", priority: "1.0", lastmod: now },
-          { path: "/collection", changefreq: "daily", priority: "0.9", lastmod: now },
-          { path: "/about", changefreq: "monthly", priority: "0.7", lastmod: "2026-09-26" },
-          { path: "/contact", changefreq: "monthly", priority: "0.7", lastmod: "2026-09-26" },
-          { path: "/policies/shipping", changefreq: "monthly", priority: "0.6", lastmod: now },
-          { path: "/policies/returns", changefreq: "monthly", priority: "0.6", lastmod: "2026-09-26" },
-          { path: "/policies/faqs", changefreq: "weekly", priority: "0.6", lastmod: now },
-          { path: "/policies/privacy", changefreq: "yearly", priority: "0.4", lastmod: "2026-09-26" },
-          { path: "/policies/terms", changefreq: "yearly", priority: "0.4", lastmod: "2026-09-26" },
+          { path: "/", changefreq: "daily", priority: "1.0" },
+          { path: "/collection", changefreq: "daily", priority: "0.9" },
+          { path: "/about", changefreq: "monthly", priority: "0.7" },
+          { path: "/contact", changefreq: "monthly", priority: "0.7" },
+          { path: "/policies/shipping", changefreq: "monthly", priority: "0.6" },
+          { path: "/policies/returns", changefreq: "monthly", priority: "0.6" },
+          { path: "/policies/faqs", changefreq: "weekly", priority: "0.6" },
+          { path: "/policies/privacy", changefreq: "yearly", priority: "0.4" },
+          { path: "/policies/terms", changefreq: "yearly", priority: "0.4" },
 
           // Category pages (task5)
           ...CATEGORY_SLUGS.map((slug) => ({
             path: `/jewellery/${slug}`,
             changefreq: "weekly",
             priority: "0.85",
-            lastmod: now,
           })),
 
-          // Blog pages (task11)
-          { path: "/blog", changefreq: "weekly", priority: "0.7", lastmod: now },
-          ...BLOG_SLUGS.map((slug) => ({
-            path: `/blog/${slug}`,
-            changefreq: "monthly",
-            priority: "0.6",
-            lastmod: now,
-          })),
+          { path: "/blog", changefreq: "weekly", priority: "0.7" },
         ];
 
         try {
@@ -97,20 +79,17 @@ export const Route = createFileRoute("/sitemap.xml")({
             });
             const { data: arts } = await sb
               .from("artworks")
-              .select("slug,updated_at")
-              .order("updated_at", { ascending: false });
+              .select("slug")
+              .order("created_at", { ascending: false });
 
             (arts ?? []).forEach((r) => {
-              const path = `/artworks/${r.slug}`;
+              const path = `/artworks/${encodeURIComponent(r.slug)}`;
               // Never include excluded paths
               if (EXCLUDED_PATHS.has(path)) return;
               entries.push({
                 path,
                 changefreq: "weekly",
                 priority: "0.8",
-                lastmod: r.updated_at
-                  ? new Date(r.updated_at).toISOString().split("T")[0]
-                  : now,
               });
             });
           }

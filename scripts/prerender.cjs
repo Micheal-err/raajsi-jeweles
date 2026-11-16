@@ -2,10 +2,17 @@ const fs = require('fs');
 const path = require('path');
 
 const BASE_URL = 'https://www.raajsijewels.com';
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://hchtqjxuqdcnwyacqlph.supabase.co';
-const SUPABASE_KEY = process.env.SUPABASE_SECRET_KEY || process.env.VITE_SUPABASE_KEY || 'sb_publishable_vA7Syx8z5fZckmPLYA2Wvg_XyFtfF3g';
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || 'https://ldkrcpdsutebayruhrjg.supabase.co';
+const SUPABASE_KEY = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_vA7Syx8z5fZckmPLYA2Wvg_XyFtfF3g';
 
 const DIST_DIR = path.join(__dirname, '..', 'dist');
+
+function supabaseHeaders() {
+  const headers = { apikey: SUPABASE_KEY };
+  // Supabase sb_publishable_* keys are not JWTs; do not send them as Bearer tokens.
+  if (!SUPABASE_KEY.startsWith('sb_')) headers.Authorization = 'Bearer ' + SUPABASE_KEY;
+  return headers;
+}
 
 function escapeHtml(str) {
   if (!str) return '';
@@ -201,6 +208,7 @@ function buildHtmlPage(template, pageConfig) {
     ogType = 'website',
     schemaJson = null,
     bodyHtml = '',
+    noIndex = false,
   } = pageConfig;
 
   let html = template;
@@ -239,6 +247,17 @@ function buildHtmlPage(template, pageConfig) {
     headAdditions.splice(1, 0, `  <meta name="description" content="${escapeHtml(desc)}" />`);
   }
 
+  // Ensure the static HTML fallback carries the same robots directive as the route.
+  const robotsContent = noIndex ? 'noindex, follow' : 'index, follow, max-image-preview:large';
+  if (/<meta\s+name=["']robots["'][\s\S]*?>/i.test(html)) {
+    html = html.replace(
+      /<meta\s+name=["']robots["'][\s\S]*?>/i,
+      `<meta name="robots" content="${robotsContent}" />`,
+    );
+  } else {
+    headAdditions.push(`  <meta name="robots" content="${robotsContent}" />`);
+  }
+
   if (schemaJson) {
     headAdditions.push(`  <script type="application/ld+json">${JSON.stringify(schemaJson)}</script>`);
   }
@@ -266,7 +285,7 @@ function buildHtmlPage(template, pageConfig) {
       ${bodyHtml}
     </main>
     <footer style="border-top: 1px solid #f1f5f9; padding: 3rem 1rem; text-align: center; color: #64748b; font-size: 0.875rem;">
-      <p>&copy; 2026 Raajsi Jewels. All rights reserved. Handcrafted 925 Sterling Silver Jewellery from Jaipur, India.</p>
+      <p>&copy; 2026 Raajsi Jewels. All rights reserved. Handcrafted jewellery from Jaipur, India.</p>
       <div style="margin-top: 0.5rem; display: flex; justify-content: center; gap: 1rem;">
         <a href="/policies/shipping" style="color: #64748b; text-decoration: none;">Shipping</a>
         <a href="/policies/returns" style="color: #64748b; text-decoration: none;">Returns</a>
@@ -299,21 +318,22 @@ async function prerender() {
 
   const baseTemplate = fs.readFileSync(indexHtmlPath, 'utf8');
 
-  // Fetch 20 live products from Supabase
+  // Product pages must use real database records. Never fabricate catalogue data.
   let products = [];
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/artworks?select=*&order=updated_at.desc`, {
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`,
-      },
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/artworks?select=id,slug,title,medium,story,primary_image_url,gallery_image_urls,availability,display_price,price,price_min,price_max,price_display,metadata&order=created_at.desc`, {
+      headers: supabaseHeaders(),
     });
-    if (res.ok) {
-      products = await res.json();
-      console.log(`✓ Fetched ${products.length} live products from Supabase for pre-rendering.`);
-    }
+    if (!res.ok) throw new Error(`Supabase returned HTTP ${res.status}.`);
+    const records = await res.json();
+    if (!Array.isArray(records)) throw new Error('Supabase artworks response was not an array.');
+    products = records.filter((p) => p && typeof p.slug === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/i.test(p.slug.trim()) && p.title);
+    if (products.length !== records.length) console.warn(`Skipped ${records.length - products.length} invalid records without slug/title.`);
+    console.log(`✓ Fetched ${products.length} actual products for prerendering.`);
   } catch (err) {
-    console.error('Error querying Supabase artworks:', err.message);
+    console.error(`SEO prerender cannot safely generate product pages: ${err.message}`);
+    process.exitCode = 1;
+    return;
   }
 
   let generatedCount = 0;
@@ -346,7 +366,8 @@ async function prerender() {
               addressCountry: 'IN',
             },
             priceRange: '₹₹',
-            telephone: '+919660233003',
+            telephone: '+919829145129',
+            email: 'raajsiforms@gmail.com',
           },
           {
             '@type': 'WebSite',
@@ -508,6 +529,7 @@ async function prerender() {
       ogType: 'article',
       schemaJson,
       bodyHtml,
+      noIndex: true,
     });
 
     const outDir = path.join(DIST_DIR, 'blog', blogSlug);
@@ -519,11 +541,12 @@ async function prerender() {
   // ── D. PRE-RENDER PRODUCT PAGES ───────────────────────────────────────
   for (const p of products) {
     if (!p.slug) continue;
-    const route = `/artworks/${p.slug}`;
+    const route = `/artworks/${encodeURIComponent(p.slug)}`;
     const url = `${BASE_URL}${route}`;
 
-    const isSilver = (p.medium || '').toLowerCase().includes('silver') || (p.metadata?.category || '').toLowerCase() === 'silver';
-    const material = isSilver ? '925 Sterling Silver' : (p.medium || 'Handcrafted Metal');
+    const material = p.medium || p.metadata?.material || undefined;
+    const availabilityMap = { available: 'https://schema.org/InStock', sold: 'https://schema.org/SoldOut', reserved: 'https://schema.org/LimitedAvailability', unavailable: 'https://schema.org/OutOfStock', out_of_stock: 'https://schema.org/OutOfStock' };
+    const offerAvailability = availabilityMap[String(p.availability || '').toLowerCase()];
 
     let pageTitle = `${p.title} | Raajsi Jewels`;
     if (pageTitle.length > 60) {
@@ -533,14 +556,24 @@ async function prerender() {
       pageTitle = `${p.title.slice(0, 50).trim()}… | Raajsi`;
     }
 
-    const price = Number(p.price || 999);
-    let desc = `Shop ${p.title} handcrafted in Jaipur. Pure 925 sterling silver with authentic artisan finish. BIS hallmarked. Free delivery above ₹999.`;
-    if (desc.length > 155) {
-      desc = `Buy ${p.title} handcrafted in Jaipur. 925 sterling silver, BIS hallmarked. Free delivery above ₹999.`;
-    }
-    if (desc.length > 155) {
-      desc = `${desc.slice(0, 151).trim()}...`;
-    }
+    const rawMinPrice = p.price_display === 'range' ? p.price_min : (p.price ?? p.display_price ?? p.price_min ?? null);
+    const rawMaxPrice = p.price_display === 'range' ? p.price_max : rawMinPrice;
+    const minPrice = Number(rawMinPrice);
+    const maxPrice = Number(rawMaxPrice);
+    const isPriceRange = p.price_display === 'range' &&
+      Number.isFinite(minPrice) && minPrice > 0 &&
+      Number.isFinite(maxPrice) && maxPrice >= minPrice;
+    const hasFixedPrice = p.price_display !== 'on_request' && p.price_display !== 'range' &&
+      rawMinPrice !== null && rawMinPrice !== '' &&
+      Number.isFinite(minPrice) && minPrice > 0 && !isPriceRange;
+    const hasPrice = isPriceRange || hasFixedPrice;
+    const productDescription = String(p.story || `${p.title} from Raajsi Jewels.`).trim();
+    let desc = `Explore ${p.title} from Raajsi Jewels. ${productDescription}`;
+    if (desc.length > 158) desc = `${desc.slice(0, 155).trimEnd()}…`;
+    const priceLabel = isPriceRange
+      ? `₹${minPrice.toLocaleString('en-IN')} – ₹${maxPrice.toLocaleString('en-IN')}`
+      : hasFixedPrice ? `₹${minPrice.toLocaleString('en-IN')}` : '';
+    const isAvailable = String(p.availability || '').toLowerCase() === 'available';
     const image = p.primary_image_url || `${BASE_URL}/logo.png`;
 
     const breadcrumbs = [
@@ -554,61 +587,24 @@ async function prerender() {
       '@type': 'Product',
       name: p.title,
       image: [image],
-      description: desc,
-      sku: p.slug,
-      material,
+      description: productDescription,
+      sku: p.id || p.slug,
+      ...(material ? { material } : {}),
       brand: {
         '@type': 'Brand',
         name: 'Raajsi Jewels',
       },
-      offers: {
-        '@type': 'Offer',
+      ...(hasPrice && offerAvailability ? { offers: {
+        '@type': isPriceRange ? 'AggregateOffer' : 'Offer',
         url,
         priceCurrency: 'INR',
-        price: price.toFixed(2),
-        priceValidUntil: '2027-12-31',
-        availability: 'https://schema.org/InStock',
+        ...(isPriceRange
+          ? { lowPrice: minPrice.toFixed(2), highPrice: maxPrice.toFixed(2) }
+          : { price: minPrice.toFixed(2) }),
+        availability: offerAvailability,
         itemCondition: 'https://schema.org/NewCondition',
-        seller: {
-          '@type': 'Organization',
-          name: 'Raajsi Jewels',
-        },
-        shippingDetails: {
-          '@type': 'OfferShippingDetails',
-          shippingRate: {
-            '@type': 'MonetaryAmount',
-            value: price >= 999 ? '0' : '99',
-            currency: 'INR',
-          },
-          shippingDestination: {
-            '@type': 'DefinedRegion',
-            addressCountry: 'IN',
-          },
-          deliveryTime: {
-            '@type': 'ShippingDeliveryTime',
-            handlingTime: {
-              '@type': 'QuantitativeValue',
-              minValue: 1,
-              maxValue: 3,
-              unitCode: 'DAY',
-            },
-            transitTime: {
-              '@type': 'QuantitativeValue',
-              minValue: 3,
-              maxValue: 7,
-              unitCode: 'DAY',
-            },
-          },
-        },
-        hasMerchantReturnPolicy: {
-          '@type': 'MerchantReturnPolicy',
-          applicableCountry: 'IN',
-          returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
-          merchantReturnDays: 7,
-          returnMethod: 'https://schema.org/ReturnByMail',
-          returnFees: 'https://schema.org/FreeReturn',
-        },
-      },
+        seller: { '@type': 'Organization', name: 'Raajsi Jewels' },
+      } } : {}),
     };
 
     const bodyHtml = `
@@ -617,13 +613,12 @@ async function prerender() {
           <img src="${escapeHtml(image)}" alt="${escapeHtml(p.title)}" style="width: 100%; max-width: 500px; height: auto; border-radius: 8px; object-fit: cover;" />
         </div>
         <div>
-          <div style="font-size: 1.75rem; font-weight: 600; color: #0f172a; margin-bottom: 0.5rem;">₹${price.toLocaleString('en-IN')}</div>
-          <div style="display: inline-block; padding: 0.25rem 0.75rem; background: #ecfdf5; color: #065f46; font-size: 0.8125rem; font-weight: 500; border-radius: 9999px; margin-bottom: 1.5rem;">In Stock &bull; Free Shipping Above ₹999</div>
-          <p style="font-size: 1rem; color: #334155; line-height: 1.7; margin-bottom: 1.5rem;">${escapeHtml(desc)}</p>
+          ${hasPrice ? `<div style="font-size: 1.75rem; font-weight: 600; color: #0f172a; margin-bottom: 0.5rem;">${priceLabel}</div>` : ''}
+          ${p.availability ? `<div style="display: inline-block; padding: 0.25rem 0.75rem; background: ${isAvailable ? '#ecfdf5' : '#f8fafc'}; color: ${isAvailable ? '#065f46' : '#475569'}; font-size: 0.8125rem; font-weight: 500; border-radius: 9999px; margin-bottom: 1.5rem;">${escapeHtml(String(p.availability))}</div>` : ''}
+          <p style="font-size: 1rem; color: #334155; line-height: 1.7; margin-bottom: 1.5rem;">${escapeHtml(productDescription)}</p>
           <div style="border-top: 1px solid #e2e8f0; padding-top: 1rem; font-size: 0.875rem; color: #64748b;">
-            <p><strong>Material:</strong> ${escapeHtml(material)}</p>
-            <p><strong>Origin:</strong> Handcrafted in Jaipur, India</p>
-            <p><strong>Guarantee:</strong> 7-Day Exchange &bull; BIS Hallmark Authenticity</p>
+            ${material ? `<p><strong>Material:</strong> ${escapeHtml(material)}</p>` : ''}
+            <p><strong>Brand:</strong> Raajsi Jewels</p>
           </div>
         </div>
       </div>

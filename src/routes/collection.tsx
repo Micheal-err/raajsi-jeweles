@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { JewelleryCard, type JewelleryProduct } from "@/components/JewelleryCard";
-import { MOCK_JEWELLERY_PRODUCTS } from "@/lib/jewellery-data";
 import { Reveal } from "@/components/Reveal";
 import { Search, Sparkles, Check, Gem, ShieldCheck, ArrowRight } from "lucide-react";
 
@@ -132,10 +131,10 @@ function CollectionPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("artworks")
-        .select("id,slug,title,medium,story,primary_image_url,gallery_image_urls,availability,display_price,price,metadata")
+        .select("id,slug,title,medium,category,story,primary_image_url,gallery_image_urls,availability,display_price,price,metadata")
         .order("created_at", { ascending: false });
-      if (!error && data && data.length > 0) return (data as unknown) as JewelleryProduct[];
-      return MOCK_JEWELLERY_PRODUCTS;
+      if (error) throw error;
+      return (data ?? []) as unknown as JewelleryProduct[];
     },
   });
 
@@ -145,16 +144,16 @@ function CollectionPage() {
   // Sterling Silver 925: metal/medium/material contains "silver"
   // Handcrafted Jewels: non-sterling-silver pieces (Kundan, Polki, Gold, Jadau, etc.)
   const isSilverPiece = (p: JewelleryProduct) => {
+    const metadataCategory = (p.metadata?.category || "").toLowerCase();
+    if (metadataCategory.includes("handicraft")) return false;
+    if (metadataCategory.includes("silver")) return true;
     const medium = (p.medium || "").toLowerCase();
     const material = (p.metadata?.material || "").toLowerCase();
-    const title = (p.title || "").toLowerCase();
-    const category = (p.metadata?.category || "").toLowerCase();
-    return (
-      medium.includes("silver") ||
-      material.includes("silver") ||
-      title.includes("silver") ||
-      category.includes("silver")
-    );
+    if (medium.includes("silver") || material.includes("silver")) return true;
+    if (medium.includes("gold") || material.includes("gold")) return false;
+    const category = (p.category || "").toLowerCase();
+    if (category) return category.includes("silver");
+    return (p.title || "").toLowerCase().includes("silver");
   };
 
   const silverProducts = useMemo(() => {

@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,11 +7,9 @@ import { useFormatPrice } from "@/lib/currency-format";
 import { useAddToCart, useCart } from "@/hooks/useCommerce";
 import { Reveal } from "@/components/Reveal";
 import { JewelleryCard, type JewelleryProduct } from "@/components/JewelleryCard";
-import { MOCK_JEWELLERY_PRODUCTS } from "@/lib/jewellery-data";
 import { TrustStrip } from "@/components/TrustStrip";
 import {
   ShoppingBag,
-  Check,
   ShieldCheck,
   Truck,
   RotateCcw,
@@ -21,7 +19,6 @@ import {
   Maximize2,
   X,
   Gem,
-  Award,
   Minus,
   Plus,
   Star,
@@ -29,16 +26,10 @@ import {
 } from "lucide-react";
 import { ProductReviews } from "@/components/ProductReviews";
 import { useProductReviews } from "@/hooks/useProductReviews";
-import randomImg1 from "@/assets/random-img-1.webp";
-import randomImg2 from "@/assets/random-img-2.webp";
-import randomImg3 from "@/assets/random-img-3.webp";
-import randomImg4 from "@/assets/random-img-4.webp";
-import randomImg5 from "@/assets/random-img-5.webp";
 
 import {
   SITE_NAME,
   SITE_LOCALE,
-  SITE_URL,
   canonical,
   defaultOgImage,
   breadcrumbSchema,
@@ -59,12 +50,9 @@ export const Route = createFileRoute("/artworks/$slug")({
       seoTitle = `${formattedTitle.slice(0, 50).trim()}… | Raajsi`;
     }
 
-    let seoDesc = `Shop ${formattedTitle} handcrafted in Jaipur. Pure 925 sterling silver with authentic artisan finish. BIS hallmarked. Free delivery above ₹999.`;
+    let seoDesc = `Explore ${formattedTitle} from Raajsi Jewels. View product details, materials, availability and pricing.`;
     if (seoDesc.length > 155) {
-      seoDesc = `Buy ${formattedTitle} handcrafted in Jaipur. 925 sterling silver, BIS hallmarked. Free delivery above ₹999.`;
-    }
-    if (seoDesc.length > 155) {
-      seoDesc = `${seoDesc.slice(0, 151).trim()}...`;
+      seoDesc = `Explore ${formattedTitle} at Raajsi Jewels. View product details and availability.`;
     }
 
     return {
@@ -170,62 +158,42 @@ function JewelleryProductDetail() {
     queryKey: ["jewellery-product", slug],
     staleTime: 300_000,
     gcTime: 1_800_000,
-    queryFn: async (): Promise<JewelleryProduct> => {
+    queryFn: async (): Promise<JewelleryProduct | null> => {
       const cleanSlug = decodeURIComponent(slug).trim().toLowerCase();
-      try {
-        const { data, error } = await supabase
-          .from("artworks")
-          .select("*")
-          .eq("slug", cleanSlug)
-          .maybeSingle();
-        if (!error && data) return data as unknown as JewelleryProduct;
+      const { data, error } = await supabase
+        .from("artworks")
+        .select("*")
+        .eq("slug", cleanSlug)
+        .maybeSingle();
 
-        // Try case-insensitive ilike match
-        const { data: ilikeData } = await supabase
-          .from("artworks")
-          .select("*")
-          .ilike("slug", cleanSlug)
-          .maybeSingle();
-        if (ilikeData) return ilikeData as unknown as JewelleryProduct;
-      } catch (err) {
-        console.warn("Product fetch from Supabase:", err);
-      }
-
-      // Fallback: match in MOCK_JEWELLERY_PRODUCTS
-      const found = MOCK_JEWELLERY_PRODUCTS.find(
-        (p) => p.slug.toLowerCase() === cleanSlug || p.id?.toLowerCase() === cleanSlug
-      );
-      if (found) return found;
-
-      const partialMatch = MOCK_JEWELLERY_PRODUCTS.find(
-        (p) => cleanSlug.includes(p.slug) || p.slug.includes(cleanSlug)
-      );
-      return partialMatch || MOCK_JEWELLERY_PRODUCTS[0];
+      if (error) throw error;
+      // A missing record is a genuine not-found result, not a reason to
+      // substitute an unrelated sample product.
+      return data ? (data as unknown as JewelleryProduct) : null;
     },
   });
 
-  const product = productQuery.data || MOCK_JEWELLERY_PRODUCTS[0];
+  const product = productQuery.data ?? null;
 
   // Fetch related items
   const relatedQuery = useQuery({
     enabled: !!product,
     queryKey: ["related-jewellery", product?.id],
-    queryFn: async () => {
-      try {
-        const { data, error } = await supabase
-          .from("artworks")
-          .select("id,slug,title,medium,story,primary_image_url,availability,display_price,price,metadata")
-          .neq("slug", slug)
-          .limit(4);
-        if (!error && data && data.length > 0) return (data as unknown) as JewelleryProduct[];
-      } catch {}
-      return MOCK_JEWELLERY_PRODUCTS.filter((p) => p.slug !== slug).slice(0, 4);
+    queryFn: async (): Promise<JewelleryProduct[]> => {
+      if (!product) return [];
+      const { data, error } = await supabase
+        .from("artworks")
+        .select("id,slug,title,medium,story,primary_image_url,availability,display_price,price,metadata")
+        .neq("slug", slug)
+        .limit(4);
+      if (error) return [];
+      return (data ?? []) as unknown as JewelleryProduct[];
     },
   });
 
-  if (productQuery.isLoading && !product) {
+  if (productQuery.isPending) {
     return (
-      <div className="container-editorial py-32 flex justify-center items-center">
+      <div className="container-editorial py-32 flex justify-center items-center" aria-live="polite">
         <div className="text-sm tracking-widest uppercase text-ink/40 animate-pulse">
           Loading jewellery details…
         </div>
@@ -233,18 +201,48 @@ function JewelleryProductDetail() {
     );
   }
 
+  if (productQuery.isError || !product) {
+    return (
+      <section className="container-editorial py-32 text-center">
+        <p className="eyebrow mb-3">Product unavailable</p>
+        <h1 className="font-serif text-3xl md:text-4xl text-ink">We couldn't find this piece.</h1>
+        <p className="mt-4 text-sm text-muted-foreground">
+          It may have been removed or the product details may be temporarily unavailable.
+        </p>
+        <Link to="/collection" className="cta-gold inline-flex mt-8 px-6 py-3 text-xs">
+          Browse the collection
+        </Link>
+      </section>
+    );
+  }
+
   // ── Product JSON-LD (injected client-side for dynamic product data) ──
+  const rawMinPrice = product.price_display === "range"
+    ? product.price_min
+    : product.price ?? product.display_price ?? product.price_min ?? null;
+  const rawMaxPrice = product.price_display === "range" ? product.price_max : rawMinPrice;
+  const numericPrice = rawMinPrice === null || rawMinPrice === "" ? null : Number(rawMinPrice);
+  const numericMaxPrice = rawMaxPrice === null || rawMaxPrice === "" ? null : Number(rawMaxPrice);
+  const isPriceRange = product.price_display === "range" &&
+    numericPrice !== null && Number.isFinite(numericPrice) && numericPrice > 0 &&
+    numericMaxPrice !== null && Number.isFinite(numericMaxPrice) && numericMaxPrice >= numericPrice;
+  const hasValidPrice = product.price_display !== "on_request" && numericPrice !== null &&
+    Number.isFinite(numericPrice) && numericPrice > 0 && (isPriceRange || product.price_display !== "range");
+  const schemaAvailability: Record<string, string> = {
+    available: "https://schema.org/InStock",
+    reserved: "https://schema.org/LimitedAvailability",
+    sold: "https://schema.org/SoldOut",
+  };
+
   const productJsonLd: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Product",
     "@id": `${canonical(`/artworks/${slug}`)}#product`,
     name: product.title,
-    description: product.story || `${product.title} — Fine jewellery from Raajsi Jewels, Jaipur.`,
-    image: product.primary_image_url
-      ? resolveImage(product.primary_image_url)
-      : defaultOgImage(),
+    description: product.story || product.description || product.title,
+    image: product.primary_image_url ? resolveImage(product.primary_image_url) : defaultOgImage(),
     url: canonical(`/artworks/${slug}`),
-    sku: slug,
+    sku: product.id || slug,
     brand: { "@type": "Brand", name: SITE_NAME },
     category: product.metadata?.category || "Jewellery",
     material: product.medium || product.metadata?.material || undefined,
@@ -259,53 +257,21 @@ function JewelleryProductDetail() {
           },
         }
       : {}),
-    offers: {
-      "@type": "Offer",
-      url: canonical(`/artworks/${slug}`),
-      priceCurrency: "INR",
-      price: product.price ?? product.display_price ?? 0,
-      priceValidUntil: "2027-12-31",
-      itemCondition: "https://schema.org/NewCondition",
-      availability:
-        product.availability === "sold"
-          ? "https://schema.org/SoldOut"
-          : product.availability === "reserved"
-          ? "https://schema.org/LimitedAvailability"
-          : "https://schema.org/InStock",
-      seller: { "@type": "Organization", name: SITE_NAME },
-      shippingDetails: {
-        "@type": "OfferShippingDetails",
-        shippingRate: {
-          "@type": "MonetaryAmount",
-          value: (product.price ?? 0) >= 999 ? "0" : "99",
-          currency: "INR",
-        },
-        shippingDestination: { "@type": "DefinedRegion", addressCountry: "IN" },
-        deliveryTime: {
-          "@type": "ShippingDeliveryTime",
-          handlingTime: {
-            "@type": "QuantitativeValue",
-            minValue: 1,
-            maxValue: 3,
-            unitCode: "DAY",
+    ...(hasValidPrice && schemaAvailability[product.availability]
+      ? {
+          offers: {
+            "@type": isPriceRange ? "AggregateOffer" : "Offer",
+            url: canonical(`/artworks/${slug}`),
+            priceCurrency: "INR",
+            ...(isPriceRange
+              ? { lowPrice: numericPrice, highPrice: numericMaxPrice }
+              : { price: numericPrice }),
+            itemCondition: "https://schema.org/NewCondition",
+            availability: schemaAvailability[product.availability],
+            seller: { "@type": "Organization", name: SITE_NAME },
           },
-          transitTime: {
-            "@type": "QuantitativeValue",
-            minValue: 3,
-            maxValue: 7,
-            unitCode: "DAY",
-          },
-        },
-      },
-      hasMerchantReturnPolicy: {
-        "@type": "MerchantReturnPolicy",
-        applicableCountry: "IN",
-        returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
-        merchantReturnDays: 7,
-        returnMethod: "https://schema.org/ReturnByMail",
-        returnFees: "https://schema.org/FreeReturn",
-      },
-    },
+        }
+      : {}),
   };
 
   const inCart = (cart.data ?? []).some(
@@ -314,17 +280,23 @@ function JewelleryProductDetail() {
 
   // Extract structured jewellery fields from metadata or fallback defaults
   const meta = product.metadata ?? {};
-  const material = meta.material || product.medium || "22K Gold & Silver";
-  const finishing = meta.finishing || "High Polish & Antique Finish";
-  const length = meta.length || "18 Inches (Adjustable chain)";
-  const width = meta.width || "12 mm";
-  const thickness = meta.thickness || "2.5 mm";
-  const gemstone = meta.gemstone || "Natural Emerald & Uncut Diamonds (Polki)";
-  const stock = product.availability === "available" ? meta.stock ?? "In Stock (Ready to Ship)" : "Made to Order";
-  const category = meta.gender || "Unisex";
-  const subcategory = meta.subcategory || "Necklace Set";
-  const ringSizeOptions = meta.ring_sizes || ["10", "12", "14", "16", "18", "20"];
-  const isRing = subcategory.toLowerCase().includes("ring");
+  const material = meta.material || product.medium || "";
+  const finishing = meta.finishing || "";
+  const length = meta.length || "";
+  const width = meta.width || "";
+  const thickness = meta.thickness || "";
+  const gemstone = meta.gemstone || "";
+  const availabilityLabels: Record<string, string> = {
+    available: "In Stock",
+    reserved: "Reserved",
+    sold: "Sold",
+    not_for_sale: "Not for sale",
+  };
+  const stock = meta.stock || availabilityLabels[product.availability] || "Check availability";
+  const category = meta.gender || "";
+  const subcategory = meta.subcategory || "";
+  const ringSizeOptions = meta.ring_sizes || [];
+  const isRing = `${subcategory} ${product.title}`.toLowerCase().includes("ring");
 
   // Multi-image list (guarantee at least 4 perspective angles)
   const rawList: string[] = [
@@ -334,26 +306,8 @@ function JewelleryProductDetail() {
     ...(Array.isArray(meta.images) ? meta.images : []),
   ];
   const distinctImages = Array.from(new Set(rawList.filter(Boolean))).map((u) => resolveImage(u));
-  const fallbackAngles = [
-    randomImg1,
-    randomImg2,
-    randomImg3,
-    randomImg4,
-    randomImg5,
-  ];
-  const images = [...distinctImages];
-  while (images.length < 4) {
-    const fallback = fallbackAngles[images.length % fallbackAngles.length];
-    images.push(fallback);
-  }
-
-  const ANGLE_LABELS = [
-    "Front View",
-    "Side Angle",
-    "On-Body Look",
-    "Craftsmanship Detail",
-    "Alternate View",
-  ];
+  const images = distinctImages.length > 0 ? distinctImages : [defaultOgImage()];
+  const ANGLE_LABELS = images.map((_, index) => `Product image ${index + 1}`);
 
   const [selectedQuantity, setSelectedQuantity] = useState(1);
 
@@ -400,12 +354,6 @@ function JewelleryProductDetail() {
                 alt={`${product.title} - ${ANGLE_LABELS[activeImageIndex] || "Angle"}`}
                 className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
               />
-
-              {/* BIS Hallmark Badge */}
-              <div className="absolute top-4 left-4 bg-ink/95 text-paper px-3 py-1.5 text-[10px] uppercase tracking-widest flex items-center gap-1.5 shadow-md">
-                <Award size={13} style={{ color: "var(--gold)" }} />
-                BIS Hallmark 916 Certified
-              </div>
 
               {/* Stock Status Badge */}
               <div className="absolute top-4 right-4 bg-paper/90 backdrop-blur text-ink border border-hairline px-3 py-1 text-[10px] uppercase tracking-widest font-medium">
@@ -484,7 +432,7 @@ function JewelleryProductDetail() {
             <div className="grid grid-cols-3 gap-2 mt-4 p-4 bg-mist/40 border border-hairline text-center text-[11px] text-ink/70">
               <div className="flex flex-col items-center gap-1">
                 <ShieldCheck size={18} className="text-[color:var(--gold)]" />
-                <span>100% Certified</span>
+                <span>Product Details</span>
               </div>
               <div className="flex flex-col items-center gap-1">
                 <Truck size={18} className="text-[color:var(--gold)]" />
@@ -504,11 +452,13 @@ function JewelleryProductDetail() {
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-[10px] tracking-[0.2em] uppercase font-semibold text-[color:var(--gold)] px-2 py-0.5 bg-[color:var(--gold)]/10">
-                  {category} Jewellery
+                  {category ? `${category} Jewellery` : "Jewellery"}
                 </span>
-                <span className="text-[10px] tracking-[0.2em] uppercase text-ink/50">
-                  {subcategory}
-                </span>
+                {subcategory && (
+                  <span className="text-[10px] tracking-[0.2em] uppercase text-ink/50">
+                    {subcategory}
+                  </span>
+                )}
               </div>
 
               <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight">
@@ -555,7 +505,7 @@ function JewelleryProductDetail() {
                   {formatPrice(product)}
                 </span>
                 <span className="text-xs text-ink/50 uppercase tracking-wider">
-                  (Incl. of all taxes & BIS Hallmarking)
+                  (Price in INR)
                 </span>
               </div>
             </div>
@@ -616,7 +566,7 @@ function JewelleryProductDetail() {
             </div>
 
             {/* Optional Ring Size Selector */}
-            {isRing && (
+            {isRing && ringSizeOptions.length > 0 && (
               <div className="p-4 bg-mist/30 border border-hairline flex flex-col gap-2">
                 <label className="text-xs font-semibold uppercase tracking-wider text-ink/70">
                   Select Ring Size (Indian Standard)
@@ -647,56 +597,55 @@ function JewelleryProductDetail() {
               </div>
 
               <div className="divide-y divide-hairline text-xs">
-                {/* Material */}
-                <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
-                  <span className="font-medium text-ink/60 uppercase tracking-wider">Material / Metal</span>
-                  <span className="col-span-2 text-ink font-semibold">{material}</span>
-                </div>
-
-                {/* Finishing */}
-                <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
-                  <span className="font-medium text-ink/60 uppercase tracking-wider">Finishing</span>
-                  <span className="col-span-2 text-ink">{finishing}</span>
-                </div>
-
-                {/* Gemstone */}
-                <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
-                  <span className="font-medium text-ink/60 uppercase tracking-wider flex items-center gap-1">
-                    <Gem size={12} className="text-[color:var(--gold)]" /> Gemstone
-                  </span>
-                  <span className="col-span-2 text-ink">{gemstone}</span>
-                </div>
-
-                {/* Length */}
-                <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
-                  <span className="font-medium text-ink/60 uppercase tracking-wider">Length</span>
-                  <span className="col-span-2 text-ink">{length}</span>
-                </div>
-
-                {/* Width */}
-                <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
-                  <span className="font-medium text-ink/60 uppercase tracking-wider">Width</span>
-                  <span className="col-span-2 text-ink">{width}</span>
-                </div>
-
-                {/* Thickness */}
-                <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
-                  <span className="font-medium text-ink/60 uppercase tracking-wider">Thickness</span>
-                  <span className="col-span-2 text-ink">{thickness}</span>
-                </div>
-
-                {/* Category & Subcategory */}
-                <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
-                  <span className="font-medium text-ink/60 uppercase tracking-wider">Category</span>
-                  <span className="col-span-2 text-ink">
-                    {category} · {subcategory}
-                  </span>
-                </div>
-
-                {/* Stock */}
+                {material && (
+                  <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
+                    <span className="font-medium text-ink/60 uppercase tracking-wider">Material / Metal</span>
+                    <span className="col-span-2 text-ink font-semibold">{material}</span>
+                  </div>
+                )}
+                {finishing && (
+                  <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
+                    <span className="font-medium text-ink/60 uppercase tracking-wider">Finishing</span>
+                    <span className="col-span-2 text-ink">{finishing}</span>
+                  </div>
+                )}
+                {gemstone && (
+                  <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
+                    <span className="font-medium text-ink/60 uppercase tracking-wider flex items-center gap-1">
+                      <Gem size={12} className="text-[color:var(--gold)]" /> Gemstone
+                    </span>
+                    <span className="col-span-2 text-ink">{gemstone}</span>
+                  </div>
+                )}
+                {length && (
+                  <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
+                    <span className="font-medium text-ink/60 uppercase tracking-wider">Length</span>
+                    <span className="col-span-2 text-ink">{length}</span>
+                  </div>
+                )}
+                {width && (
+                  <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
+                    <span className="font-medium text-ink/60 uppercase tracking-wider">Width</span>
+                    <span className="col-span-2 text-ink">{width}</span>
+                  </div>
+                )}
+                {thickness && (
+                  <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
+                    <span className="font-medium text-ink/60 uppercase tracking-wider">Thickness</span>
+                    <span className="col-span-2 text-ink">{thickness}</span>
+                  </div>
+                )}
+                {(category || subcategory) && (
+                  <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
+                    <span className="font-medium text-ink/60 uppercase tracking-wider">Category</span>
+                    <span className="col-span-2 text-ink">
+                      {[category, subcategory].filter(Boolean).join(" · ")}
+                    </span>
+                  </div>
+                )}
                 <div className="grid grid-cols-3 p-3 hover:bg-mist/20">
                   <span className="font-medium text-ink/60 uppercase tracking-wider">Stock Status</span>
-                  <span className="col-span-2 text-emerald-700 font-semibold">{stock}</span>
+                  <span className="col-span-2 text-ink font-semibold">{stock}</span>
                 </div>
               </div>
             </div>
@@ -707,8 +656,7 @@ function JewelleryProductDetail() {
                 Craftsmanship Description
               </h3>
               <p className="text-sm text-ink/80 leading-relaxed font-sans">
-                {product.story || product.description ||
-                  `Handcrafted by master artisans in Jaipur, this fine ${subcategory.toLowerCase()} represents the pinnacle of Rajasthani jewellery craftsmanship. Made with premium ${material}, every piece undergoes strict quality and purity checks before receiving BIS Hallmarking.`}
+                {product.story || product.description || "Contact Raajsi Jewels for further product details."}
               </p>
             </div>
           </div>
