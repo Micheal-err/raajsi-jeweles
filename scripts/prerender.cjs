@@ -545,8 +545,8 @@ async function prerender() {
       pageTitle = `${p.title.slice(0, 50).trim()}… | Raajsi`;
     }
 
-    const rawMinPrice = p.price_min ?? p.price ?? p.display_price ?? null;
-    const rawMaxPrice = p.price_max ?? rawMinPrice;
+    const rawMinPrice = p.price_display === 'range' ? p.price_min : (p.price ?? p.display_price ?? p.price_min ?? null);
+    const rawMaxPrice = p.price_display === 'range' ? p.price_max : rawMinPrice;
     const minPrice = Number(rawMinPrice);
     const maxPrice = Number(rawMaxPrice);
     const isPriceRange = p.price_display === 'range' &&
