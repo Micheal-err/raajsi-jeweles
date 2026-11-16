@@ -5,17 +5,13 @@ import { getRouter } from "./router";
 import "./styles.css";
 
 const router = getRouter();
-const rootElement = document.getElementById("root");
+const rootElement = document.getElementById("root")!;
 
-if (!rootElement) {
-  throw new Error('App root element "#root" was not found.');
+if (!rootElement.innerHTML) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>,
+  );
 }
-
-// The SEO prerender step writes crawlable fallback HTML into #root.
-// It is not React-rendered markup, so it must be replaced with the live app
-// rather than left in place or passed to hydrateRoot().
-ReactDOM.createRoot(rootElement).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>,
-);
