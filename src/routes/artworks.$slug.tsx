@@ -217,8 +217,10 @@ function JewelleryProductDetail() {
   }
 
   // ── Product JSON-LD (injected client-side for dynamic product data) ──
-  const rawMinPrice = product.price_min ?? product.price ?? product.display_price ?? null;
-  const rawMaxPrice = product.price_max ?? rawMinPrice;
+  const rawMinPrice = product.price_display === "range"
+    ? product.price_min
+    : product.price ?? product.display_price ?? product.price_min ?? null;
+  const rawMaxPrice = product.price_display === "range" ? product.price_max : rawMinPrice;
   const numericPrice = rawMinPrice === null || rawMinPrice === "" ? null : Number(rawMinPrice);
   const numericMaxPrice = rawMaxPrice === null || rawMaxPrice === "" ? null : Number(rawMaxPrice);
   const isPriceRange = product.price_display === "range" &&
@@ -262,7 +264,7 @@ function JewelleryProductDetail() {
             url: canonical(`/artworks/${slug}`),
             priceCurrency: "INR",
             ...(isPriceRange
-              ? { lowPrice: numericPrice, highPrice: numericMaxPrice, offerCount: 1 }
+              ? { lowPrice: numericPrice, highPrice: numericMaxPrice }
               : { price: numericPrice }),
             itemCondition: "https://schema.org/NewCondition",
             availability: schemaAvailability[product.availability],
