@@ -58,11 +58,6 @@ function supabaseHeaders() {
   return headers;
 }
 
-function validDate(value) {
-  if (!value) return null;
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? null : date.toISOString().slice(0, 10);
-}
 
 async function fetchProducts() {
   if (!SUPABASE_URL || !SUPABASE_KEY) {
