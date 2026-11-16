@@ -9,6 +9,7 @@ export interface JewelleryProduct {
   slug: string;
   title: string;
   medium: string | null;          // Material: Gold/Silver/etc.
+  category?: string | null;
   story?: string | null;
   description?: string | null;
   primary_image_url: string | null;
