@@ -21,7 +21,6 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { JewelleryCard, type JewelleryProduct } from "@/components/JewelleryCard";
-import { MOCK_JEWELLERY_PRODUCTS } from "@/lib/jewellery-data";
 import { Reveal } from "@/components/Reveal";
 import {
   SITE_NAME,
@@ -303,26 +302,18 @@ function CategoryPage() {
         )
         .order("created_at", { ascending: false })
         .limit(48);
-      if (!error && data && data.length > 0) {
-        const kws = meta.keywords.map((k: string) => k.toLowerCase());
-        const filtered = (data as unknown as JewelleryProduct[]).filter((p: JewelleryProduct) => {
-          const fields = [
-            p.title,
-            p.medium,
-            p.metadata?.subcategory,
-            p.metadata?.material,
-            p.metadata?.category,
-          ]
-            .join(" ")
-            .toLowerCase();
-          return kws.some((kw: string) => fields.includes(kw));
-        });
-        return filtered.length > 0 ? filtered : (data as unknown as JewelleryProduct[]);
-      }
-      // Fallback: filter mock data
+      if (error) throw error;
+
       const kws = meta.keywords.map((k: string) => k.toLowerCase());
-      return MOCK_JEWELLERY_PRODUCTS.filter((p: JewelleryProduct) => {
-        const fields = [p.title, p.medium, p.metadata?.subcategory ?? ""]
+      return ((data ?? []) as unknown as JewelleryProduct[]).filter((p) => {
+        const fields = [
+          p.title,
+          p.medium,
+          p.metadata?.subcategory,
+          p.metadata?.material,
+          p.metadata?.category,
+        ]
+          .filter(Boolean)
           .join(" ")
           .toLowerCase();
         return kws.some((kw: string) => fields.includes(kw));
