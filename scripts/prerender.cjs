@@ -599,7 +599,7 @@ async function prerender() {
         url,
         priceCurrency: 'INR',
         ...(isPriceRange
-          ? { lowPrice: minPrice.toFixed(2), highPrice: maxPrice.toFixed(2), offerCount: 1 }
+          ? { lowPrice: minPrice.toFixed(2), highPrice: maxPrice.toFixed(2) }
           : { price: minPrice.toFixed(2) }),
         availability: offerAvailability,
         itemCondition: 'https://schema.org/NewCondition',
