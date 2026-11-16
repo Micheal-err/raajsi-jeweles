@@ -144,12 +144,16 @@ function CollectionPage() {
   // Sterling Silver 925: metal/medium/material contains "silver"
   // Handcrafted Jewels: non-sterling-silver pieces (Kundan, Polki, Gold, Jadau, etc.)
   const isSilverPiece = (p: JewelleryProduct) => {
-    const category = (p.category || p.metadata?.category || "").toLowerCase();
-    if (category) return category.includes("silver");
+    const metadataCategory = (p.metadata?.category || "").toLowerCase();
+    if (metadataCategory.includes("handicraft")) return false;
+    if (metadataCategory.includes("silver")) return true;
     const medium = (p.medium || "").toLowerCase();
     const material = (p.metadata?.material || "").toLowerCase();
-    const title = (p.title || "").toLowerCase();
-    return medium.includes("silver") || material.includes("silver") || title.includes("silver");
+    if (medium.includes("silver") || material.includes("silver")) return true;
+    if (medium.includes("gold") || material.includes("gold")) return false;
+    const category = (p.category || "").toLowerCase();
+    if (category) return category.includes("silver");
+    return (p.title || "").toLowerCase().includes("silver");
   };
 
   const silverProducts = useMemo(() => {
