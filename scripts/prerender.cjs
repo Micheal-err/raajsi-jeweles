@@ -247,6 +247,17 @@ function buildHtmlPage(template, pageConfig) {
     headAdditions.splice(1, 0, `  <meta name="description" content="${escapeHtml(desc)}" />`);
   }
 
+  // Ensure the static HTML fallback carries the same robots directive as the route.
+  const robotsContent = noIndex ? 'noindex, follow' : 'index, follow, max-image-preview:large';
+  if (/<meta\s+name=["']robots["'][\s\S]*?>/i.test(html)) {
+    html = html.replace(
+      /<meta\s+name=["']robots["'][\s\S]*?>/i,
+      `<meta name="robots" content="${robotsContent}" />`,
+    );
+  } else {
+    headAdditions.push(`  <meta name="robots" content="${robotsContent}" />`);
+  }
+
   if (schemaJson) {
     headAdditions.push(`  <script type="application/ld+json">${JSON.stringify(schemaJson)}</script>`);
   }
@@ -316,7 +327,7 @@ async function prerender() {
     if (!res.ok) throw new Error(`Supabase returned HTTP ${res.status}.`);
     const records = await res.json();
     if (!Array.isArray(records)) throw new Error('Supabase artworks response was not an array.');
-    products = records.filter((p) => p && typeof p.slug === 'string' && p.slug.trim() && p.title);
+    products = records.filter((p) => p && typeof p.slug === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/i.test(p.slug.trim()) && p.title);
     if (products.length !== records.length) console.warn(`Skipped ${records.length - products.length} invalid records without slug/title.`);
     console.log(`✓ Fetched ${products.length} actual products for prerendering.`);
   } catch (err) {
