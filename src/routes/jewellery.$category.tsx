@@ -300,8 +300,7 @@ function CategoryPage() {
         .select(
           "id,slug,title,medium,category,story,primary_image_url,gallery_image_urls,availability,display_price,price,metadata",
         )
-        .order("created_at", { ascending: false })
-        .limit(48);
+        .order("created_at", { ascending: false });
       if (error) throw error;
 
       const kws = meta.keywords.map((k: string) => k.toLowerCase());
