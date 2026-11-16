@@ -272,12 +272,16 @@ function Home() {
 
   // STAGE STRICT SEPARATION (PDF Section 6: "The two collections should not be mixed on the homepage or collection pages")
   const isSilver = (p: JewelleryProduct) => {
-    const category = (p.category || p.metadata?.category || "").toLowerCase();
-    if (category) return category.includes("silver");
+    const metadataCategory = (p.metadata?.category || "").toLowerCase();
+    if (metadataCategory.includes("handicraft")) return false;
+    if (metadataCategory.includes("silver")) return true;
     const medium = (p.medium || "").toLowerCase();
     const material = (p.metadata?.material || "").toLowerCase();
-    const title = (p.title || "").toLowerCase();
-    return medium.includes("silver") || material.includes("silver") || title.includes("silver");
+    if (medium.includes("silver") || material.includes("silver")) return true;
+    if (medium.includes("gold") || material.includes("gold")) return false;
+    const category = (p.category || "").toLowerCase();
+    if (category) return category.includes("silver");
+    return (p.title || "").toLowerCase().includes("silver");
   };
 
   const silverItems = useMemo(() => allItems.filter(isSilver), [allItems]);
