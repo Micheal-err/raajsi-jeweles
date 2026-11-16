@@ -70,8 +70,8 @@ async function fetchProducts() {
   }
 
   const endpoint = new URL('/rest/v1/artworks', SUPABASE_URL);
-  endpoint.searchParams.set('select', 'slug,title,updated_at,primary_image_url');
-  endpoint.searchParams.set('order', 'updated_at.desc');
+  endpoint.searchParams.set('select', 'slug,title,primary_image_url');
+  endpoint.searchParams.set('order', 'created_at.desc');
 
   const response = await fetch(endpoint, {
     headers: supabaseHeaders(),
@@ -98,7 +98,7 @@ async function fetchProducts() {
   }).map((product) => ({
     slug: product.slug.trim(),
     title: product.title || 'Raajsi Jewels product',
-    lastmod: validDate(product.updated_at),
+    lastmod: null,
     image: typeof product.primary_image_url === 'string' ? product.primary_image_url : null,
   }));
 }
