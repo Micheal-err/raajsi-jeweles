@@ -307,9 +307,13 @@ function CategoryPage() {
       const catalogue = (data ?? []) as unknown as JewelleryProduct[];
       const scopedCatalogue = meta.collectionFilter === "sterling-silver"
         ? catalogue.filter((p) => {
-            const explicitCategory = (p.category || p.metadata?.category || "").toLowerCase();
-            if (explicitCategory) return explicitCategory.includes("silver");
-            return `${p.medium || ""} ${p.metadata?.material || ""}`.toLowerCase().includes("silver");
+            const metadataCategory = (p.metadata?.category || "").toLowerCase();
+            if (metadataCategory.includes("handicraft")) return false;
+            if (metadataCategory.includes("silver")) return true;
+            const materialText = `${p.medium || ""} ${p.metadata?.material || ""}`.toLowerCase();
+            if (materialText.includes("silver")) return true;
+            if (materialText.includes("gold")) return false;
+            return (p.category || "").toLowerCase().includes("silver");
           })
         : catalogue;
 
